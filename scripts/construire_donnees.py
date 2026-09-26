@@ -21,9 +21,9 @@ ACTEURS = [
     (R + "14/amo/deputes_senateurs_ministres_legislatures_XIV/AMO20_dep_sen_min_tous_mandats_et_organes_XIV.json.zip", False),
 ]
 POLICES = {
-    "Newsreader.ttf": "https://raw.githubusercontent.com/google/fonts/main/ofl/newsreader/Newsreader%5Bopsz,wght%5D.ttf",
-    "Newsreader-Italic.ttf": "https://raw.githubusercontent.com/google/fonts/main/ofl/newsreader/Newsreader-Italic%5Bopsz,wght%5D.ttf",
-    "SchibstedGrotesk.ttf": "https://raw.githubusercontent.com/google/fonts/main/ofl/schibstedgrotesk/SchibstedGrotesk%5Bwght%5D.ttf",
+    "Lexend.ttf": "https://raw.githubusercontent.com/google/fonts/main/ofl/lexend/Lexend%5Bwght%5D.ttf",
+    "SourceSans3.ttf": "https://raw.githubusercontent.com/google/fonts/main/ofl/sourcesans3/SourceSans3%5Bwght%5D.ttf",
+    "SourceSans3-Italic.ttf": "https://raw.githubusercontent.com/google/fonts/main/ofl/sourcesans3/SourceSans3-Italic%5Bwght%5D.ttf",
 }
 RACINE = os.path.dirname(os.path.dirname(os.path.abspath(__file__)))
 SITE = os.path.join(RACINE, "site")
@@ -264,20 +264,36 @@ def charger_scrutins(data, organes=None):
                         sc["mises"].append([ref, code])
             if sc["n"] and sc["d"]:
                 out.append(sc)
-    compte_org = {}
-    for sc in out:
-        compte_org[sc["org"]] = compte_org.get(sc["org"], 0) + 1
-    principal = max(compte_org, key=compte_org.get) if compte_org else ""
-    autres = [sc for sc in out if sc["org"] and sc["org"] != principal]
-    if autres:
-        congres += len(autres)
-        out = [sc for sc in out if not sc["org"] or sc["org"] == principal]
+    # Les numéros officiels de scrutin croissent avec le temps. Tout scrutin qui rompt cette
+    # progression vient d'une autre assemblée (Congrès du Parlement) : on le retire.
+    out.sort(key=lambda x: (x["n"], x["d"]))
+    dates = [sc["d"] for sc in out]
+    fins, pred, idx = [], [-1] * len(out), []
+    import bisect
+    for i, d in enumerate(dates):
+        j = bisect.bisect_right(fins, d)
+        if j == len(fins):
+            fins.append(d)
+            idx.append(i)
+        else:
+            fins[j] = d
+            idx[j] = i
+        pred[i] = idx[j - 1] if j else -1
+    garder = set()
+    k = idx[-1] if idx else -1
+    while k >= 0:
+        garder.add(k)
+        k = pred[k]
+    ecartes = [sc for i, sc in enumerate(out) if i not in garder]
+    if ecartes:
+        congres += len(ecartes)
+        apercu = ", ".join(f"n° {sc['n']} du {sc['d']}" for sc in ecartes[:3])
+        print(f"  {len(ecartes)} scrutin(s) hors de cette assemblée écarté(s) : {apercu}")
+        out = [sc for i, sc in enumerate(out) if i in garder]
     uniques = {}
     for sc in out:
         uniques.setdefault(sc["n"], sc)
     out = sorted(uniques.values(), key=lambda x: x["n"])
-    if congres:
-        print(f"  {congres} scrutin(s) du Congrès du Parlement écarté(s)")
     print(f"  scrutins : {len(out)} ; votes nominatifs : {sum(len(s['votes']) for s in out)}" + (f" ; {ecarts} totaux de groupe différents du total officiel" if ecarts else ""))
     return out
 
@@ -616,7 +632,7 @@ def construire_legislature(L, acteurs, organes, aujourd_hui, credits=None):
         json.dump(donnees, f, ensure_ascii=False, separators=(",", ":"))
     print(f"  écrit : {nom} ({os.path.getsize(os.path.join(SITE, nom)) / 1e6:.1f} Mo) ; groupes : " + ", ".join(f"{g['sigle']} {g['effectif']}" for g in groupes if g["actif"]))
     return {"leg": leg, "label": L["label"], "du": L["du"], "au": L["au"], "fichier": nom, "nb": len(scrutins),
-            "premier": scrutins[0]["d"], "dernier": scrutins[-1]["d"], "deputes": len(actifs), "lois": len(lois)}
+            "premier": min(s["d"] for s in scrutins), "dernier": max(s["d"] for s in scrutins), "deputes": len(actifs), "lois": len(lois)}
 
 # ---------- contenus éditoriaux ----------
 def verifier_contenus():
