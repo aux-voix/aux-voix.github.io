@@ -19,7 +19,7 @@ concurrency:
 jobs:
   construire:
     runs-on: ubuntu-latest
-    timeout-minutes: 45
+    timeout-minutes: 60
     steps:
       - uses: actions/checkout@v4
       - name: Récupérer les photos déjà téléchargées
@@ -28,6 +28,12 @@ jobs:
           path: site/photos
           key: photos-${{ github.run_id }}
           restore-keys: photos-
+      - name: Récupérer le comptage hebdomadaire des amendements
+        uses: actions/cache@v4
+        with:
+          path: cache
+          key: amendements-${{ github.run_id }}
+          restore-keys: amendements-
       - uses: actions/setup-python@v5
         with:
           python-version: "3.12"
