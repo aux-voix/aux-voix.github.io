@@ -490,6 +490,63 @@ main{view-transition-name:page}
   details.nom::details-content{transition:none}
   ::view-transition-old(page),::view-transition-new(page){animation:none}
 }
+
+/* Le chemin d'un texte : étapes franchies, étape en cours, étapes restantes */
+.chemin{list-style:none;margin:18px 0 14px;padding:0;display:grid;grid-template-columns:repeat(auto-fill,minmax(172px,1fr));row-gap:26px}
+.chemin li{position:relative;padding:22px 18px 0 0;min-width:0}
+.chemin li::before{content:"";position:absolute;top:6px;left:0;right:0;height:2px;background:var(--bleu)}
+.chemin li:last-child::before{right:auto;width:14px}
+.chemin .pt{position:absolute;top:0;left:0;width:14px;height:14px;border-radius:50%;background:var(--bleu);box-shadow:0 0 0 3px var(--fond)}
+.chemin li.cur .pt{background:var(--bleu2);box-shadow:0 0 0 3px var(--fond),0 0 0 6px var(--bleuclair)}
+.chemin li.cur::before{background:linear-gradient(90deg,var(--bleu) 0 14px,transparent 14px) ,repeating-linear-gradient(90deg,var(--bord) 0 6px,transparent 6px 11px)}
+.chemin li.avenir::before{background:repeating-linear-gradient(90deg,var(--bord) 0 6px,transparent 6px 11px)}
+.chemin li.avenir .pt{background:var(--fond);box-shadow:inset 0 0 0 2px var(--abst),0 0 0 3px var(--fond)}
+.chemin .dt{display:block;font-size:var(--t-sm);color:var(--texte2);font-variant-numeric:tabular-nums}
+.chemin b{display:block;font-size:var(--t-ui);line-height:1.3;margin-top:2px}
+.chemin li.avenir b,.chemin li.avenir .dt{color:var(--texte3);font-weight:600}
+.chemin .ex{display:block;font-size:13.5px;line-height:1.45;color:var(--texte2);margin-top:5px}
+.chemin .stt{display:inline-block;margin-top:6px;font-size:12.5px;font-weight:700;padding:1px 7px;border-radius:2px;background:var(--bleuclair);color:var(--bleu)}
+.chemin .stt.neg{background:#FBEFE6;color:#8C3B12}
+@media (max-width:640px){
+  .chemin{grid-template-columns:1fr;row-gap:0}
+  .chemin li{padding:0 0 18px 30px}
+  .chemin li::before{top:14px;bottom:0;left:6px;right:auto;width:2px;height:auto}
+  .chemin li:last-child::before{display:none}
+  .chemin li.avenir::before,.chemin li.cur::before{background:repeating-linear-gradient(180deg,var(--bord) 0 6px,transparent 6px 11px)}
+  .chemin .pt{top:2px}
+}
+
+.retenir{margin:30px 0 8px;border-top:2px solid var(--texte);padding-top:14px}
+.retenir ol{list-style:none;margin:14px 0 10px;padding:0}
+.retenir li{padding:14px 0 14px 18px;border-bottom:1px solid var(--bord2);border-left:3px solid var(--bleu);margin-bottom:10px;background:linear-gradient(90deg,var(--bleuclair),transparent 55%)}
+.retenir li:first-child{border-left-width:5px}
+.retenir li a{font-family:var(--titre);font-weight:600;font-size:var(--t-md);line-height:1.3;color:var(--texte);text-decoration:none}
+.retenir li a:hover{color:var(--bleu2);text-decoration:underline}
+.retenir .dt{display:block;margin-top:3px}
+.retenir li p{margin:6px 0 0;font-size:var(--t-ui);color:var(--texte2);line-height:1.5;max-width:70ch}
+
+.senat-bilan{display:inline-block;margin:8px 0 10px;padding:6px 12px;font-size:var(--t-ui);font-weight:600;border-left:4px solid var(--abst);background:var(--gris)}
+.senat-bilan.s-accord,.senat-bilan.s-pour{border-left-color:var(--bleu);background:var(--bleuclair);color:var(--bleu)}
+.senat-bilan.s-modifie{border-left-color:#B8860B;background:#FFF8E6;color:#7A4B00}
+.senat-bilan.s-contre,.senat-bilan.s-dernier-mot{border-left-color:#8C3B12;background:#FBEFE6;color:#8C3B12}
+
+/* Parcours compact : chambre indiquée, explications au niveau Expert */
+.chemin{grid-template-columns:repeat(auto-fill,minmax(150px,1fr));row-gap:20px;margin:14px 0 10px}
+.chemin li{padding:20px 14px 0 0}
+.chemin .lieu{display:block;font-weight:600;color:var(--texte2)}
+.chemin li.ch-senat .pt{border-radius:3px}
+.chemin .stt{margin-top:4px}
+.chemin .ex{font-size:13px}
+.senat-box{margin-top:22px;border-top:1px solid var(--bord);padding-top:14px}
+.senat-box .h3{margin-bottom:6px}
+.senat-box .ui{margin:0 0 8px}
+.senat-bilan{display:inline;margin:0;padding:2px 8px}
+@media (max-width:640px){
+  .chemin{grid-template-columns:1fr;row-gap:0}
+  .chemin li{padding:0 0 12px 28px}
+  .chemin .dt{display:flex;flex-wrap:wrap;gap:0 8px}
+  .chemin .lieu{display:inline}
+}
 </style>
 </head>
 <body data-lv="2">
@@ -733,15 +790,36 @@ function pageHome(){
 }
 
 /* ============ Lois ============ */
-const ETAPES=[[/AN1.*DEPOT/,"Dépôt à l'Assemblée"],[/SN1.*DEPOT/,"Dépôt au Sénat"],[/AN1.*DEC/,"Vote en première lecture à l'Assemblée"],[/SN1.*DEC/,"Vote en première lecture au Sénat"],[/AN2.*DEC/,"Vote en deuxième lecture à l'Assemblée"],[/SN2.*DEC/,"Vote en deuxième lecture au Sénat"],[/CMP.*DEC/,"Commission mixte paritaire"],[/ANNLEC.*DEC|AN.*NLEC.*DEC/,"Nouvelle lecture à l'Assemblée"],[/SNNLEC.*DEC|SN.*NLEC.*DEC/,"Nouvelle lecture au Sénat"],[/ANLDEF.*DEC|LDEF.*DEC/,"Lecture définitive à l'Assemblée"],[/ANLUNI.*DEC|LUNI.*DEC/,"Lecture unique à l'Assemblée"],[/CC.*CONCLUSION/,"Décision du Conseil constitutionnel"],[/PROM/,"Promulgation"]];
-function etapeLib(e){for(const[re,l] of ETAPES)if(re.test(e[0]))return l;return cap(e[1]||e[0]);}
-function statutLoi(l){if(l.prom)return `Promulguée le ${fd(l.prom.date)}`;const e=last(l.etapes||[]);return e?`En cours : ${etapeLib(e).toLowerCase()} le ${fd(e[2])}`:"En cours";}
+const LIEU={AN:"à l'Assemblée",SN:"au Sénat"},QUI={AN:"Les députés",SN:"Les sénateurs"};
+const chambreDe=c=>/^AN|CMP-DEBATS-AN/.test(c)?"AN":/^SN|CMP-DEBATS-SN/.test(c)?"SN":null;
+function lectureDe2(c){if(/^(AN|SN)1-/.test(c))return "première lecture";if(/^(AN|SN)2-/.test(c))return "deuxième lecture";if(/^(AN|SN)3-/.test(c))return "troisième lecture";
+  if(/NLEC/.test(c))return "nouvelle lecture";if(/LDEF/.test(c))return "lecture définitive";if(/LUNI/.test(c))return "lecture unique";return null;}
+const ETAPES=[[/DEPOT|DEC$|PROM|CONCLUSION/,""]];
+function etapeInfo(e,l){
+  const c=e[0],ch=chambreDe(c),lec=lectureDe2(c),st=(e[3]||"").trim(),stn=norm(st),E=(l&&l.etapes)||[],premier=E.length&&E[0]===e;
+  if(/^PROM/.test(c))return {lib:"Promulgation",expl:"Le Président de la République signe la loi, qui est publiée au Journal officiel. Elle s'applique, parfois après des décrets d'application."};
+  if(/^CC/.test(c))return {lib:"Décision du Conseil constitutionnel",expl:"Saisi avant la promulgation, le Conseil vérifie que le texte respecte la Constitution et peut en censurer tout ou partie.",st};
+  if(/^CMP-DEPOT/.test(c))return {lib:"Commission mixte paritaire convoquée",expl:"Sept députés et sept sénateurs se réunissent pour chercher un texte commun sur les articles encore en désaccord."};
+  if(/^CMP-DEC/.test(c)){const echec=/desaccord|echec|pas abouti|n.a pas abouti/.test(stn),ok=!echec&&/accord|abouti|adopt/.test(stn);
+    return {lib:"Conclusion de la commission mixte paritaire",expl:echec?"Pas d'accord entre députés et sénateurs : le texte repart en nouvelle lecture dans chaque assemblée.":ok?"Députés et sénateurs se sont accordés sur un texte commun, qui doit encore être voté par chaque assemblée.":"La commission rend ses conclusions : un texte commun ou un constat d'échec.",st};}
+  if(/^CMP-DEBATS/.test(c))return {lib:`Vote du texte de compromis ${ch?LIEU[ch]:""}`.trim(),expl:`${ch?QUI[ch]:"Les parlementaires"} se prononcent sur le texte de la commission mixte paritaire, qu'ils ne peuvent modifier qu'avec l'accord du Gouvernement.`,st};
+  if(/DEPOT/.test(c)){
+    if(premier||!E.slice(0,E.indexOf(e)).some(x=>/DEBATS-DEC$/.test(x[0])))return {lib:`Dépôt ${LIEU[ch]||""}`.trim(),expl:`Le texte est déposé ${LIEU[ch]||""} : il sera d'abord examiné en commission, puis en séance publique.`};
+    return {lib:`Transmission ${LIEU[ch]||""}`.trim()+(lec?`, ${lec}`:""),expl:`Adopté par l'autre assemblée, le texte arrive ${LIEU[ch]||""} pour ${lec?"sa "+lec:"un nouvel examen"}.`};}
+  if(/DEC$/.test(c)){const quoi=lec==="lecture définitive"?"L'Assemblée a le dernier mot : ce vote adopte ou rejette définitivement le texte.":lec==="nouvelle lecture"?"Après l'échec de la commission mixte paritaire, chaque assemblée réexamine le texte.":lec==="lecture unique"?"Le texte n'est examiné qu'une fois par l'Assemblée.":`${ch?QUI[ch]:"Les parlementaires"} se prononcent sur l'ensemble du texte${lec&&lec!=="première lecture"?", en ne réexaminant que les articles encore en désaccord":""}.`;
+    return {lib:`Vote en ${lec||"séance"} ${LIEU[ch]||""}`.trim(),expl:quoi,st};}
+  return {lib:cap(e[1]||c),expl:""};
+}
+function etapeLib(e,l){return etapeInfo(e,l).lib;}
+function statutLoi(l){if(l.prom)return `Promulguée le ${fd(l.prom.date)}`;const e=last(l.etapes||[]);return e?`En cours : ${etapeLib(e,l).toLowerCase()} le ${fd(e[2])}`:"En cours";}
 function dateLoi(l){return l.prom?l.prom.date:(last(l.etapes||[])||[])[2]||"";}
 let LF={q:"",st:"all",sort:{k:"date",dir:-1},lim:60};
 function pageLois(){
   LF.lim=60;
   const cols=[{k:"titre",label:"Texte",get:l=>l.titre,render:l=>`<a href="#/loi/${esc(l.id)}">${esc(cap(l.titre))}</a>${l.ed?' <span class="tag">Résumé</span>':""}`},
     {k:"statut",label:"Statut",wd:"13%",get:l=>l.prom?0:1,render:l=>esc(l.prom?"Promulguée":"En cours")},
+    {k:"senat",label:"Au Sénat",wd:"15%",hide:"hm",get:l=>{const x=senatInfo(l);return x?x.position:"~";},render:l=>{const x=senatInfo(l);if(!x)return '<span class="meta">Pas encore transmis</span>';
+      return esc({accord:"Accord",modifie:"Modifié",contre:"Rejeté",pour:"Adopté","dernier-mot":"Désaccord, dernier mot à l'Assemblée",attente:"En attente"}[x.position]);}},
     {k:"date",label:"Date",wd:"13%",desc:1,get:dateLoi,render:l=>`<span style="white-space:nowrap">${fds(dateLoi(l))}</span>`},
     {k:"votes",label:"Votes publics",wd:"11%",hide:"hs",num:1,desc:1,get:l=>l.scrutins.length,render:l=>n(l.scrutins.length)}];
   return {title:"Lois",html:`<div class="wrap sec"><h1 class="h1s">Lois</h1>
@@ -783,31 +861,91 @@ function resumeLoi(l){
   if(ob)return cap(`${n2.gov===1?"ce projet de loi":n2.gov===0?"cette proposition de loi":"ce texte"}${qui?", "+(fem?"déposée":"déposé")+" par "+qui+",":""} ${ob}.`);
   return `Ce texte s'intitule « ${cap(l.titre)} ».`;
 }
-const EXPL=[[/AN1.*DEPOT/,"Le texte est officiellement déposé à l'Assemblée : son examen peut commencer."],[/SN1.*DEPOT/,"Le texte est officiellement déposé au Sénat : son examen peut commencer."],
-  [/AN1.*DEC/,"Les députés votent une première version du texte, qui part ensuite au Sénat."],[/SN1.*DEC/,"Les sénateurs votent leur propre version ; si elle diffère, le texte revient aux députés."],
-  [/AN2.*DEC|SN2.*DEC/,"Deuxième passage : seuls les articles encore en désaccord sont réexaminés."],[/CMP.*DEC/,"Sept députés et sept sénateurs cherchent un texte commun sur les points de désaccord."],
-  [/NLEC.*DEC/,"Faute d'accord, chaque assemblée réexamine le texte."],[/LDEF.*DEC/,"L'Assemblée a le dernier mot : ce vote adopte le texte définitivement."],
-  [/LUNI.*DEC/,"Le texte n'est examiné qu'une fois par l'Assemblée."],[/CC.*CONCLUSION/,"Le Conseil constitutionnel vérifie que la loi respecte la Constitution ; il peut en censurer des articles."],
-  [/PROM/,"Le Président de la République promulgue la loi, publiée au Journal officiel : elle devient applicable."]];
-function etapeExpl(e){for(const[re,x] of EXPL)if(re.test(e[0]))return x;return "";}
+function etapeExpl(e,l){return etapeInfo(e,l).expl;}
+
+function etapesRestantes(l){
+  if(l.prom)return [];const E=l.etapes||[];if(!E.length)return [];
+  const d=last(E);if(/DEC$/.test(d[0])&&/rejet/.test(norm(d[3]||""))&&!/CMP|LDEF|NLEC/.test(d[0]))return [];
+  const ch1=chambreDe(E[0][0])||"AN",ch2=ch1==="AN"?"SN":"AN",vote=ch=>E.some(x=>chambreDe(x[0])===ch&&/DEBATS-DEC$/.test(x[0]));
+  const fin=E.some(x=>/^CMP-DEBATS|LDEF.*DEC|^CC/.test(x[0])),out=[];
+  if(!vote(ch1))out.push(`Vote ${LIEU[ch1]}`);if(!vote(ch2))out.push(`Examen ${LIEU[ch2]}`);if(!fin)out.push("Adoption définitive");out.push("Promulgation");
+  return out;
+}
+function etapesUtiles(l){const E=l.etapes||[];return E.filter((e,i)=>i===0||!/DEPOT/.test(e[0]));}
+function lieuEtape(c){if(/^PROM/.test(c))return "Président de la République";if(/^CC/.test(c))return "Conseil constitutionnel";if(/^CMP-DEC|^CMP-DEPOT/.test(c))return "Députés et sénateurs";const ch=chambreDe(c);return ch==="AN"?"Assemblée":ch==="SN"?"Sénat":"";}
+function cheminHTML(l){
+  const E=etapesUtiles(l),reste=etapesRestantes(l);
+  const puce=st=>st?`<span class="stt${/rejet|desaccord|echec|non conforme/.test(norm(st))?" neg":""}">${esc(cap(st))}</span>`:"";
+  const faits=E.map((e,i)=>{const x=etapeInfo(e,l),cur=i===E.length-1&&!l.prom,ch=chambreDe(e[0]),lieu=lieuEtape(e[0]);
+    return `<li class="fait${cur?" cur":""}${ch==="SN"?" ch-senat":""}"><span class="pt" aria-hidden="true"></span><span class="dt">${fds(e[2])}${lieu?`<span class="lieu">${esc(lieu)}</span>`:""}</span><b>${esc(x.lib.replace(/ (à l.Assemblée|au Sénat)$/,""))}</b>${puce(x.st)}<span class="ex lv3">${esc(x.expl)}</span></li>`;}).join("");
+  const avenir=reste.map(t=>`<li class="avenir"><span class="pt" aria-hidden="true"></span><span class="dt">À venir</span><b>${esc(t)}</b></li>`).join("");
+  return `<ol class="chemin" aria-label="Parcours du texte">${faits}${avenir}</ol>`;
+}
+function nomPersonne(x){
+  if(DEPID[x])return `${eluLink(DEPID[x])} <span class="meta">(${esc(grp(DEPID[x].groupe).sigle)})</span>`;
+  const p=(DATA.personnes||{})[x];return p?`${esc((p.p+" "+p.n).trim())}${p.q?` <span class="meta">(${esc(p.q)})</span>`:""}`:null;
+}
+function listeNoms(ids,max){const ok=(ids||[]).map(nomPersonne).filter(Boolean),rest=(ids||[]).length-ok.length;
+  const aff=max?ok.slice(0,max):ok,plus=ok.length-aff.length+rest;
+  return aff.join(", ")+(plus>0?` et ${n(plus)} ${plural(plus,"autre signataire","autres signataires")}`:"");}
+
+/* ============ Le Sénat dans le parcours d'un texte (d'après les dossiers législatifs) ============ */
+function sensSenat(st){const x=norm(st||"");if(/sans modif|conforme/.test(x))return "adopté sans modification";if(/modifi/.test(x))return "modifié";if(/rejet/.test(x))return "rejeté";if(/adopt/.test(x))return "adopté";return "";}
+function senatInfo(l){
+  const E=l.etapes||[],S=E.filter(e=>chambreDe(e[0])==="SN"||/^CMP/.test(e[0]));if(!E.some(e=>chambreDe(e[0])==="SN"))return null;
+  const depart=chambreDe(E[0][0])==="SN",ph=[];let court="",position="attente";
+  const arrivee=E.find(e=>chambreDe(e[0])==="SN"&&/DEPOT/.test(e[0]));
+  if(arrivee){if(depart)ph.push(`Le texte a été déposé au Sénat le ${fd(arrivee[2])}.`);
+    else{const avant=E.slice(0,E.indexOf(arrivee)).filter(e=>chambreDe(e[0])==="AN"&&/DEBATS-DEC$/.test(e[0])),sensAN=avant.length?sensSenat(last(avant)[3]):"";
+      ph.push(/rejet/.test(sensAN)?`Bien que rejeté par les députés, le texte a été transmis au Sénat le ${fd(arrivee[2])}, comme la Constitution le prévoit pour certains textes, notamment budgétaires.`
+        :sensAN?`Adopté par les députés, le texte a été transmis au Sénat le ${fd(arrivee[2])}.`:`Le texte a été transmis au Sénat le ${fd(arrivee[2])}.`);}}
+  S.forEach(e=>{const c=e[0],sens=sensSenat(e[3]),lec=lectureDe2(c);
+    if(/^SN.*DEBATS-DEC$/.test(c)){const q=sens?`l'a ${sens}`:"s'est prononcé";ph.push(`Le Sénat ${q} en ${lec||"séance"} le ${fd(e[2])}.`);
+      court=sens?`${cap(sens)} par le Sénat en ${lec||"séance"}, le ${fd(e[2])}`:`Examiné par le Sénat le ${fd(e[2])}`;
+      position=/rejet/.test(sens)?"contre":/sans modif/.test(sens)?"accord":/modifi/.test(sens)?"modifie":sens?"pour":position;}
+    else if(/^CMP-DEC/.test(c)){const x=norm(e[3]||""),echec=/desaccord|echec|pas abouti/.test(x);
+      ph.push(echec?`Réunis en commission mixte paritaire le ${fd(e[2])}, députés et sénateurs ne sont pas parvenus à un texte commun.`:`Réunis en commission mixte paritaire le ${fd(e[2])}, députés et sénateurs se sont accordés sur un texte commun.`);}
+    else if(/^CMP-DEBATS-SN/.test(c)){const sens=sensSenat(e[3]);ph.push(`Le Sénat a ${sens||"voté"} le texte de compromis le ${fd(e[2])}.`);
+      court=`Texte de compromis ${sens||"voté"} par le Sénat le ${fd(e[2])}`;position=/rejet/.test(sens)?"contre":"accord";}});
+  const ldef=E.find(e=>/LDEF.*DEC/.test(e[0]));
+  if(ldef){ph.push(`Faute d'accord, l'Assemblée a eu le dernier mot en lecture définitive le ${fd(ldef[2])} : la version finale n'a pas été validée par le Sénat.`);position="dernier-mot";}
+  if(!S.some(e=>/^SN.*DEBATS-DEC$|^CMP-DEBATS-SN/.test(e[0]))&&!ldef){ph.push(l.prom?"":"Le Sénat ne s'est pas encore prononcé sur ce texte.");court=court||"pas encore de vote";}
+  const bilan={accord:"Les deux assemblées se sont accordées sur le texte.",modifie:"Le Sénat a modifié le texte voté par les députés : les deux assemblées doivent encore s'accorder.",contre:"Le Sénat s'est opposé au texte.",pour:"Le Sénat a adopté le texte.","dernier-mot":"Les deux assemblées ne se sont pas accordées : l'Assemblée a tranché seule.",attente:""}[position];
+  return {phrases:ph.filter(Boolean),court,position,bilan,depart};
+}
+function senatHTML(l){
+  const x=senatInfo(l);if(!x)return "";
+  const lien=safeUrl(l.senat)?` ${ext(l.senat,"Dossier et votes sur le site du Sénat")}`:"";
+  return `<div class="senat-box"><h3 class="h3">Au Sénat</h3>
+    <p class="ui">${x.bilan?`<span class="senat-bilan s-${x.position}">${esc(x.bilan)}</span> `:""}${x.court?esc(cap(x.court))+".":""}${lien}</p>
+    <p class="ui lv3">${x.phrases.map(esc).join(" ")}</p>
+    <p class="meta lv3">Le Sénat ne publie pas le vote de ses groupes dans ses données ouvertes : seule la décision de l'assemblée entière est indiquée.</p></div>`;
+}
 function suiteLoi(l){
   if(l.prom)return "La loi est promulguée : elle s'applique, parfois après la publication de décrets d'application.";
-  const e=last(l.etapes||[])||["",""];const c=e[0];
-  if(/AN1.*DEC/.test(c))return "Prochaine étape : l'examen par le Sénat.";
-  if(/SN1.*DEC/.test(c))return "Prochaine étape : un nouvel examen par l'Assemblée, ou une commission mixte paritaire si le Gouvernement l'a convoquée.";
-  if(/CMP.*DEC/.test(c))return "Prochaine étape : le vote du texte de compromis par chaque assemblée.";
-  if(/LDEF.*DEC|CC/.test(c))return "Prochaine étape : la promulgation par le Président de la République.";
-  if(/DEPOT/.test(c))return "Prochaine étape : l'examen en commission, puis en séance.";
+  const E=l.etapes||[];if(!E.length)return "";
+  const e=last(E),c=e[0],ch=chambreDe(c),autre=ch==="AN"?"SN":"AN",st=norm(e[3]||"");
+  if(/^CC/.test(c))return "Prochaine étape : la promulgation de la loi par le Président de la République.";
+  if(/LDEF.*DEC/.test(c))return "L'Assemblée a statué définitivement. Prochaine étape : une éventuelle saisine du Conseil constitutionnel, puis la promulgation.";
+  if(/^CMP-DEBATS/.test(c)){const n2=new Set(E.filter(x=>/^CMP-DEBATS/.test(x[0])).map(x=>chambreDe(x[0]))).size;
+    return n2>=2?"Les deux assemblées ont voté le texte de compromis. Prochaine étape : une éventuelle saisine du Conseil constitutionnel, puis la promulgation.":`Prochaine étape : le vote du texte de compromis ${LIEU[autre]}.`;}
+  if(/^CMP-DEC/.test(c))return /desaccord|echec|pas abouti/.test(st)?"Prochaine étape : une nouvelle lecture dans chaque assemblée.":"Prochaine étape : le vote du texte de compromis par chaque assemblée.";
+  if(/^CMP-DEPOT/.test(c))return "Prochaine étape : la réunion de la commission mixte paritaire.";
+  if(/DEPOT/.test(c))return `Prochaine étape : l'examen en commission ${LIEU[ch]||""}, puis en séance publique.`;
+  if(/DEC$/.test(c)){
+    if(/rejet/.test(st)&&!E.some(x=>chambreDe(x[0])===autre&&/DEBATS-DEC$/.test(x[0])))return `Le texte a été rejeté ${LIEU[ch]||""}. Sauf nouvelle inscription à l'ordre du jour, son examen s'arrête là.`;
+    const autreAVote=E.some(x=>chambreDe(x[0])===autre&&/DEBATS-DEC$/.test(x[0]));
+    return autreAVote?`Prochaine étape : un nouvel examen ${LIEU[autre]}, ou une commission mixte paritaire si elle est convoquée.`:`Prochaine étape : l'examen ${LIEU[autre]}.`;}
   return "Le texte poursuit son parcours entre l'Assemblée et le Sénat.";
 }
 function pageLoi(id){
   const l=LOIID[id];if(!l)return pageNotFound();
   const ed=l.ed,scr=l.scrutins.map(k=>SCN[k]).filter(Boolean);
   const fin=scr.filter(s=>estEnsemble(s)).pop()||last(scr);
-  const rail=(l.etapes||[]).filter(e=>ETAPES.some(([re])=>re.test(e[0])));
+  const rail=l.etapes||[];
   const phrase=ed&&ed.phrase?ed.phrase:resumeLoi(l);
   const resultat=fin?`À l'Assemblée, ${estEnsemble(fin)?"le vote sur l'ensemble du texte":"le dernier vote public"} a eu lieu le ${fd(fin.d)} : ${fin.adopte?"adopté":"rejeté"} par ${n(fin.po)} voix contre ${n(fin.co)}.`:"";
-  const nom=x=>DEPID[x]?`${eluLink(DEPID[x])} <span class="meta">(${esc(grp(DEPID[x].groupe).sigle)})</span>`:esc(x);
+  const nom=x=>nomPersonne(x)||"";
   const am=l.am,glab=gix=>gix===-2?"Gouvernement ou commission":gix>=0?grp(gix).sigle:"Autres";
   return {title:cap(l.titre),html:`<div class="wrap sec" style="max-width:980px;margin-left:auto;margin-right:auto">
     <p class="meta"><a href="#/lois" style="color:var(--ink-2)">Lois</a>${l.proc?", "+esc(l.proc.toLowerCase()):""}</p>
@@ -815,13 +953,15 @@ function pageLoi(id){
     ${lvBar()}
     <section><h2 class="sr">En une phrase</h2><p class="phrase" style="margin-top:14px">${esc(phrase)}</p>
       <p class="ui"><strong>${esc(statutLoi(l))}.</strong> ${esc(resultat)}</p>
+      ${(()=>{const x=senatInfo(l);return x&&x.court?`<p class="ui"><strong>Au Sénat :</strong> ${esc(x.court)}.${x.bilan?" "+esc(x.bilan):""}</p>`:"";})()}
       ${!ed?`<p class="meta">Résumé établi à partir du titre officiel du texte. <a href="#/methode/themes">Comment</a></p>`:""}</section>
 
     <section class="lv2" style="margin-top:30px"><h2 class="h2">Comprendre ce texte</h2>
-      ${(l.auteurs||[]).filter(a=>DEPID[a]).length?`<p class="ui">Déposé par ${(l.auteurs||[]).filter(a=>DEPID[a]).slice(0,5).map(nom).join(", ")}${(l.auteurs||[]).length>5?" et d'autres":""}.</p>`:""}
+      ${(l.auteurs||[]).length&&listeNoms(l.auteurs,5)?`<p class="ui">Déposé par ${listeNoms(l.auteurs,5)}.</p>`:""}
       ${ed&&ed.change&&ed.change.length?`<h3 class="h3" style="margin-top:18px">Ce qui change</h3><div class="tw" style="margin-top:10px"><table class="t"><thead><tr><th>Avant</th><th>Après</th><th>Qui est concerné</th></tr></thead><tbody>${ed.change.map(r=>`<tr>${r.map(c=>`<td>${esc(c)}</td>`).join("")}</tr>`).join("")}</tbody></table></div>`:""}
-      ${rail.length?`<h3 class="h3" style="margin-top:22px">Son parcours, étape par étape</h3><ol class="parcours">${rail.map(e=>`<li><span class="dt">${fds(e[2])}</span><b>${esc(etapeLib(e))}</b><span>${esc(etapeExpl(e))}</span></li>`).join("")}</ol>`:""}
+      ${rail.length?`<h3 class="h3" style="margin-top:22px">Son parcours</h3>${cheminHTML(l)}`:""}
       <p class="explain ui">${esc(suiteLoi(l))}</p>
+      ${senatHTML(l)}
       ${fin?`<h3 class="h3" style="margin-top:26px">Qui a voté pour, qui a voté contre</h3>${quiPourQuiContre(fin)}
       <figure style="margin:14px 0 0">${hemicycle(fin)}<figcaption>${legendHTML(fin)}</figcaption></figure>`:""}
       ${am?`<p class="ui" style="margin-top:18px">${n(am.t)} amendements ont été déposés sur ce texte à l'Assemblée ; ${n(am.a)} ont été adoptés.</p>`:""}
@@ -829,15 +969,15 @@ function pageLoi(id){
 
     <section class="lv3" style="margin-top:34px"><h2 class="h2">Le dossier complet</h2>
       <dl class="facts"><dt>Titre officiel</dt><dd>${esc(cap(l.titre))}</dd><dt>Procédure</dt><dd>${esc(l.proc||"—")}</dd>
-        ${(l.auteurs||[]).length?`<dt>Auteurs</dt><dd>${(l.auteurs||[]).map(nom).join(", ")}</dd>`:""}
-        ${(l.rapporteurs||[]).length?`<dt>Rapporteurs</dt><dd>${(l.rapporteurs||[]).map(nom).join(", ")}</dd>`:""}
+        ${(l.auteurs||[]).length?`<dt>Auteurs</dt><dd>${listeNoms(l.auteurs)}</dd>`:""}
+        ${(l.rapporteurs||[]).length?`<dt>Rapporteurs</dt><dd>${listeNoms(l.rapporteurs)}</dd>`:""}
         ${l.cc?`<dt>Conseil constitutionnel</dt><dd>${fd(l.cc.date)} : ${esc(l.cc.lib||"décision")}${l.cc.url?" ; "+ext(l.cc.url,"lire la décision"):""}</dd>`:""}
         ${l.prom?`<dt>Promulgation</dt><dd>${fd(l.prom.date)}${l.prom.titre?" : "+esc(l.prom.titre):""}${l.prom.url?" ; "+ext(l.prom.url,"Légifrance"):""}</dd>`:""}</dl>
-      ${(l.etapes||[]).length?`<h3 class="h3" style="margin-top:24px">Toutes les étapes enregistrées</h3><div class="tw" style="margin-top:10px"><table class="t"><thead><tr><th>Date</th><th>Étape</th><th>Libellé officiel</th></tr></thead><tbody>${l.etapes.map(e=>`<tr><td class="dt">${fds(e[2])}</td><td>${esc(etapeLib(e))}</td><td class="meta">${esc(e[1]||"")} <span class="code-a">${esc(e[0])}</span></td></tr>`).join("")}</tbody></table></div>`:""}
+      ${(l.etapes||[]).length?`<h3 class="h3" style="margin-top:24px">Toutes les étapes enregistrées</h3><div class="tw" style="margin-top:10px"><table class="t"><thead><tr><th>Date</th><th>Étape</th><th>Résultat</th><th>Libellé officiel</th></tr></thead><tbody>${l.etapes.map(e=>`<tr><td class="dt">${fds(e[2])}</td><td>${esc(etapeLib(e,l))}</td><td>${e[3]?esc(cap(e[3])):'<span class="meta">—</span>'}</td><td class="meta">${esc(e[1]||"")} <span class="code-a">${esc(e[0])}</span></td></tr>`).join("")}</tbody></table></div>`:""}
       ${am?`<h3 class="h3" style="margin-top:24px">Amendements par auteur</h3><p class="meta" style="margin:6px 0 10px">${n(am.t)} amendements déposés sur les textes de ce dossier à l'Assemblée, dont ${n(am.a)} adoptés (${pc(am.a/am.t)}).</p>
         <div class="tw"><table class="t"><thead><tr><th>Déposés par</th><th class="n">Déposés</th><th class="n">Adoptés</th><th class="n">Taux d'adoption</th></tr></thead><tbody>${am.g.map(r=>`<tr><td>${esc(glab(r[0]))}</td><td class="n">${n(r[1])}</td><td class="n">${n(r[2])}</td><td class="n">${pc(r[1]?r[2]/r[1]:null)}</td></tr>`).join("")}</tbody></table></div>`:""}
       ${scr.length?`<h3 class="h3" style="margin-top:24px">Tous les votes publics sur ce texte</h3><div class="tw" style="margin-top:10px"><table class="t"><thead><tr><th>Date</th><th>Scrutin</th><th>Résultat</th></tr></thead><tbody>${scr.slice().reverse().map(s=>`<tr><td class="dt">${fds(s.d)}</td><td class="w"><a href="#/scrutin/${s.n}">${esc(cap(s.ti))}</a></td><td class="dt">${s.adopte?"Adopté":"Rejeté"} <span class="meta">(${n(s.po)} pour, ${n(s.co)} contre)</span></td></tr>`).join("")}</tbody></table></div>`:""}
-      <h3 class="h3" style="margin-top:24px">Sources officielles</h3><ul class="pieces" style="margin-top:10px"><li>${ext(offDos(l),"Dossier législatif sur le site de l'Assemblée nationale")}</li>${l.prom&&l.prom.url?`<li>${ext(l.prom.url,"Texte promulgué sur Légifrance")}</li>`:""}${l.cc&&l.cc.url?`<li>${ext(l.cc.url,"Décision du Conseil constitutionnel")}</li>`:""}${fin?`<li>${ext(offScr(fin.n),"Scrutin n° "+fin.n+" sur le site de l'Assemblée")}</li>`:""}</ul>
+      <h3 class="h3" style="margin-top:24px">Sources officielles</h3><ul class="pieces" style="margin-top:10px"><li>${ext(offDos(l),"Dossier législatif sur le site de l'Assemblée nationale")}</li>${safeUrl(l.senat)?`<li>${ext(l.senat,"Dossier législatif sur le site du Sénat")}</li>`:""}${l.prom&&l.prom.url?`<li>${ext(l.prom.url,"Texte promulgué sur Légifrance")}</li>`:""}${l.cc&&l.cc.url?`<li>${ext(l.cc.url,"Décision du Conseil constitutionnel")}</li>`:""}${fin?`<li>${ext(offScr(fin.n),"Scrutin n° "+fin.n+" sur le site de l'Assemblée")}</li>`:""}</ul>
       ${ed?`<p class="meta" style="margin-top:12px">Résumé rédigé par ${esc(ed.auteur)}, vérifié par ${esc(ed.verif)}.</p>`:""}</section>
     <p class="dlg-acts" style="margin-top:28px">${fin?`<button type="button" class="btn btn-q" data-flash="loi:${esc(l.id)}">Visuel Flash à télécharger</button>`:""}</p></div>`,after:bindLv};
 }
@@ -1068,11 +1208,44 @@ function pageCal(q){
     <div class="monthnav">${i>0?`<a class="btn btn-q" href="#/calendrier?m=${mois[i-1]}">Mois précédent</a>`:""}<label class="sr" for="msel">Choisir un mois</label><select id="msel">${mois.slice().reverse().map(x=>{const[a,b]=x.split("-").map(Number);return `<option value="${x}"${x===m?" selected":""}>${cap(MOIS[b-1])} ${a}</option>`;}).join("")}</select>${i<mois.length-1?`<a class="btn btn-q" href="#/calendrier?m=${mois[i+1]}">Mois suivant</a>`:""}</div>
     <h2 class="h2" style="margin-top:22px">${cap(lib)}</h2><p class="phrase" style="margin-top:10px">${esc(resume)}</p>
     <div class="stat3"><div><b>${n(S.length)}</b><span>scrutins publics</span></div><div><b>${n(sol.length)}</b><span>scrutins solennels</span></div><div><b>${n(prom.length)}</b><span>lois promulguées</span></div></div>
+    ${aRetenir(m,S,prom)}
     ${prom.length?`<section style="margin-top:28px"><h2 class="h3">Lois promulguées</h2><ul class="side-list">${prom.map(l=>`<li><a href="#/loi/${esc(l.id)}">${esc(cap(l.titre))}</a><div class="meta">Promulguée le ${fd(l.prom.date)}${l.prom.url?" ; "+ext(l.prom.url,"Légifrance"):""}</div></li>`).join("")}</ul></section>`:""}
     ${sol.length||moc.length?`<section style="margin-top:28px"><h2 class="h3">Votes solennels et motions de censure</h2><ul class="side-list">${sol.concat(moc).sort((a,b)=>a.n-b.n).map(li).join("")}</ul></section>`:""}
     ${fins.length?`<section style="margin-top:28px"><h2 class="h3">Autres votes sur l'ensemble d'un texte</h2><ul class="side-list">${fins.map(li).join("")}</ul></section>`:""}
     ${top.length?`<section style="margin-top:28px"><h2 class="h3">Les textes les plus débattus</h2><p class="meta" style="margin:6px 0 10px">Classés selon le nombre de scrutins publics tenus ce mois-ci (amendements, articles, ensemble).</p><ul class="side-list">${top.map(([t,c])=>`<li>${esc(cap(t))}<div class="meta">${n(c)} ${plural(c,"scrutin")} ; <a href="#/votes?q=${encodeURIComponent(t.slice(0,60))}">les voir</a></div></li>`).join("")}</ul></section>`:""}</div>`,
   after(){$("#msel").addEventListener("change",e=>{location.hash="#/calendrier?m="+e.target.value;});}};
+}
+
+
+/* ============ À retenir : sélection automatique des faits marquants d'un mois ============ */
+function aRetenir(m,S,prom){
+  const it=[],parTexte={};
+  const ajouter=(cle,o)=>{const x=parTexte[cle];if(x){x.poids=Math.max(x.poids,o.poids);if(!x.pourquoi.includes(o.pourquoi))x.pourquoi.push(o.pourquoi);return;}o.pourquoi=[o.pourquoi];parTexte[cle]=o;it.push(o);};
+  S.filter(s=>s.moc).forEach(s=>ajouter("moc"+s.n,{poids:s.adopte?100:62,titre:cap(s.ti),lien:`#/scrutin/${s.n}`,date:s.d,
+    pourquoi:s.adopte?"La motion est adoptée : le Gouvernement est renversé et doit démissionner.":`Une motion de censure peut renverser le Gouvernement ; elle a recueilli ${n(s.po)} voix sur ${n(s.rq)} nécessaires.`}));
+  prom.forEach(l=>{const am=l.am&&l.am.t?` ; ${n(l.am.t)} amendements avaient été déposés à l'Assemblée`:"";
+    ajouter("l"+l.id,{poids:55+Math.min(20,(l.scrutins||[]).length/10)+(l.am&&l.am.t?Math.min(15,l.am.t/200):0),titre:cap(l.titre),lien:`#/loi/${l.id}`,date:l.prom.date,
+      pourquoi:`La loi est promulguée : elle entre en vigueur${am}.`});});
+  LOIS.forEach(l=>{if(l.prom&&(l.prom.date||"").startsWith(m))return;
+    const e=(l.etapes||[]).filter(x=>(x[2]||"").startsWith(m)).find(x=>/LDEF.*DEC/.test(x[0])&&/adopt/.test(norm(x[3]||""))||/DEBATS-DEC$/.test(x[0])&&/conforme|sans modification/.test(norm(x[3]||"")));
+    const cmp=(l.etapes||[]).filter(x=>/^CMP-DEBATS/.test(x[0])&&/adopt/.test(norm(x[3]||"")));
+    const cmpFin=cmp.length>=2&&(last(cmp)[2]||"").startsWith(m);
+    if(e||cmpFin)ajouter("l"+l.id,{poids:50,titre:cap(l.titre),lien:`#/loi/${l.id}`,date:(e||last(cmp))[2],pourquoi:"Le Parlement a adopté définitivement ce texte : il ne reste que l'éventuel contrôle du Conseil constitutionnel et la promulgation."});});
+  S.filter(s=>(s.sol||estEnsemble(s))&&!s.moc).forEach(s=>{const ex=s.po+s.co,ecart=Math.abs(s.po-s.co),serre=ex>=100&&ecart/ex<0.1;
+    const l=SCR2LOI[s.n],tx=texteDe(s.ti),cle=l?"l"+l.id:(tx?"t"+norm(tx):"s"+s.n),rejet=!s.adopte&&estEnsemble(s);
+    let poids=(s.sol?32:18)+(serre?22:0)+(rejet?14:0),pq;
+    if(rejet)pq=`L'ensemble du texte est rejeté par ${n(s.co)} voix contre ${n(s.po)}.`;
+    else if(serre)pq=`Vote serré : ${n(ecart)} ${plural(ecart,"voix","voix")} d'écart seulement (${n(s.po)} pour, ${n(s.co)} contre).`;
+    else pq=`${s.sol?"Vote solennel":"Vote sur l'ensemble du texte"} : ${s.adopte?"adopté":"rejeté"}, ${n(s.po)} pour et ${n(s.co)} contre.`;
+    ajouter(cle,{poids,titre:l?cap(l.titre):cap(tx||s.ti),lien:l?`#/loi/${l.id}`:`#/scrutin/${s.n}`,date:s.d,pourquoi:pq});});
+  const cpt={};S.forEach(s=>{const t=texteDe(s.ti);if(t)cpt[t]=(cpt[t]||0)+1;});
+  Object.entries(cpt).sort((a,b)=>b[1]-a[1]).slice(0,2).forEach(([t,c])=>{if(c<20)return;
+    ajouter("t"+norm(t),{poids:20+Math.min(25,c/15),titre:cap(t),lien:`#/votes?q=${encodeURIComponent(t.slice(0,60))}`,date:"",pourquoi:`Le texte le plus débattu du mois : ${n(c)} votes publics, surtout sur des amendements.`});});
+  const top=it.sort((a,b)=>b.poids-a.poids).slice(0,5);
+  if(!top.length)return "";
+  return `<section class="retenir" aria-labelledby="ar-t"><h2 class="h2" id="ar-t">À retenir</h2>
+    <ol>${top.map(x=>`<li><a href="${esc(x.lien)}">${esc(x.titre)}</a>${x.date?`<span class="dt">${fd(x.date)}</span>`:""}<p>${x.pourquoi.map(esc).join(" ")}</p></li>`).join("")}</ol>
+    <p class="meta">Sélection automatique, par ordre d'importance : motions de censure, lois promulguées, adoptions définitives, votes serrés ou rejets de textes, puis textes les plus débattus. <a href="#/methode/themes">Méthode</a></p></section>`;
 }
 
 /* ============ Méthode, mentions légales ============ */
@@ -1104,6 +1277,7 @@ function pageMethode(){
       <div class="tw"><table class="t"><thead><tr><th>Thème</th><th>Mots recherchés dans le titre</th></tr></thead><tbody>${THEMES.map(t=>`<tr><td>${t[1]}</td><td class="meta">${esc(String(t[2]).slice(1,-1).replace(/\\b/g,"").split("|").join(", "))}</td></tr>`).join("")}</tbody></table></div>
       <p class="ui">Amendements : comptés dans le fichier officiel des amendements de l'Assemblée, relu une fois par semaine en raison de son volume. Sont comptés les amendements déposés en premier signataire, ceux qui ont été adoptés, et les cosignatures.</p>
       <p class="ui">Présence : l'Assemblée ne publie pas de relevé de présence en séance. Aucun site ne peut donc afficher un vrai taux de présence ; nous affichons la participation aux votes, sous ce nom.</p>
+      <p class="ui">Calendrier, rubrique « À retenir » : les faits du mois sont sélectionnés automatiquement et classés selon une règle fixe. Une motion de censure passe en premier ; viennent ensuite les lois promulguées (d'autant plus haut qu'elles ont suscité de votes et d'amendements), les adoptions définitives, les votes solennels serrés (moins de 10 % d'écart) ou les rejets d'un texte, et enfin les textes ayant fait l'objet de plus de 20 votes publics dans le mois. Cette sélection mesure l'activité parlementaire ; elle ne juge pas de la portée politique d'un texte.</p>
       <p class="ui">Classements : chaque classement repose sur une seule donnée, sans note globale ni pondération, et ne porte que sur les députés ayant connu au moins 20 scrutins.</p>
       <p class="ui">Intérêts des élus : nous ne classons pas les élus ou les partis par « intérêts » sectoriels, parce qu'une telle attribution relèverait de l'interprétation. Chaque fiche renvoie à la déclaration d'intérêts publiée par la Haute Autorité pour la transparence de la vie publique, et les votes sont classés par thème.</p></section>
     <section id="corrections" style="margin-top:40px"><h2 class="h2">Journal des corrections</h2>${CORR.length?`<ul class="rows" style="margin-top:14px">${CORR.map(x=>`<li><p class="meta" style="margin:0 0 4px">${fd(x.date)}</p><p class="ui" style="margin:0">${esc(x.texte)}</p></li>`).join("")}</ul>`:`<p class="ui" style="margin-top:12px">Aucune correction publiée à ce jour.</p>`}</section>

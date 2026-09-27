@@ -20,6 +20,8 @@ LEGISLATURES = [
 ACTEURS = [
     (R + "17/amo/tous_acteurs_mandats_organes_xi_legislature/AMO30_tous_acteurs_tous_mandats_tous_organes_historique.json.zip", True),
     (R + "14/amo/deputes_senateurs_ministres_legislatures_XIV/AMO20_dep_sen_min_tous_mandats_et_organes_XIV.json.zip", False),
+    (R + "17/amo/deputes_senateurs_ministres_legislature/AMO20_dep_sen_min_tous_mandats_et_organes.json.zip", False),
+    (R + "16/amo/deputes_senateurs_ministres_legislature/AMO20_dep_sen_min_tous_mandats_et_organes.json.zip", False),
 ]
 POLICES = {
     "Lexend.ttf": "https://raw.githubusercontent.com/google/fonts/main/ofl/lexend/Lexend%5Bwght%5D.ttf",
@@ -368,7 +370,8 @@ def charger_lois(data, numeros, leg, am_textes=None, gi=None):
                 if "CONCLUSION" in code and code.startswith("CC"):
                     cc = {"date": date, "lib": txt((a.get("statutConclusion") or {}).get("libelle")) or lib, "url": txt(a.get("urlConclusion")) or None}
                 if date and CODES_UTILES.search(code):
-                    etapes.append([code, lib, date])
+                    statut = txt((a.get("statutConclusion") or {}).get("libelle"))
+                    etapes.append([code, lib, date, statut] if statut else [code, lib, date])
             if not prom and not scr and not refs_acteurs(d.get("initiateur")):
                 continue
             vu, et = set(), []
@@ -400,7 +403,7 @@ def charger_lois(data, numeros, leg, am_textes=None, gi=None):
                     y[0] += dep
                     y[1] += adop
             am_out = {"t": am["t"], "a": am["a"], "g": sorted([[gi.get(g, -1) if g != "Gouvernement" else -2, v[0], v[1]] for g, v in am["g"].items()], key=lambda r: -r[1])} if am["t"] else None
-            lois.append({"id": uid, "titre": txt(titre_d.get("titre")), "chemin": txt(titre_d.get("titreChemin")) or None,
+            lois.append({"id": uid, "titre": txt(titre_d.get("titre")), "chemin": txt(titre_d.get("titreChemin")) or None, "senat": txt(titre_d.get("senatChemin")) or None,
                          "proc": proc, "etapes": et[:24], "prom": prom, "cc": cc, "scrutins": sorted(scr),
                          "auteurs": auteurs[:40], "rapporteurs": sorted(rapporteurs)[:20], "am": am_out})
     lois.sort(key=lambda l: (l["prom"] or {}).get("date") or (l["etapes"][-1][2] if l["etapes"] else ""), reverse=True)
@@ -603,6 +606,33 @@ def compter_amendements(url, cache_dir):
         except OSError:
             pass
 
+def qualite(a):
+    """Dernière fonction connue : sénateur, membre du Gouvernement ou député."""
+    types = {"SENAT": "sen", "GOUVERNEMENT": "gouv", "MINISTERE": "gouv", "ASSEMBLEE": "dep"}
+    meilleur, date_max = None, ""
+    for m in a.get("mandats", []):
+        t = types.get(txt(m.get("typeOrgane")))
+        d = txt(m.get("dateDebut"))
+        if t and d >= date_max:
+            meilleur, date_max = t, d
+    fem = a.get("civ") == "Mme"
+    return {"sen": "sénatrice" if fem else "sénateur", "gouv": "membre du Gouvernement",
+            "dep": "députée" if fem else "député"}.get(meilleur, "")
+
+def personnes_citees(lois, index, acteurs):
+    refs = set()
+    for l in lois:
+        refs.update(l.get("auteurs") or [])
+        refs.update(l.get("rapporteurs") or [])
+    out = {}
+    for r in refs:
+        if r in index or r not in acteurs:
+            continue
+        a = acteurs[r]
+        out[r] = {"p": a["prenom"], "n": a["nom"], "c": a["civ"], "q": qualite(a)}
+    print(f"  noms retrouvés pour {len(out)} auteurs ou rapporteurs non députés de la législature")
+    return out
+
 # ---------- calcul d'une législature ----------
 def periodes(L, aujourd_hui):
     fin_leg = L["au"] or aujourd_hui
@@ -765,6 +795,7 @@ def construire_legislature(L, acteurs, organes, aujourd_hui, credits=None):
         "maj": datetime.datetime.now(datetime.timezone.utc).strftime("%Y-%m-%dT%H:%MZ"),
         "sources": {"scrutins": L["scrutins"], "acteurs": ACTEURS[0][0], "dossiers": L.get("dossiers"), "licence": "Licence Ouverte / Open Licence (Etalab)"},
         "periodes": per, "medianes": medianes, "groupes": groupes, "lois": lois,
+        "personnes": personnes_citees(lois, index, acteurs),
         "deputes": [{"id": d["id"], "civ": d["civ"], "prenom": d["prenom"], "nom": d["nom"], "dept": d["dept"], "numDept": d["numDept"],
                      "circ": d["circ"], "actif": d["actif"], "debut": d["debut"], "periodes": d["periodes"],
                      "groupe": gi.get(groupe_final(d) or "", -1), "seg": [[a, b, gi.get(c, -1)] for a, b, c in d["seg"]],
