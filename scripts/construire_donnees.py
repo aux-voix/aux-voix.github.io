@@ -7,7 +7,8 @@ R = "https://data.assemblee-nationale.fr/static/openData/repository/"
 LEGISLATURES = [
     {"leg": "17", "label": "17e législature", "du": "2024-07-18", "au": None, "requis": True,
      "scrutins": R + "17/loi/scrutins/Scrutins.json.zip",
-     "dossiers": R + "17/loi/dossiers_legislatifs/Dossiers_Legislatifs.json.zip"},
+     "dossiers": R + "17/loi/dossiers_legislatifs/Dossiers_Legislatifs.json.zip",
+     "amendements": R + "17/loi/amendements_div_legis/Amendements.json.zip"},
     {"leg": "16", "label": "16e législature", "du": "2022-06-28", "au": "2024-06-09",
      "scrutins": R + "16/loi/scrutins/Scrutins.json.zip",
      "dossiers": R + "16/loi/dossiers_legislatifs/Dossiers_Legislatifs.json.zip"},
@@ -306,10 +307,46 @@ def actes(noeud, prof=0):
             yield a
             yield from actes(a, prof + 1)
 
+def refs_documents(doc, prof=0):
+    """Identifiants des subdivisions d'un document (textes rattachés)."""
+    out = []
+    if prof > 4 or not isinstance(doc, dict):
+        return out
+    for d in liste((doc.get("divisions") or {}).get("division")):
+        if isinstance(d, dict):
+            out.append(txt(d.get("uid")))
+            out += refs_documents(d, prof + 1)
+    return out
+
+def refs_acteurs(noeud, prof=0):
+    """Tous les identifiants acteurRef présents sous un nœud, quelle que soit sa forme."""
+    out = []
+    if prof > 8 or noeud is None:
+        return out
+    if isinstance(noeud, dict):
+        for k, v in noeud.items():
+            if k == "acteurRef":
+                out += [txt(x) for x in liste(v)]
+            elif isinstance(v, (dict, list)):
+                out += refs_acteurs(v, prof + 1)
+    elif isinstance(noeud, list):
+        for v in noeud:
+            out += refs_acteurs(v, prof + 1)
+    return out
+
 CODES_UTILES = re.compile(r"(DEPOT|DEC|PROM|PUB|CONCLUSION|SAISIE-CC)$")
-def charger_lois(data, numeros, leg):
-    lois = []
-    for obj in jsons(data):
+def charger_lois(data, numeros, leg, am_textes=None, gi=None):
+    am_textes, gi = am_textes or {}, gi or {}
+    lois, docs = [], {}
+    objets = list(jsons(data))
+    for obj in objets:
+        for doc in trouver(obj, "document"):
+            dos = txt(doc.get("dossierRef"))
+            if dos:
+                docs.setdefault(dos, set()).add(txt(doc.get("uid")))
+                for div in refs_documents(doc):
+                    docs[dos].add(div)
+    for obj in objets:
         for d in trouver(obj, "dossierParlementaire"):
             titre_d = d.get("titreDossier") or {}
             proc = txt((d.get("procedureParlementaire") or {}).get("libelle"))
@@ -332,7 +369,7 @@ def charger_lois(data, numeros, leg):
                     cc = {"date": date, "lib": txt((a.get("statutConclusion") or {}).get("libelle")) or lib, "url": txt(a.get("urlConclusion")) or None}
                 if date and CODES_UTILES.search(code):
                     etapes.append([code, lib, date])
-            if not prom and not scr:
+            if not prom and not scr and not refs_acteurs(d.get("initiateur")):
                 continue
             vu, et = set(), []
             for e in sorted(etapes, key=lambda x: x[2]):
@@ -340,8 +377,32 @@ def charger_lois(data, numeros, leg):
                 if k not in vu:
                     vu.add(k)
                     et.append(e)
-            lois.append({"id": txt(d.get("uid")), "titre": txt(titre_d.get("titre")), "chemin": txt(titre_d.get("titreChemin")) or None,
-                         "proc": proc, "etapes": et[:24], "prom": prom, "cc": cc, "scrutins": sorted(scr)})
+            auteurs = sorted({x for x in refs_acteurs(d.get("initiateur")) if x.startswith("PA")})
+            rapporteurs = set()
+            for a in actes(d):
+                for x in refs_acteurs(a.get("rapporteurs")):
+                    if x.startswith("PA"):
+                        rapporteurs.add(x)
+            uid = txt(d.get("uid"))
+            for a in actes(d):
+                for tref in liste(a.get("texteAssocie")) + liste(a.get("texteAdopte")):
+                    if txt(tref):
+                        docs.setdefault(uid, set()).add(txt(tref))
+            am = {"t": 0, "a": 0, "g": {}}
+            for doc in docs.get(uid, ()):
+                x = am_textes.get(doc)
+                if not x:
+                    continue
+                am["t"] += x["t"]
+                am["a"] += x["a"]
+                for g, (dep, adop) in x["g"].items():
+                    y = am["g"].setdefault(g, [0, 0])
+                    y[0] += dep
+                    y[1] += adop
+            am_out = {"t": am["t"], "a": am["a"], "g": sorted([[gi.get(g, -1) if g != "Gouvernement" else -2, v[0], v[1]] for g, v in am["g"].items()], key=lambda r: -r[1])} if am["t"] else None
+            lois.append({"id": uid, "titre": txt(titre_d.get("titre")), "chemin": txt(titre_d.get("titreChemin")) or None,
+                         "proc": proc, "etapes": et[:24], "prom": prom, "cc": cc, "scrutins": sorted(scr),
+                         "auteurs": auteurs[:40], "rapporteurs": sorted(rapporteurs)[:20], "am": am_out})
     lois.sort(key=lambda l: (l["prom"] or {}).get("date") or (l["etapes"][-1][2] if l["etapes"] else ""), reverse=True)
     print(f"  lois et textes suivis : {len(lois)} (dont {sum(1 for l in lois if l['prom'])} promulguées)")
     return lois
@@ -461,6 +522,86 @@ def photos_libres(ids):
     except Exception as e:
         print(f"Photos : collecte interrompue ({e}), le site est construit sans nouvelles photos")
     return credits
+
+
+# ---------- amendements (législature en cours) ----------
+def compter_amendements(url, cache_dir):
+    """Télécharge le fichier des amendements (volumineux) au plus une fois par semaine ; sinon réutilise le cache."""
+    os.makedirs(cache_dir, exist_ok=True)
+    cache = os.path.join(cache_dir, "amendements.json")
+    try:
+        prec = json.load(open(cache, encoding="utf-8"))
+        age = (datetime.datetime.now(datetime.timezone.utc) - datetime.datetime.fromisoformat(prec["date"])).days
+        if age < 7 and "textes" in prec and os.environ.get("RELEVE_FORCER_AMENDEMENTS") != "1":
+            print(f"Amendements : cache de {age} jour(s) réutilisé ({len(prec['deputes'])} députés)")
+            return prec
+    except Exception:
+        prec = None
+    if os.environ.get("RELEVE_LOCAL"):
+        return prec or {"date": "", "deputes": {}, "total": 0}
+    chemin = os.path.join(cache_dir, "amendements.zip")
+    try:
+        print(f"Téléchargement : {url}")
+        req = urllib.request.Request(url, headers={"User-Agent": UA})
+        with urllib.request.urlopen(req, timeout=900) as r, open(chemin, "wb") as f:
+            while True:
+                bloc = r.read(1 << 20)
+                if not bloc:
+                    break
+                f.write(bloc)
+        print(f"  {os.path.getsize(chemin) / 1e6:.0f} Mo")
+        compte, total, debut, par_texte = {}, 0, time.time(), {}
+        with zipfile.ZipFile(chemin) as z:
+            for nom in z.namelist():
+                if not nom.endswith(".json"):
+                    continue
+                try:
+                    obj = json.loads(z.read(nom).decode("utf-8"))
+                except Exception:
+                    continue
+                for a in trouver(obj, "amendement"):
+                    total += 1
+                    sig = a.get("signataires") or {}
+                    aut = sig.get("auteur") or {}
+                    auteur = txt(aut.get("acteurRef"))
+                    texte = txt(a.get("texteLegislatifRef"))
+                    grp_ref = txt(aut.get("groupePolitiqueRef"))
+                    cyc = a.get("cycleDeVie") or {}
+                    sort_ = cyc.get("sort")
+                    sort_ = txt(sort_.get("libelle") if isinstance(sort_, dict) else sort_).lower()
+                    adopte = sort_.startswith("adopt")
+                    if auteur.startswith("PA"):
+                        c = compte.setdefault(auteur, [0, 0, 0])
+                        c[0] += 1
+                        if adopte:
+                            c[1] += 1
+                    if texte:
+                        t = par_texte.setdefault(texte, {"t": 0, "a": 0, "g": {}})
+                        t["t"] += 1
+                        t["a"] += adopte
+                        cle = grp_ref or ("Gouvernement" if not auteur.startswith("PA") else "")
+                        if cle:
+                            gg = t["g"].setdefault(cle, [0, 0])
+                            gg[0] += 1
+                            gg[1] += adopte
+                    for co in refs_acteurs(sig.get("cosignataires")):
+                        if co.startswith("PA") and co != auteur:
+                            compte.setdefault(co, [0, 0, 0])[2] += 1
+                if time.time() - debut > 1200:
+                    print("  lecture interrompue au bout de 20 minutes : comptes partiels")
+                    break
+        res = {"date": datetime.datetime.now(datetime.timezone.utc).isoformat(), "deputes": compte, "total": total, "textes": par_texte}
+        json.dump(res, open(cache, "w", encoding="utf-8"))
+        print(f"  {total} amendements lus, {len(compte)} députés concernés")
+        return res
+    except Exception as e:
+        print(f"Amendements : lecture impossible ({e}) ; le site est construit sans")
+        return prec or {"date": "", "deputes": {}, "total": 0}
+    finally:
+        try:
+            os.remove(chemin)
+        except OSError:
+            pass
 
 # ---------- calcul d'une législature ----------
 def periodes(L, aujourd_hui):
@@ -596,13 +737,16 @@ def construire_legislature(L, acteurs, organes, aujourd_hui, credits=None):
                     n += 1
                     a2 += x == y
             g["accord"][h["id"]] = round(a2 / n, 4) if n >= 30 else None
+    amdt = {"deputes": {}, "total": 0, "date": "", "textes": {}}
+    if L.get("amendements"):
+        amdt = compter_amendements(L["amendements"], os.path.join(RACINE, "cache"))
     # lois
     lois = []
     if L.get("dossiers"):
         dd = telecharger(L["dossiers"], False)
         if dd:
             try:
-                lois = charger_lois(dd, {s["n"] for s in scrutins}, leg)
+                lois = charger_lois(dd, {s["n"] for s in scrutins}, leg, amdt.get("textes"), gi)
             except Exception as e:
                 print(f"  dossiers législatifs ignorés : {e}")
     # sortie compacte
@@ -624,7 +768,8 @@ def construire_legislature(L, acteurs, organes, aujourd_hui, credits=None):
         "deputes": [{"id": d["id"], "civ": d["civ"], "prenom": d["prenom"], "nom": d["nom"], "dept": d["dept"], "numDept": d["numDept"],
                      "circ": d["circ"], "actif": d["actif"], "debut": d["debut"], "periodes": d["periodes"],
                      "groupe": gi.get(groupe_final(d) or "", -1), "seg": [[a, b, gi.get(c, -1)] for a, b, c in d["seg"]],
-                     "parti": d["parti"], "commission": d["commission"], "hatvp": d["hatvp"], "photo": credits.get(d["id"]), "st": d["st"]} for d in deputes],
+                     "parti": d["parti"], "commission": d["commission"], "hatvp": d["hatvp"], "photo": credits.get(d["id"]), "am": amdt["deputes"].get(d["id"]), "st": d["st"]} for d in deputes],
+        "amendements": {"total": amdt.get("total", 0), "date": amdt.get("date", "")[:10]},
         "scrutins": sortie,
     }
     nom = f"data-{leg}.json"
