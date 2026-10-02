@@ -1,0 +1,3 @@
+document.addEventListener("click",function(e){var b=e.target.closest("[data-copie]");if(!b)return;var t=document.getElementById(b.getAttribute("data-copie")).textContent;
+function ok(){var x=b.textContent;b.textContent="Copié";setTimeout(function(){b.textContent=x;},1500);}
+if(navigator.clipboard&&window.isSecureContext){navigator.clipboard.writeText(t).then(ok);}else{var a=document.createElement("textarea");a.value=t;document.body.appendChild(a);a.select();try{document.execCommand("copy");ok();}catch(_){}a.remove();}});

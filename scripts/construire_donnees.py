@@ -814,7 +814,7 @@ def construire_legislature(L, acteurs, organes, aujourd_hui, credits=None):
 def verifier_contenus():
     dossier = os.path.join(SITE, "contenu")
     erreurs = []
-    for nom in ("lois.json", "corrections.json", "site.json"):
+    for nom in ("lois.json", "corrections.json", "site.json", "articles.json"):
         chemin = os.path.join(dossier, nom)
         if not os.path.exists(chemin):
             erreurs.append(f"{nom} : fichier manquant")
@@ -824,6 +824,14 @@ def verifier_contenus():
         except json.JSONDecodeError as e:
             erreurs.append(f"{nom}, ligne {e.lineno}, colonne {e.colno} : {e.msg} (virgule, guillemet ou crochet manquant ?)")
             continue
+        if nom == "articles.json":
+            for i, t in enumerate(contenu or []):
+                if isinstance(t, dict) and t.get("publie"):
+                    for champ in ("code", "article", "explication", "auteur", "verif"):
+                        if not t.get(champ):
+                            erreurs.append(f"articles.json, fiche {i + 1} : le champ « {champ} » est vide")
+                    if t.get("auteur") and t.get("auteur") == t.get("verif"):
+                        erreurs.append(f"articles.json, fiche {i + 1} : l'auteur et le vérificateur doivent être deux personnes différentes")
         if nom == "lois.json":
             for i, t in enumerate(contenu or []):
                 if isinstance(t, dict) and t.get("publie"):
@@ -865,6 +873,21 @@ def main():
             index.append(r)
     with open(os.path.join(SITE, "index.json"), "w", encoding="utf-8") as f:
         json.dump({"maj": datetime.datetime.now(datetime.timezone.utc).strftime("%Y-%m-%dT%H:%MZ"), "legislatures": index}, f, ensure_ascii=False)
+    # Codes consolidés (Constitution, Code civil…) : facultatif, ne bloque jamais le reste du site
+    if not os.environ.get("RELEVE_LOCAL") or os.environ.get("RELEVE_LEGI_LOCAL"):
+        try:
+            sys.path.insert(0, os.path.dirname(os.path.abspath(__file__)))
+            import codes
+            codes.construire_codes(SITE, os.path.join(RACINE, "cache"))
+        except Exception as e:
+            print(f"Codes : collecte interrompue ({e}) ; le reste du site est publié normalement")
+    # Pages publiques (moteurs de recherche), plan du site, flux RSS : facultatif, ne bloque jamais le site
+    try:
+        sys.path.insert(0, os.path.dirname(os.path.abspath(__file__)))
+        import pages
+        pages.generer(SITE)
+    except Exception as e:
+        print(f"Pages publiques : génération interrompue ({e}) ; le site est publié normalement")
     print("\nTerminé : " + ", ".join(f"{x['label']} ({x['nb']} scrutins)" for x in index))
 
 if __name__ == "__main__":
