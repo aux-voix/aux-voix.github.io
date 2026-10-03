@@ -1,5 +1,5 @@
 #!/usr/bin/env python3
-"""Le Relevé : pages statiques lisibles par les moteurs de recherche (députés, votes, lois, articles de code),
+"""Aux Voix : pages statiques lisibles par les moteurs de recherche (députés, votes, lois, articles de code),
 plan du site, robots.txt et flux RSS. Un seul interrupteur, "public" dans contenu/site.json, ouvre le site à
 l'indexation ; tant qu'il vaut false, chaque page porte noindex et robots.txt interdit l'exploration."""
 import datetime, html, json, os, re, statistics
@@ -35,12 +35,12 @@ def mediane(v):
 
 CSS = """@font-face{font-family:"Lexend";src:url("/fonts/Lexend.ttf") format("truetype");font-weight:300 800;font-display:swap}
 @font-face{font-family:"Source Sans 3";src:url("/fonts/SourceSans3.ttf") format("truetype");font-weight:200 900;font-display:swap}
-:root{--t:#1B1D1F;--t2:#5A6169;--b:#DDE1E5;--b2:#EDF0F3;--g:#F5F7F9;--bl:#123B6D;--bl2:#1B58A3;--blc:#EAF0F7;--pour:#1F6FB2;--contre:#C2690A;--abst:#8A9099}
+:root{--t:#1B1D1F;--t2:#5A6169;--b:#DDE1E5;--b2:#EDF0F3;--g:#F5F7F9;--bl:#123B6D;--bl2:#1B58A3;--blc:#EAF0F7;--pour:#1F6FB2;--contre:#B42318;--abst:#8A9099}
 *{box-sizing:border-box}body{margin:0;font:400 16.5px/1.6 "Source Sans 3",Helvetica,Arial,sans-serif;color:var(--t);background:#fff}
 a{color:var(--bl2);text-underline-offset:.18em}h1,h2,h3{font-family:"Lexend","Source Sans 3",Arial,sans-serif;font-weight:600;letter-spacing:-.015em;line-height:1.22;margin:0}
 .w{max-width:900px;margin:0 auto;padding:0 20px}.beta{background:var(--blc);border-bottom:1px solid #D2DFEC;font-size:14px;padding:8px 0}
 header{border-bottom:1px solid var(--b)}header .w{display:flex;flex-wrap:wrap;gap:8px 22px;align-items:center;min-height:62px}
-.logo{font:800 20px "Lexend",Arial,sans-serif;color:var(--t);text-decoration:none}.logo:after{content:"";display:block;width:24px;height:3px;background:var(--bl2);margin-top:3px}
+.logo{display:inline-flex;align-items:center;gap:9px;font:20px/1 "Lexend",Arial,sans-serif;letter-spacing:-.03em;color:var(--t);text-decoration:none}.logo .emb{width:40px;height:22px;color:var(--bl)}.logo .wm1{font-weight:300}.logo .wm2{font-weight:800;color:var(--bl)}
 nav a{font-weight:600;color:var(--t);text-decoration:none;margin-right:16px;font-size:15px}nav a:hover{color:var(--bl2)}
 main{padding:30px 0 50px}.fil{font-size:14px;color:var(--t2);margin:0 0 6px}h1{font-size:clamp(24px,3.4vw,32px);margin-bottom:10px}
 h2{font-size:20px;margin:30px 0 10px;padding-bottom:8px;border-bottom:2px solid var(--t)}.lede{font-size:18px;color:var(--t2);margin:0 0 14px}
@@ -78,10 +78,10 @@ class Generateur:
         robots = "" if self.public else '<meta name="robots" content="noindex, nofollow">\n'
         alt = f'<link rel="alternate" type="application/rss+xml" title="{ESC(rss[1])}" href="{ESC(rss[0])}">\n' if rss else ""
         doc = f"""<!doctype html><html lang="fr"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width, initial-scale=1">
-<title>{ESC(titre)} | Le Relevé</title><meta name="description" content="{ESC(description[:300])}">
+<title>{ESC(titre)} | Aux Voix</title><link rel="icon" type="image/svg+xml" href="/favicon.svg"><meta name="description" content="{ESC(description[:300])}">
 {robots}<link rel="canonical" href="{ESC(self.url + chemin)}">{alt}<link rel="stylesheet" href="/statique.css"></head><body>
 {'' if self.public else '<div class="beta"><div class="w">Version bêta du site.</div></div>'}
-<header><div class="w"><a class="logo" href="/">Le Relevé</a><nav aria-label="Rubriques"><a href="/#/lois">Lois</a><a href="/#/codes">Codes</a><a href="/#/elus">Élus</a><a href="/#/votes">Votes</a><a href="/#/methode">Méthode</a></nav></div></header>
+<header><div class="w"><a class="logo" href="/" aria-label="Aux Voix, accueil"><svg class="emb" viewBox="0 2 120 64" aria-hidden="true"><g fill="none" stroke="currentColor" stroke-width="6" stroke-linecap="round"><path d="M43.0 60.0 A17 17 0 0 1 50.0 46.2"/><path d="M53.1 44.5 A17 17 0 0 1 66.9 44.5"/><path d="M70.0 46.2 A17 17 0 0 1 77.0 60.0"/><path d="M32.0 60.0 A28 28 0 0 1 43.5 37.3"/><path d="M48.6 34.4 A28 28 0 0 1 71.4 34.4"/><path d="M76.5 37.3 A28 28 0 0 1 88.0 60.0"/><path d="M21.0 60.0 A39 39 0 0 1 37.1 28.4"/><path d="M44.1 24.4 A39 39 0 0 1 75.9 24.4"/><path d="M82.9 28.4 A39 39 0 0 1 99.0 60.0"/><path d="M10.0 60.0 A50 50 0 0 1 30.6 19.5"/><path d="M39.7 14.3 A50 50 0 0 1 80.3 14.3"/><path d="M89.4 19.5 A50 50 0 0 1 110.0 60.0"/></g></svg><span><span class="wm1">Aux </span><span class="wm2">Voix</span></span></a><nav aria-label="Rubriques"><a href="/#/lois">Lois</a><a href="/#/codes">Codes</a><a href="/#/elus">Élus</a><a href="/#/votes">Votes</a><a href="/#/methode">Méthode</a></nav></div></header>
 <main id="main"><div class="w">{corps}</div></main>
 <footer><div class="w"><p>Données officielles de l'Assemblée nationale et de la DILA (Légifrance), sous Licence Ouverte, mises à jour le {fd(self.aujourdhui)}.</p>
 <p><a href="/#/methode/sources">Sources</a><a href="/#/methode/mentions">Mentions légales</a><a href="/#/methode/accessibilite">Accessibilité</a><a href="/flux/">Flux de suivi</a></p></div></footer>
@@ -150,7 +150,7 @@ class Generateur:
             am = x.get("am")
             chemin = f"/depute/{x['id']}/"
             cit = [("Référence", f"{nom}, {qual.lower()}{(' (' + x['dept'] + ', ' + ordinal(x['circ']) + ' circonscription)') if x.get('dept') else ''}, groupe {g['nom']}, {d['label']}, Assemblée nationale."),
-                   ("Avec la source", f"Le Relevé, fiche de {nom}, d'après les données de l'Assemblée nationale, {self.url}{chemin} (consulté le {fd(self.aujourdhui)}).")]
+                   ("Avec la source", f"Aux Voix, fiche de {nom}, d'après les données de l'Assemblée nationale, {self.url}{chemin} (consulté le {fd(self.aujourdhui)}).")]
             corps = f"""<p class="fil"><a href="/#/elus">Élus</a>, {ESC(d['label'])}</p><h1>{ESC(nom)}</h1>
 <p class="lede">{qual}{'' if x['actif'] else ' (mandat terminé)'}, {ESC(lieu)}. Groupe : {ESC(g['nom'])} ({ESC(g['sigle'])}).</p>
 <a class="cta" href="/#/elu/{x['id']}">Ouvrir la fiche complète</a><a class="cta s" href="https://www.assemblee-nationale.fr/dyn/deputes/{x['id']}">Fiche officielle à l'Assemblée</a>
@@ -164,7 +164,7 @@ class Generateur:
                       corps, rss=(f"/flux/depute/{x['id']}.xml", f"Votes de {nom}"))
             self.urls["deputes"].append((chemin, d["maj"][:10]))
             if courante:
-                self.flux(f"/flux/depute/{x['id']}.xml", f"Le Relevé, votes de {nom}", f"Les derniers votes de {nom} à l'Assemblée nationale.",
+                self.flux(f"/flux/depute/{x['id']}.xml", f"Aux Voix, votes de {nom}", f"Les derniers votes de {nom} à l'Assemblée nationale.",
                           [(f"{s['ti'][:1].upper() + s['ti'][1:]} : {vl[s['v'][i]].lower()}", self.url + lien_vote(s["n"]) if s["n"] in num_retenus else f"{self.url}/#/scrutin/{s['n']}", s["d"],
                             f"Vote de {nom} : {vl[s['v'][i]].lower()}. Résultat : {'adopté' if 'adopt' in s['so'] else 'rejeté'}, {s['po']} pour, {s['co']} contre.") for s in votes])
         # --- votes importants ---
@@ -190,7 +190,7 @@ class Generateur:
             l = lois_par_scr.get(s["n"])
             chemin = f"/vote/{leg}/{s['n']}/"
             cit = [("Référence", f"Assemblée nationale, scrutin public n° {s['n']} du {fd(s['d'])}, sur {s['ti']}."),
-                   ("Avec la source", f"Le Relevé, d'après les données de l'Assemblée nationale, {self.url}{chemin} (consulté le {fd(self.aujourdhui)}).")]
+                   ("Avec la source", f"Aux Voix, d'après les données de l'Assemblée nationale, {self.url}{chemin} (consulté le {fd(self.aujourdhui)}).")]
             corps = f"""<p class="fil"><a href="/#/votes">Votes</a>, {ESC(d['label'])}, scrutin n° {s['n']}</p><h1>{ESC(titre)}</h1>
 <p class="lede">Le {fd(s['d'])}, l'Assemblée a {'adopté' if adopte else 'rejeté'} {ESC(s['ti'])}{'' if moc else f", par {s['po']} voix pour et {s['co']} contre ({s['ab']} abstentions)"}.</p>
 <a class="cta" href="/#/scrutin/{s['n']}">Voir l'hémicycle et les explications</a><a class="cta s" href="https://www.assemblee-nationale.fr/dyn/{leg}/scrutins/{s['n']}">Scrutin sur le site de l'Assemblée</a>
@@ -201,7 +201,7 @@ class Generateur:
             self.page(chemin, titre[:110], f"Scrutin public n° {s['n']} du {fd(s['d'])} à l'Assemblée nationale : {s['ti'][:160]}. Résultat et vote de chaque député.", corps)
             self.urls["votes"].append((chemin, s["d"]))
         if courante:
-            self.flux("/flux/votes.xml", "Le Relevé, votes importants", "Les votes solennels, motions de censure et votes sur l'ensemble des textes à l'Assemblée nationale.",
+            self.flux("/flux/votes.xml", "Aux Voix, votes importants", "Les votes solennels, motions de censure et votes sur l'ensemble des textes à l'Assemblée nationale.",
                       [(f"{'Adopté' if 'adopt' in s['so'] else 'Rejeté'} : {s['ti'][:1].upper() + s['ti'][1:]}", f"{self.url}/vote/{leg}/{s['n']}/", s["d"],
                         f"{s['po']} pour, {s['co']} contre, {s['ab']} abstentions.") for s in list(reversed(retenus))[:50]])
         # --- lois ---
@@ -215,7 +215,7 @@ class Generateur:
             statut = f"Promulguée le {fd(prom['date'])}" if prom else (f"En cours : {libelle_etape(E[-1], E).lower()} le {fd(E[-1][2])}" if E else "En cours")
             fin = [scr_n for scr_n in l.get("scrutins", []) if scr_n in num_retenus]
             cit = [("Référence", ((prom or {}).get("titre") or titre) + (f", JO du {fd(prom['date'])}" if prom else f" ({d['label']}, dossier législatif de l'Assemblée nationale)")),
-                   ("Avec la source", f"Le Relevé, d'après les données de l'Assemblée nationale, {self.url}{chemin} (consulté le {fd(self.aujourdhui)}).")]
+                   ("Avec la source", f"Aux Voix, d'après les données de l'Assemblée nationale, {self.url}{chemin} (consulté le {fd(self.aujourdhui)}).")]
             corps = f"""<p class="fil"><a href="/#/lois">Lois</a>, {ESC(d['label'])}</p><h1>{ESC(titre)}</h1><p class="lede">{ESC(statut)}.</p>
 <a class="cta" href="/#/loi/{ESC(l['id'])}">Voir le parcours et les votes</a>{f'<a class="cta s" href="{ESC(prom["url"])}">Texte sur Légifrance</a>' if prom and prom.get("url") else ''}
 {f'<h2>Son parcours</h2><table><thead><tr><th>Date</th><th>Étape</th><th>Résultat</th></tr></thead><tbody>{etapes}</tbody></table>' if etapes else ''}
@@ -227,7 +227,7 @@ class Generateur:
                 evenements.append((E[-1][2], titre, chemin, statut))
         if courante:
             evenements.sort(reverse=True)
-            self.flux("/flux/lois.xml", "Le Relevé, lois", "Les dernières étapes franchies par les textes de loi au Parlement.",
+            self.flux("/flux/lois.xml", "Aux Voix, lois", "Les dernières étapes franchies par les textes de loi au Parlement.",
                       [(t, self.url + c, dt, st) for dt, t, c, st in evenements[:50]])
 
     # ---------------- codes ----------------
@@ -270,7 +270,7 @@ class Generateur:
                 if a["d"] and limite <= a["d"] <= self.aujourdhui:
                     recents.append((a["d"], art_l, chemin, src))
             recents.sort(reverse=True)
-            self.flux(f"/flux/code/{code['slug']}.xml", f"Le Relevé, modifications du {code['titre']}", f"Les articles du {code['titre']} modifiés au cours des douze derniers mois.",
+            self.flux(f"/flux/code/{code['slug']}.xml", f"Aux Voix, modifications du {code['titre']}", f"Les articles du {code['titre']} modifiés au cours des douze derniers mois.",
                       [(f"Article {n} modifié", self.url + ch, dt, f"Nouvelle rédaction en vigueur le {fd(dt)}" + (f", issue de {s[:1].lower() + s[1:]}" if s else "") + ".") for dt, n, ch, s in recents[:100]])
 
     # ---------------- flux, plan du site, robots ----------------

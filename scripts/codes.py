@@ -1,23 +1,23 @@
 #!/usr/bin/env python3
-"""Le Relevé : codes consolidés (Constitution, Code civil, Code pénal…) depuis la base officielle LEGI de la DILA
+"""Aux Voix : codes consolidés (Constitution, Code civil, Code pénal…) depuis la base officielle LEGI de la DILA
 (Licence Ouverte). Archive complète + mises à jour quotidiennes, relues au plus une fois par semaine."""
 import datetime, html, io, json, os, re, sys, tarfile, time, urllib.request
 import xml.etree.ElementTree as ET
 
 BASE = "https://echanges.dila.gouv.fr/OPENDATA/LEGI/"
-UA = "LeReleve/2.0 (https://lereleve.github.io ; reutilisation de donnees ouvertes)"
+UA = "AuxVoix/2.0 (https://lereleve.github.io ; reutilisation de donnees ouvertes)"
 # identifiant LEGI du code (et identifiant JORF d'origine, qui sert parfois de dossier), abréviation d'usage
 CODES = [
-    {"slug": "constitution", "ids": ["LEGITEXT000006071194", "JORFTEXT000000571356"], "abr": "Const.", "titre": "Constitution du 4 octobre 1958", "code": False},
-    {"slug": "civil", "ids": ["LEGITEXT000006070721"], "abr": "C. civ.", "titre": "Code civil", "code": True},
-    {"slug": "penal", "ids": ["LEGITEXT000006070719"], "abr": "C. pén.", "titre": "Code pénal", "code": True},
-    {"slug": "procedure-civile", "ids": ["LEGITEXT000006070716"], "abr": "C. pr. civ.", "titre": "Code de procédure civile", "code": True},
-    {"slug": "procedure-penale", "ids": ["LEGITEXT000006071154"], "abr": "C. pr. pén.", "titre": "Code de procédure pénale", "code": True},
-    {"slug": "commerce", "ids": ["LEGITEXT000005634379"], "abr": "C. com.", "titre": "Code de commerce", "code": True},
-    {"slug": "travail", "ids": ["LEGITEXT000006072050"], "abr": "C. trav.", "titre": "Code du travail", "code": True},
-    {"slug": "consommation", "ids": ["LEGITEXT000006069565"], "abr": "C. consom.", "titre": "Code de la consommation", "code": True},
-    {"slug": "justice-administrative", "ids": ["LEGITEXT000006070933"], "abr": "CJA", "titre": "Code de justice administrative", "code": True},
-    {"slug": "relations-administration", "ids": ["LEGITEXT000031366350"], "abr": "CRPA", "titre": "Code des relations entre le public et l'administration", "code": True},
+    {"slug": "constitution", "hf": ["legi_constitution", "legi_constitution_du_4_octobre_1958"], "ids": ["LEGITEXT000006071194", "JORFTEXT000000571356"], "abr": "Const.", "titre": "Constitution du 4 octobre 1958", "code": False},
+    {"slug": "civil", "hf": ["legi_code_civil"], "ids": ["LEGITEXT000006070721"], "abr": "C. civ.", "titre": "Code civil", "code": True},
+    {"slug": "penal", "hf": ["legi_code_penal"], "ids": ["LEGITEXT000006070719"], "abr": "C. pén.", "titre": "Code pénal", "code": True},
+    {"slug": "procedure-civile", "hf": ["legi_code_de_procedure_civile"], "ids": ["LEGITEXT000006070716"], "abr": "C. pr. civ.", "titre": "Code de procédure civile", "code": True},
+    {"slug": "procedure-penale", "hf": ["legi_code_de_procedure_penale"], "ids": ["LEGITEXT000006071154"], "abr": "C. pr. pén.", "titre": "Code de procédure pénale", "code": True},
+    {"slug": "commerce", "hf": ["legi_code_de_commerce"], "ids": ["LEGITEXT000005634379"], "abr": "C. com.", "titre": "Code de commerce", "code": True},
+    {"slug": "travail", "hf": ["legi_code_du_travail"], "ids": ["LEGITEXT000006072050"], "abr": "C. trav.", "titre": "Code du travail", "code": True},
+    {"slug": "consommation", "hf": ["legi_code_de_la_consommation"], "ids": ["LEGITEXT000006069565"], "abr": "C. consom.", "titre": "Code de la consommation", "code": True},
+    {"slug": "justice-administrative", "hf": ["legi_code_de_justice_administrative"], "ids": ["LEGITEXT000006070933"], "abr": "CJA", "titre": "Code de justice administrative", "code": True},
+    {"slug": "relations-administration", "hf": ["legi_code_des_relations_entre_le_public_et_l_administration"], "ids": ["LEGITEXT000031366350"], "abr": "CRPA", "titre": "Code des relations entre le public et l'administration", "code": True},
 ]
 EN_VIGUEUR = ("VIGUEUR", "VIGUEUR_DIFF")
 
@@ -134,6 +134,98 @@ def version_issue_de(art):
     return ok[-1] if ok else (art["liens"][-1] if art["liens"] else None)
 
 
+HF_API = "https://huggingface.co/api/datasets/AgentPublic/legi/tree/main/data/legi-latest/"
+HF_FICHIER = "https://huggingface.co/datasets/AgentPublic/legi/resolve/main/"
+COLONNES = ["doc_id", "chunk_index", "status", "number", "start_date", "end_date", "subtitles", "nota", "links", "text"]
+ENTETES = re.compile(r"\s+-\s+(?=(?:Livre|Titre|Sous-titre|Chapitre|Section|Sous-section|Paragraphe|Partie|Annexe|Préambule)\b)")
+
+
+def assurer_pyarrow():
+    try:
+        import pyarrow.parquet as pq  # noqa: F401
+    except ImportError:
+        import subprocess
+        subprocess.run([sys.executable, "-m", "pip", "install", "--quiet", "pyarrow"], check=True)
+    import pyarrow.parquet as pq
+    return pq
+
+
+def fichiers_hf(dossier):
+    local = os.environ.get("RELEVE_HF_LOCAL")
+    if local:
+        d = os.path.join(local, dossier)
+        return sorted(os.path.join(d, f) for f in os.listdir(d) if f.endswith(".parquet")) if os.path.isdir(d) else []
+    try:
+        liste = json.loads(obtenir(HF_API + dossier, timeout=60).decode("utf-8"))
+    except Exception:
+        return []
+    return [HF_FICHIER + x["path"] for x in liste if x.get("type") == "file" and x.get("path", "").endswith(".parquet")]
+
+
+def lire_hf(c, articles, cache_dir):
+    """Lit un code depuis la copie Parquet publiée par la DINUM ; renvoie le nombre de versions d'articles lues."""
+    pq = assurer_pyarrow()
+    for dossier in c.get("hf", []):
+        sources = fichiers_hf(dossier)
+        if not sources:
+            continue
+        morceaux = {}
+        for src in sources:
+            chemin = src
+            if src.startswith("http"):
+                chemin = os.path.join(cache_dir, "legi_hf.parquet")
+                req = urllib.request.Request(src, headers={"User-Agent": UA})
+                with urllib.request.urlopen(req, timeout=900) as r, open(chemin, "wb") as f:
+                    while True:
+                        b = r.read(1 << 20)
+                        if not b:
+                            break
+                        f.write(b)
+            try:
+                dispo = set(pq.read_schema(chemin).names)
+                table = pq.read_table(chemin, columns=[k for k in COLONNES if k in dispo])
+                for ligne in table.to_pylist():
+                    morceaux.setdefault(ligne.get("doc_id"), []).append(ligne)
+            finally:
+                if src.startswith("http") and os.path.exists(chemin):
+                    os.remove(chemin)
+        n = 0
+        for doc_id, lignes in morceaux.items():
+            if not doc_id or not str(doc_id).startswith("LEGIARTI"):
+                continue
+            lignes.sort(key=lambda x: x.get("chunk_index") or 0)
+            l0 = lignes[0]
+            liens = []
+            brut = l0.get("links") or []
+            if isinstance(brut, str):
+                try:
+                    brut = json.loads(brut)
+                except ValueError:
+                    brut = []
+            for li in brut if isinstance(brut, list) else []:
+                if isinstance(li, dict) and li.get("link_direction") == "cible" and li.get("link_type") in ("CREATION", "MODIFIE", "TRANSFERE", "DEPLACE", "CODIFIE"):
+                    liens.append({"date": str(li.get("text_signature_date") or "")[:10], "type": li.get("link_type"),
+                                  "titre": re.sub(r"\s*\([A-Z]\)\s*$", "", str(li.get("title") or "")).strip(), "cid": li.get("text_doc_id") or ""})
+            sous = str(l0.get("subtitles") or "").strip()
+            chemin_t = [t.strip() for t in (sous.split("\n") if "\n" in sous else ENTETES.split(sous)) if t.strip()]
+            texte = "\n".join(str(x.get("text") or "").strip() for x in lignes).strip()
+            articles[doc_id] = {"id": doc_id, "num": str(l0.get("number") or "").strip(), "etat": str(l0.get("status") or ""),
+                                "debut": str(l0.get("start_date") or "")[:10], "fin": str(l0.get("end_date") or "")[:10],
+                                "texte": texte, "nota": str(l0.get("nota") or "").strip(), "chemin": chemin_t, "liens": liens,
+                                "_motif": c["ids"][0]}
+            n += 1
+        if n:
+            return n
+    return 0
+
+
+def annonce(niveau, message):
+    """Affiche le message dans le journal et, sur GitHub, dans le résumé du passage."""
+    print(message)
+    if os.environ.get("GITHUB_ACTIONS"):
+        print(f"::{niveau} title=Codes::{message}")
+
+
 def construire_codes(site_dir, cache_dir):
     os.makedirs(cache_dir, exist_ok=True)
     etat_path = os.path.join(cache_dir, "codes-etat.json")
@@ -150,32 +242,61 @@ def construire_codes(site_dir, cache_dir):
             open(os.path.join(out_dir, nom), "wb").write(open(os.path.join(cache_codes, nom), "rb").read())
         print(f"Codes : cache de {age} jour(s) réutilisé")
         return
-    racine, globale, incr = lister_archives()
     motifs = [i for c in CODES for i in c["ids"]]
-    articles, suppr = {}, set()
+    articles, suppr, source, erreurs = {}, set(), None, []
+    globale, incr = None, []
     debut = time.time()
-    for nom in [globale] + incr:
-        tmp = os.path.join(cache_dir, "legi.tar.gz")
-        print(f"Codes : lecture de {nom}")
-        try:
-            if racine.startswith("file://"):
-                tmp = racine[7:] + nom
-            else:
-                req = urllib.request.Request(racine + nom, headers={"User-Agent": UA})
-                with urllib.request.urlopen(req, timeout=1800) as r, open(tmp, "wb") as f:
-                    while True:
-                        b = r.read(1 << 20)
-                        if not b:
-                            break
-                        f.write(b)
-            k = parcourir(tmp, motifs, articles, suppr)
-            print(f"  {k} versions d'articles retenues")
-        finally:
-            if not racine.startswith("file://") and os.path.exists(tmp):
-                os.remove(tmp)
-        if time.time() - debut > 2700:
-            print("  temps dépassé : mises à jour suivantes ignorées pour ce passage")
-            break
+    try:
+        racine, globale, incr = lister_archives()
+        for nom in [globale] + incr:
+            tmp = os.path.join(cache_dir, "legi.tar.gz")
+            print(f"Codes : lecture de {nom}")
+            try:
+                if racine.startswith("file://"):
+                    tmp = racine[7:] + nom
+                else:
+                    req = urllib.request.Request(racine + nom, headers={"User-Agent": UA})
+                    with urllib.request.urlopen(req, timeout=1800) as r, open(tmp, "wb") as f:
+                        while True:
+                            b = r.read(1 << 20)
+                            if not b:
+                                break
+                            f.write(b)
+                k = parcourir(tmp, motifs, articles, suppr)
+                print(f"  {k} versions d'articles retenues")
+            finally:
+                if not racine.startswith("file://") and os.path.exists(tmp):
+                    os.remove(tmp)
+            if time.time() - debut > 2700:
+                print("  temps dépassé : mises à jour suivantes ignorées pour ce passage")
+                break
+        source = "DILA, base LEGI (Légifrance)"
+    except Exception as e:
+        erreurs.append(f"serveur de la DILA : {e}")
+        annonce("warning", f"Serveur de la DILA indisponible ({e}) : bascule sur la copie publiée par la DINUM")
+    if not articles:
+        articles, suppr = {}, set()
+        for c in CODES:
+            try:
+                k = lire_hf(c, articles, cache_dir)
+                print(f"Codes (copie DINUM) : {c['titre']} : {k} versions d'articles")
+                if not k:
+                    erreurs.append(f"{c['titre']} : introuvable dans la copie DINUM")
+            except Exception as e:
+                erreurs.append(f"{c['titre']} : {e}")
+        if articles:
+            source = "DILA, base LEGI (Légifrance), via la copie publiée par la DINUM"
+    if not articles:
+        message = " ; ".join(erreurs)[:600] or "aucune source disponible"
+        annonce("warning", f"Codes non mis à jour : {message}")
+        if os.path.isdir(cache_codes) and os.listdir(cache_codes):
+            for nom in os.listdir(cache_codes):
+                open(os.path.join(out_dir, nom), "wb").write(open(os.path.join(cache_codes, nom), "rb").read())
+            print("Codes : dernière version connue republiée")
+        else:
+            json.dump({"maj": datetime.date.today().isoformat(), "codes": [], "erreur": message},
+                      open(os.path.join(out_dir, "index.json"), "w", encoding="utf-8"), ensure_ascii=False)
+        return
     for i in suppr:
         articles.pop(i, None)
     aujourd_hui = datetime.date.today().isoformat()
@@ -219,14 +340,15 @@ def construire_codes(site_dir, cache_dir):
             print(f"  {c['titre']} : aucun article trouvé")
             continue
         doc = {"slug": c["slug"], "titre": c["titre"], "abr": c["abr"], "code": c["code"], "maj": aujourd_hui,
-               "source": "DILA, base LEGI (Légifrance), Licence Ouverte", "toc": toc, "articles": sortie}
+               "source": f"{source}, Licence Ouverte", "toc": toc, "articles": sortie}
         nom = f"{c['slug']}.json"
         txt = json.dumps(doc, ensure_ascii=False, separators=(",", ":"))
         open(os.path.join(out_dir, nom), "w", encoding="utf-8").write(txt)
         open(os.path.join(cache_codes, nom), "w", encoding="utf-8").write(txt)
         resume.append({"slug": c["slug"], "titre": c["titre"], "abr": c["abr"], "n": len(sortie), "maj": aujourd_hui})
         print(f"  {c['titre']} : {len(sortie)} articles en vigueur ({len(txt) / 1e6:.1f} Mo)")
-    idx = json.dumps({"maj": aujourd_hui, "codes": resume}, ensure_ascii=False)
+    annonce("notice", f"Codes : {len(resume)} codes publiés, {sum(r['n'] for r in resume)} articles en vigueur ; source : {source}")
+    idx = json.dumps({"maj": aujourd_hui, "source": source, "codes": resume}, ensure_ascii=False)
     open(os.path.join(out_dir, "index.json"), "w", encoding="utf-8").write(idx)
     open(os.path.join(cache_codes, "index.json"), "w", encoding="utf-8").write(idx)
     json.dump({"date": datetime.datetime.now(datetime.timezone.utc).isoformat(), "globale": globale, "maj": len(incr)},

@@ -3,12 +3,13 @@
 <head>
 <meta charset="utf-8">
 <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
-<title>Le Relevé</title>
+<title>Aux Voix</title>
+<link rel="icon" type="image/svg+xml" href="favicon.svg">
 <meta name="description" content="Ce que votent les députés, d'après les données officielles de l'Assemblée nationale.">
 <!-- Version bêta : retirer la ligne suivante à l'ouverture publique -->
 <meta name="robots" content="noindex, nofollow">
-<link rel="alternate" type="application/rss+xml" title="Le Relevé : votes importants" href="flux/votes.xml">
-<link rel="alternate" type="application/rss+xml" title="Le Relevé : lois" href="flux/lois.xml">
+<link rel="alternate" type="application/rss+xml" title="Aux Voix : votes importants" href="flux/votes.xml">
+<link rel="alternate" type="application/rss+xml" title="Aux Voix : lois" href="flux/lois.xml">
 <style>
 @font-face{font-family:"Lexend";src:url("fonts/Lexend.ttf") format("truetype");font-weight:300 800;font-style:normal;font-display:swap}
 @font-face{font-family:"Source Sans 3";src:url("fonts/SourceSans3.ttf") format("truetype");font-weight:200 900;font-style:normal;font-display:swap}
@@ -17,8 +18,8 @@
   --texte:#1B1D1F;--texte2:#5A6169;--texte3:#666D75;
   --bord:#DDE1E5;--bord2:#EDF0F3;--fond:#FFFFFF;--gris:#F5F7F9;
   --bleu:#123B6D;--bleu2:#1B58A3;--bleuclair:#EAF0F7;--bleubord:#D2DFEC;
-  --pour:#1F6FB2;--contre:#A85706;--abst:#8A9099;--nonv:#4A5058;
-  --mark:#FFE9A8;--alerte:#8C3B12;--surbleu:#FFFFFF;--pourfill:#1F6FB2;--contrefill:#C2690A;
+  --pour:#1F6FB2;--contre:#A61B1B;--abst:#8A9099;--nonv:#4A5058;
+  --mark:#FFE9A8;--alerte:#8C3B12;--surbleu:#FFFFFF;--pourfill:#1F6FB2;--contrefill:#B42318;
   --s:"Source Sans 3","Helvetica Neue",Helvetica,Arial,sans-serif;
   --titre:"Lexend","Source Sans 3","Helvetica Neue",Arial,sans-serif;
   --t-xs:12px;--t-sm:13px;--t-ui:14px;--t-base:16px;--t-md:18px;--t-lg:21px;--t-xl:26px;--t-2xl:32px;
@@ -31,11 +32,11 @@
 @media (prefers-color-scheme:dark){:root:not([data-theme="light"]){
   --texte:#E7EAED;--texte2:#A2A9B1;--texte3:#8A9199;--bord:#333A42;--bord2:#262C33;--fond:#14171A;--gris:#1B1F24;
   --bleu:#9CC2EA;--bleu2:#8FB9E8;--bleuclair:#18242F;--bleubord:#26384A;
-  --pour:#5C9FDC;--contre:#D98B2B;--abst:#8A9099;--nonv:#A2A9B1;--mark:#5A4A12;--alerte:#D98B2B;--surbleu:#0E1114;color-scheme:dark}}
+  --pour:#5C9FDC;--contre:#EF6B5F;--contrefill:#EF6B5F;--abst:#8A9099;--nonv:#A2A9B1;--mark:#5A4A12;--alerte:#D98B2B;--surbleu:#0E1114;color-scheme:dark}}
 :root[data-theme="dark"]{
   --texte:#E7EAED;--texte2:#A2A9B1;--texte3:#8A9199;--bord:#333A42;--bord2:#262C33;--fond:#14171A;--gris:#1B1F24;
   --bleu:#9CC2EA;--bleu2:#8FB9E8;--bleuclair:#18242F;--bleubord:#26384A;
-  --pour:#5C9FDC;--contre:#D98B2B;--abst:#8A9099;--nonv:#A2A9B1;--mark:#5A4A12;--alerte:#D98B2B;--surbleu:#0E1114;color-scheme:dark}
+  --pour:#5C9FDC;--contre:#EF6B5F;--contrefill:#EF6B5F;--abst:#8A9099;--nonv:#A2A9B1;--mark:#5A4A12;--alerte:#D98B2B;--surbleu:#0E1114;color-scheme:dark}
 *,*::before,*::after{box-sizing:border-box}
 [hidden]{display:none!important}
 html{scroll-padding-top:calc(env(safe-area-inset-top,0px) + var(--mast-h) + 16px);-webkit-text-size-adjust:100%;text-size-adjust:100%}
@@ -75,8 +76,10 @@ sup{font-size:.7em;line-height:0}
 .legsel select{font-size:13.5px;padding:3px 6px}
 .mast{position:sticky;top:env(safe-area-inset-top,0px);z-index:30;background:var(--fond);border-bottom:1px solid var(--bord)}
 .mast .wrap{display:flex;align-items:center;gap:28px;min-height:68px}
-.wordmark{font-weight:800;font-size:21px;letter-spacing:-.025em;color:var(--texte);text-decoration:none;white-space:nowrap}
-.wordmark::after{content:"";display:block;width:26px;height:3px;background:var(--bleu2);margin-top:3px}
+.wordmark{display:inline-flex;align-items:center;gap:10px;font-family:var(--titre);font-size:22px;line-height:1;letter-spacing:-.03em;color:var(--texte);text-decoration:none;white-space:nowrap}
+.wordmark .emb{width:44px;height:24px;flex:none;color:var(--bleu)}
+.wordmark .wm1{font-weight:300}.wordmark .wm2{font-weight:800;color:var(--bleu)}
+.wordmark:hover .wm2{color:var(--bleu2)}
 .nav{display:flex;gap:24px;overflow-x:auto;scrollbar-width:none}
 .nav::-webkit-scrollbar{display:none}
 .nav a{font-size:var(--t-ui);font-weight:600;color:var(--texte);text-decoration:none;padding:23px 2px 20px;border-bottom:3px solid transparent;white-space:nowrap;transition:color var(--anim),border-color var(--anim)}
@@ -166,7 +169,7 @@ table.t.fit{table-layout:fixed;font-size:14.5px}
   .btn,.seg button,.dlg-x{min-height:44px}
   .dlg-x{min-width:44px}
   input[type=text],input[type=search],select{min-height:44px;padding-top:10px;padding-bottom:10px}
-  .wordmark{display:inline-flex;flex-direction:column;justify-content:center;min-height:44px}
+  .wordmark{min-height:44px}
   .th-s{display:inline-block;padding:14px 0}
   .proto a,.folio a,.foot a,.t td a,.side-list a,.circs a,.members a,.pieces a,.rows h2 a,.rows h3 a,.trio h3 a,.foot li a,.acts a,.meta a,.ui a,.empty-note a,.notice a,.flag a,.box a{display:inline-block;padding:13px 0}
   .t td,.side-list li,.circs li,.members li{padding-top:2px;padding-bottom:2px}
@@ -578,6 +581,37 @@ main{view-transition-name:page}
 .citer-l{border-bottom:1px solid var(--bord2);padding:10px 0}
 .citer-l .lab{margin:0 0 4px}
 .citer-t{margin:0 0 8px;font-size:var(--t-ui);line-height:1.5;overflow-wrap:anywhere}
+
+/* Filtres : tous les intitulés sur une même ligne, tous les champs à la même hauteur */
+.filters>div{display:flex;flex-direction:column}
+.filters .lab{display:block;margin:0 0 6px;line-height:1.25;white-space:nowrap}
+.filters input[type=search],.filters input[type=text],.filters select{height:42px;box-sizing:border-box;padding-top:0;padding-bottom:0}
+.filters .chk{height:42px;margin:0!important;white-space:nowrap}
+.filters select{max-width:300px}
+.filters .btn{height:42px;min-height:42px;align-self:flex-end}
+.filters>p.meta{align-self:flex-end;height:42px;display:flex;align-items:center;margin:0 0 0 auto!important;white-space:nowrap}
+@media (max-width:640px){.filters>p.meta{margin-left:0!important;height:auto}.filters .chk{white-space:normal;height:auto;min-height:42px}}
+
+/* En-tête : le menu tient sur une ligne au-delà de 1180 px, passe sous le logo en dessous */
+.mast .wrap{gap:22px}
+.nav{gap:18px}
+.search{flex:0 1 220px}
+@media (max-width:1180px){
+  .mast .wrap{flex-wrap:wrap;gap:10px 18px;min-height:0;padding-top:12px}
+  .nav{order:3;flex-basis:100%;gap:20px;border-top:1px solid var(--bord2)}
+  .nav a{padding:13px 0 11px;border-bottom-width:2px}
+  .search{flex:1 1 200px;max-width:340px;margin-left:auto}
+}
+
+/* Titres de colonnes : la flèche de tri ne prend jamais de place sur la ligne, tous les titres sur une seule ligne */
+.th-s{display:inline-block;position:relative;padding-right:15px;white-space:nowrap}
+.th-s .sort-ic{position:absolute;right:0;bottom:.2em;margin:0}
+.t.fit th{white-space:nowrap;vertical-align:bottom}
+/* Cellules : tout est centré verticalement, nom et vignette compris */
+.t.fit td{vertical-align:middle}
+.t th.n .th-s{padding-right:0;padding-left:15px}
+.t th.n .th-s .sort-ic{left:0;right:auto}
+@media (max-width:1100px){.t.fit th,.th-s{white-space:normal}table.t.fit{table-layout:auto}.t.fit th{width:auto!important}}
 </style>
 </head>
 <body data-lv="2">
@@ -586,7 +620,7 @@ main{view-transition-name:page}
 <div class="folio"><div class="wrap"><span id="today"></span><span id="folio-maj">Chargement des données officielles</span><span class="legsel"><label for="legsel">Législature</label> <select id="legsel"></select></span></div></div>
 <header class="mast">
   <div class="wrap">
-    <a class="wordmark" href="#/">Le Relevé</a>
+    <a class="wordmark" href="#/" aria-label="Aux Voix, accueil"><svg class="emb" viewBox="0 2 120 64" aria-hidden="true"><g fill="none" stroke="currentColor" stroke-width="6" stroke-linecap="round"><path d="M43.0 60.0 A17 17 0 0 1 50.0 46.2"/><path d="M53.1 44.5 A17 17 0 0 1 66.9 44.5"/><path d="M70.0 46.2 A17 17 0 0 1 77.0 60.0"/><path d="M32.0 60.0 A28 28 0 0 1 43.5 37.3"/><path d="M48.6 34.4 A28 28 0 0 1 71.4 34.4"/><path d="M76.5 37.3 A28 28 0 0 1 88.0 60.0"/><path d="M21.0 60.0 A39 39 0 0 1 37.1 28.4"/><path d="M44.1 24.4 A39 39 0 0 1 75.9 24.4"/><path d="M82.9 28.4 A39 39 0 0 1 99.0 60.0"/><path d="M10.0 60.0 A50 50 0 0 1 30.6 19.5"/><path d="M39.7 14.3 A50 50 0 0 1 80.3 14.3"/><path d="M89.4 19.5 A50 50 0 0 1 110.0 60.0"/></g></svg><span><span class="wm1">Aux </span><span class="wm2">Voix</span></span></a>
     <nav class="nav" aria-label="Rubriques">
       <a href="#/lois" data-nav="lois">Lois</a>
       <a href="#/codes" data-nav="codes">Codes</a>
@@ -607,7 +641,7 @@ main{view-transition-name:page}
   <div><h2>Dernières corrections</h2><ul id="foot-corr"><li class="meta">Aucune correction publiée.</li></ul><p class="meta"><a href="#/methode/corrections">Journal des corrections</a></p></div>
   <div><h2>Méthode</h2><ul><li><a href="#/methode/indicateurs">Comment sont calculés les chiffres</a></li><li><a href="#/methode/sources">Sources et données brutes</a></li><li><a href="#/methode/mentions">Mentions légales</a></li><li><a href="#/methode/donnees-personnelles">Données personnelles</a></li><li><a href="#/methode/accessibilite">Accessibilité</a></li><li><a href="flux/">Flux de suivi (RSS)</a></li></ul></div>
   <div><h2>Indépendance</h2><ul><li>Aucune publicité, aucun cookie, aucun traceur.</li><li>Données : Assemblée nationale, Licence Ouverte.</li></ul></div>
-  <div class="fine"><span class="meta" id="foot-maj">Le Relevé, version bêta.</span>
+  <div class="fine"><span class="meta" id="foot-maj">Aux Voix, version bêta.</span>
     <div class="seg" role="group" aria-label="Thème d'affichage" id="theme-seg"><button type="button" data-th="auto">Automatique</button><button type="button" data-th="light">Clair</button><button type="button" data-th="dark">Sombre</button></div></div>
 </div></footer>
 <dialog id="dlg" aria-labelledby="dlg-t"><div class="dlg-in"><div class="dlg-h"><h2 id="dlg-t" class="h3"></h2><button class="dlg-x" type="button" aria-label="Fermer">×</button></div><div id="dlg-b"></div></div></dialog>
@@ -1019,17 +1053,17 @@ function pageElus(){
   EF.lim=60;const depts=[...new Set(DEP.map(d=>d.dept).filter(Boolean))].sort((a,b)=>a.localeCompare(b,"fr"));const K=PER.length;
   const cols=[{k:"nom",label:"Nom",get:d=>d.nom+" "+d.prenom,render:d=>`<span class="nm"><span class="pt-s" aria-hidden="true">${d.photo?`<img src="${esc(d.photo.f)}" alt="" loading="lazy" width="36" height="36">`:esc(initials(d))}</span><span><a href="#/elu/${d.id}">${esc(d.nom)}</a> ${esc(d.prenom)}</span></span>`},
     {k:"groupe",label:"Groupe",wd:"9%",get:d=>grp(d.groupe).sigle,render:d=>esc(grp(d.groupe).sigle)},
-    {k:"circ",label:"Circonscription",wd:"17%",hide:"hm",get:d=>(d.numDept||"").padStart(3,"0")+String(d.circ).padStart(2,"0"),render:d=>esc(d.dept?`${d.dept}, ${ord(d.circ)}`:"—")},
-    {k:"partS",label:"Scrutins solennels",tip:"Trier par participation aux scrutins solennels",wd:"12%",num:1,desc:1,get:d=>d.st[K].partS,render:d=>pc(d.st[K].partS)},
-    {k:"part",label:"Tous les scrutins",tip:"Trier par participation à tous les scrutins publics",wd:"12%",num:1,desc:1,hide:"hs",get:d=>d.st[K].part,render:d=>pc(d.st[K].part)},
-    {k:"align",label:"Comme son groupe",tip:"Trier par part des votes identiques à la position de son groupe",wd:"12%",num:1,desc:1,hide:"hs",get:d=>d.st[K].align,render:d=>pc(d.st[K].align)},
+    {k:"circ",label:"Circonscription",wd:"15%",hide:"hm",get:d=>(d.numDept||"").padStart(3,"0")+String(d.circ).padStart(2,"0"),render:d=>esc(d.dept?`${d.dept}, ${ord(d.circ)}`:"—")},
+    {k:"partS",label:"Solennels",tip:"Trier par participation aux scrutins solennels",wd:"12%",num:1,desc:1,get:d=>d.st[K].partS,render:d=>pc(d.st[K].partS)},
+    {k:"part",label:"Tous scrutins",tip:"Trier par participation à tous les scrutins publics",wd:"12%",num:1,desc:1,hide:"hs",get:d=>d.st[K].part,render:d=>pc(d.st[K].part)},
+    {k:"align",label:"Comme son groupe",tip:"Trier par part des votes identiques à la position de son groupe",wd:"14%",num:1,desc:1,hide:"hs",get:d=>d.st[K].align,render:d=>pc(d.st[K].align)},
     ...(DATA.amendements&&DATA.amendements.total?[{k:"am",label:"Amende­ments",tip:"Trier par nombre d'amendements déposés en premier signataire",wd:"11%",num:1,desc:1,get:d=>d.am?d.am[0]:0,render:d=>n(d.am?d.am[0]:0)}]:[])];
-  return {title:"Élus",html:`<div class="wrap sec"><h1 class="h1s">Élus</h1><p class="lede intro">Les ${n(actifs().length)} députés ${enExercice()} de la ${esc(DATA.label)}. Participation : part des scrutins où le député a voté. Cliquez sur un titre de colonne pour trier, à nouveau pour inverser.</p>
-    <div class="filters"><div><label class="lab" for="ef-q">Nom</label><input id="ef-q" type="search" placeholder="Nom ou prénom"></div>
+  return {title:"Élus",html:`<div class="wrap sec"><h1 class="h1s">Élus</h1><p class="lede intro">Les ${n(actifs().length)} députés ${enExercice()} de la ${esc(DATA.label)}. Participation : part des scrutins où le député a voté, pour les scrutins solennels puis pour tous les scrutins. Cliquez sur un titre de colonne pour trier, à nouveau pour inverser.</p>
+    <div class="filters"><div><label class="lab" for="ef-q">Nom</label><input id="ef-q" type="search" placeholder="Nom ou prénom" style="width:220px"></div>
       <div><label class="lab" for="ef-g">Groupe</label><select id="ef-g"><option value="all">Tous les groupes</option>${GRP.filter(g=>g.effectif>0).map(g=>`<option value="${g.i}">${esc(g.nom)} (${esc(g.sigle)})</option>`).join("")}</select></div>
       <div><label class="lab" for="ef-d">Département</label><select id="ef-d"><option value="">Tous</option>${depts.map(x=>`<option>${esc(x)}</option>`).join("")}</select></div>
-      <label class="chk" style="margin-bottom:10px"><input type="checkbox" id="ef-a"> Députés ayant quitté leur mandat en cours de législature</label>
-      <p class="meta" id="ef-c" aria-live="polite" style="margin:0 0 10px"></p></div>
+      <div><span class="lab" aria-hidden="true">Mandat</span><label class="chk"><input type="checkbox" id="ef-a"> Ayant quitté leur mandat</label></div>
+      <p class="meta" id="ef-c" aria-live="polite"></p></div>
     <div id="ef-out"></div><p class="meta">Définitions : <a href="#/methode/indicateurs">comment sont calculés ces pourcentages</a>.</p></div>`,after(){
     $("#ef-q").value=EF.q;$("#ef-g").value=EF.g;$("#ef-d").value=EF.d;$("#ef-a").checked=EF.anc;
     const draw=()=>{const q=norm(EF.q.trim());
@@ -1093,11 +1127,11 @@ let GF={sort:{k:"ordre",dir:1}};
 function pageGroupes(){
   const act=groupesActifs(),old=GRP.filter(g=>!g.actif),tot=act.reduce((a,g)=>a+g.effectif,0)||577;
   const cols=[{k:"ordre",label:"Groupe",get:g=>g.i,render:g=>`<a href="#/groupe/${g.id}">${esc(g.nom)}</a> <span class="meta">(${esc(g.sigle)})</span>`},
-    {k:"sieges",label:"Sièges",wd:"9%",num:1,desc:1,get:g=>g.effectif,render:g=>n(g.effectif)},
-    {k:"part",label:"Part de l'Assemblée",wd:"12%",hide:"hs",num:1,desc:1,get:g=>g.effectif/tot,render:g=>pc(g.effectif/tot)},
-    {k:"rice",label:"Cohésion",wd:"11%",num:1,desc:1,get:g=>g.rice,render:g=>g.rice==null?'<span class="meta">sans objet</span>':pc(g.rice)},
-    {k:"partS",label:"Participation médiane, solennels",wd:"15%",hide:"hm",num:1,desc:1,get:g=>g.partSMed,render:g=>pc(g.partSMed)},
-    {k:"partM",label:"Participation médiane, tous scrutins",wd:"15%",hide:"hm",num:1,desc:1,get:g=>g.partMed,render:g=>pc(g.partMed)}];
+    {k:"sieges",label:"Sièges",wd:"8%",num:1,desc:1,get:g=>g.effectif,render:g=>n(g.effectif)},
+    {k:"part",label:"Part de l'Assemblée",wd:"14%",hide:"hs",num:1,desc:1,get:g=>g.effectif/tot,render:g=>pc(g.effectif/tot)},
+    {k:"rice",label:"Cohésion",wd:"10%",num:1,desc:1,get:g=>g.rice,render:g=>g.rice==null?'<span class="meta">sans objet</span>':pc(g.rice)},
+    {k:"partS",label:"Solennels (médiane)",tip:"Trier par participation médiane aux scrutins solennels",wd:"17%",hide:"hm",num:1,desc:1,get:g=>g.partSMed,render:g=>pc(g.partSMed)},
+    {k:"partM",label:"Tous scrutins (médiane)",tip:"Trier par participation médiane à tous les scrutins",wd:"18%",hide:"hm",num:1,desc:1,get:g=>g.partMed,render:g=>pc(g.partMed)}];
   return {title:"Groupes",html:`<div class="wrap sec"><h1 class="h1s">Groupes</h1><p class="lede intro">Les votes se lisent par groupe parlementaire. Un groupe n'est pas un parti : chaque fiche montre aussi les partis de rattachement de ses membres. Cliquez sur un titre de colonne pour trier.</p>
     <p class="ui"><a href="#/simulateur">Simuler une coalition entre groupes</a></p>
     <div id="gf-out" style="margin-top:22px"></div>
@@ -1297,7 +1331,7 @@ const COMP=[
   {id:"cmp",titre:"La commission mixte paritaire",sous:"Sept députés, sept sénateurs, un texte commun",corps:["La commission mixte paritaire réunit sept députés et sept sénateurs. Elle cherche un texte commun sur les seules dispositions encore en discussion.","Elle est convoquée par le Premier ministre ou, pour une proposition de loi, par les présidents des deux assemblées agissant conjointement.","Si elle aboutit, son texte est soumis aux deux chambres, qui ne peuvent l'amender qu'avec l'accord du Gouvernement. Si elle échoue, le Gouvernement peut, après une nouvelle lecture dans chaque chambre, demander à l'Assemblée nationale de statuer définitivement : c'est le « dernier mot »."]},
   {id:"scrutin",titre:"Lire un scrutin",sous:"Suffrages exprimés, abstentions, mises au point",corps:["Un scrutin public enregistre le vote de chaque député. Il est ordinaire lorsqu'il est demandé en séance, notamment par le Gouvernement, la commission saisie ou un président de groupe ; il est solennel lorsque la Conférence des présidents l'a fixé à l'avance, en général pour le vote sur l'ensemble d'un texte important.","Les suffrages exprimés sont les votes pour et contre. Les abstentions n'en font pas partie : un texte est adopté s'il recueille plus de la moitié des suffrages exprimés, quel que soit le nombre d'abstentions.","Un député peut déléguer son vote à un collègue, qui ne peut en détenir qu'une. Après le vote, un député peut faire une « mise au point » pour indiquer qu'il souhaitait voter autrement : elle est publiée, mais ne modifie pas le résultat.","Par usage, le président de séance ne prend pas part au vote : il apparaît comme non-votant. Et les votes à main levée, les plus nombreux, ne sont pas nominatifs : ils ne disent rien de la position d'un élu en particulier."]}];
 function pageMethode(){
-  const M=SITE.mentions||{},todo=!M.directeur_publication||!M.contact;
+  const M=SITE.mentions||{},anon=M.anonyme===true,todo=anon?!M.contact:(!M.directeur_publication||!M.contact);
   return {title:"Méthode et mentions légales",html:`<div class="wrap sec" style="max-width:820px;margin-left:auto;margin-right:auto"><h1 class="h1s">Méthode et mentions légales</h1>
     <p class="lede intro">Tout ce qui figure sur ce site est calculé à partir des données publiques officielles de l'Assemblée nationale, sans interprétation ni jugement, et peut être vérifié par n'importe qui.</p>
     <section id="sources" style="margin-top:40px"><h2 class="h2">Sources et données brutes</h2>
@@ -1325,17 +1359,17 @@ function pageMethode(){
       <p class="ui">Intérêts des élus : nous ne classons pas les élus ou les partis par « intérêts » sectoriels, parce qu'une telle attribution relèverait de l'interprétation. Chaque fiche renvoie à la déclaration d'intérêts publiée par la Haute Autorité pour la transparence de la vie publique, et les votes sont classés par thème.</p></section>
     <section id="corrections" style="margin-top:40px"><h2 class="h2">Journal des corrections</h2>${CORR.length?`<ul class="rows" style="margin-top:14px">${CORR.map(x=>`<li><p class="meta" style="margin:0 0 4px">${fd(x.date)}</p><p class="ui" style="margin:0">${esc(x.texte)}</p></li>`).join("")}</ul>`:`<p class="ui" style="margin-top:12px">Aucune correction publiée à ce jour.</p>`}</section>
     <section id="mentions" style="margin-top:40px"><h2 class="h2">Mentions légales</h2>
-      ${todo?`<p class="todo">À compléter avant toute ouverture publique : fichier contenu/site.json.</p>`:""}
-      <dl class="facts"><dt>Éditeur</dt><dd>${esc(M.editeur||"—")}</dd><dt>Directeur de la publication</dt><dd>${esc(M.directeur_publication||"—")}</dd><dt>Contact</dt><dd>${M.contact?`<a href="mailto:${esc(M.contact)}">${esc(M.contact)}</a>`:"—"}</dd><dt>Hébergeur</dt><dd>${esc(M.hebergeur||"—")}</dd></dl>
-      <p class="ui" style="margin-top:14px">Droit de réponse : toute personne citée peut demander l'insertion d'une réponse, conformément à la loi pour la confiance dans l'économie numérique, en écrivant à l'adresse de contact. Toute erreur signalée est corrigée et consignée dans le journal des corrections.</p>
-      <p class="ui">Réutilisation : les données de l'Assemblée nationale sont réutilisées sous Licence Ouverte, avec mention de leur source et de leur date de mise à jour. Les polices Newsreader et Schibsted Grotesk sont distribuées sous licence SIL Open Font License et hébergées sur ce site.</p>
+      ${todo?`<p class="todo">${anon?"À compléter avant toute ouverture publique : l'adresse de contact (fichier contenu/site.json).":"À compléter avant toute ouverture publique : fichier contenu/site.json."}</p>`:""}
+      <dl class="facts">${anon?`<dt>Éditeur</dt><dd>Site édité à titre non professionnel par un particulier qui a choisi de rester anonyme à l'égard du public, conformément à l'article 1-1, II, de la loi n° 2004-575 du 21 juin 2004 pour la confiance dans l'économie numérique. Son identité a été communiquée à l'hébergeur.</dd><dt>Directeur de la publication</dt><dd>L'éditeur du site.</dd>`:`<dt>Éditeur</dt><dd>${esc(M.editeur||"—")}</dd><dt>Directeur de la publication</dt><dd>${esc(M.directeur_publication||"—")}</dd>`}<dt>Contact</dt><dd>${M.contact?`<a href="mailto:${esc(M.contact)}">${esc(M.contact)}</a>`:"—"}</dd><dt>Hébergeur</dt><dd>${esc(M.hebergeur||"—")}. L'hébergeur assure aussi le stockage de l'ensemble des données du service.</dd></dl>
+      <p class="ui" style="margin-top:14px">Droit de réponse : toute personne nommée ou désignée dans le service dispose d'un droit de réponse, prévu à l'article 1-1, III, de la loi du 21 juin 2004 précitée. ${anon?"L'éditeur étant anonyme, la demande est adressée à l'hébergeur, qui la transmet sans délai au directeur de la publication ; elle peut aussi être envoyée à l'adresse de contact ci-dessus.":"La demande peut être adressée au directeur de la publication, à l'adresse de contact ci-dessus."} Toute erreur signalée est corrigée et consignée dans le journal des corrections.</p>
+      <p class="ui">Réutilisation : les données de l'Assemblée nationale sont réutilisées sous Licence Ouverte, avec mention de leur source et de leur date de mise à jour. Les polices Lexend et Source Sans 3 sont distribuées sous licence SIL Open Font License et hébergées sur ce site.</p>
       <p class="ui">Photographies : portraits issus de Wikimedia Commons, publiés sous licence libre (Creative Commons ou domaine public). L'auteur, la licence et la page d'origine sont indiqués sous chaque photo. Les photos sont hébergées sur ce site. Elles représentent les députés dans l'exercice de leur mandat ; toute personne souhaitant le retrait d'une photo peut écrire au contact ci-dessus.</p></section>
     <section id="accessibilite" style="margin-top:40px"><h2 class="h2">Accessibilité</h2>
       <p style="margin-top:12px">Le site vise la conformité au référentiel général d'amélioration de l'accessibilité (RGAA). <strong>État : non audité.</strong> Aucun audit de conformité complet n'a encore été réalisé ; ce site ne peut donc pas se déclarer conforme.</p>
       <p class="ui">Mesures déjà prises : contrastes de texte supérieurs à 4,5 pour 1, navigation complète au clavier avec focus visible, lien d'évitement vers le contenu, titres hiérarchisés, tableaux avec en-têtes, graphiques accompagnés d'une description textuelle, animations désactivées si l'utilisateur limite les mouvements, cibles tactiles d'au moins 44 pixels sur mobile, aucune information transmise par la couleur seule. Le site est vérifié automatiquement avec l'outil axe à chaque version.</p>
       <p class="ui">Un défaut d'accessibilité vous empêche d'accéder à un contenu ? Écrivez à l'adresse de contact des mentions légales : nous vous répondrons et fournirons le contenu sous une autre forme. Si vous n'obtenez pas de réponse satisfaisante, vous pouvez saisir le Défenseur des droits.</p></section>
     <section id="independance" style="margin-top:40px"><h2 class="h2">Indépendance</h2>
-      <p style="margin-top:12px">Le Relevé ne reçoit aucun financement d'un parti, d'un élu, d'une entreprise ou d'un groupe d'intérêts, et n'affiche aucune publicité. Il ne note pas les élus et ne prend pas position sur les textes : il publie des faits officiels, avec leur source, et une méthode que chacun peut vérifier.</p></section>
+      <p style="margin-top:12px">Aux Voix ne reçoit aucun financement d'un parti, d'un élu, d'une entreprise ou d'un groupe d'intérêts, et n'affiche aucune publicité. Il ne note pas les élus et ne prend pas position sur les textes : il publie des faits officiels, avec leur source, et une méthode que chacun peut vérifier.</p></section>
     <section id="donnees-personnelles" style="margin-top:40px"><h2 class="h2">Données personnelles</h2>
       <p style="margin-top:12px">Ce site ne dépose aucun cookie, n'utilise aucun outil de mesure d'audience ni aucun service tiers : ni publicité, ni police ou script chargés depuis un autre site. Seuls vos choix d'affichage (thème, niveau de lecture, législature) sont conservés dans votre navigateur, sans être transmis. L'hébergeur conserve, pour des raisons de sécurité, les journaux techniques de connexion.</p>
       <p class="ui">Les informations sur les députés (nom, circonscription, groupe, parti de rattachement, votes) sont des données publiques relatives à l'exercice de leur mandat, publiées par l'Assemblée nationale. Elles sont reproduites sans modification, pour l'information du public. Toute demande relative à ces données peut être adressée au contact ci-dessus.</p></section>
@@ -1484,9 +1518,9 @@ function pageCodes(){
     <p class="lede intro">La Constitution et les principaux codes, dans leur version en vigueur, d'après la base officielle de Légifrance. Pour chaque article : le texte, ce qui a changé lors de la dernière réforme, et la référence prête à citer dans un devoir.</p>
     <div class="filters"><div><label class="lab" for="cx-c">Code</label><select id="cx-c"></select></div><div><label class="lab" for="cx-n">Numéro d'article</label><input id="cx-n" type="search" placeholder="1240, L. 1221-1, 49…" autocomplete="off"></div><button type="button" class="btn btn-p" id="cx-go">Afficher l'article</button><p class="meta" id="cx-err" aria-live="polite" style="margin:0 0 10px"></p></div>
     <div id="cx-liste"><p class="meta">Chargement de la liste des codes…</p></div>
-    <p class="meta" style="margin-top:22px">Textes : Direction de l'information légale et administrative (DILA), base LEGI, sous Licence Ouverte. Mise à jour chaque semaine. Seule la version publiée au Journal officiel fait foi.</p></div>`,
+    <p class="meta" style="margin-top:22px" id="cx-src">Textes : Direction de l'information légale et administrative (DILA), base LEGI, sous Licence Ouverte. Mise à jour chaque semaine. Seule la version publiée au Journal officiel fait foi.</p></div>`,
   after(){chargerIndexCodes().then(ix=>{const L=ix.codes||[],box=$("#cx-liste");if(!box)return;
-    if(!L.length){box.innerHTML=`<p class="empty-note">Les codes n'ont pas encore été téléchargés. Ils apparaîtront après le prochain passage de la mise à jour automatique.</p>`;frTypo(box);return;}
+    if(!L.length){box.innerHTML=ix.erreur?`<p class="empty-note">Les codes n'ont pas pu être récupérés lors de la dernière mise à jour, le ${fd(ix.maj)} : les serveurs qui publient les textes officiels étaient indisponibles. Un nouvel essai a lieu à chaque mise à jour automatique.</p><details class="nom"><summary>Détail technique</summary><p class="meta">${esc(ix.erreur)}</p></details>`:`<p class="empty-note">Les codes n'ont pas encore été téléchargés. Ils apparaîtront après le prochain passage de la mise à jour automatique.</p>`;frTypo(box);return;}
     $("#cx-c").innerHTML=L.map(c=>`<option value="${esc(c.slug)}">${esc(c.titre)}</option>`).join("");
     box.innerHTML=`<div class="quad trois-x">${L.map(c=>`<a href="#/code/${esc(c.slug)}"><span class="h3">${esc(c.titre)}</span><span class="meta">${n(c.n)} articles en vigueur. Abréviation : ${esc(c.abr)}</span></a>`).join("")}</div>`;frTypo(box);
     const go=()=>{const s=$("#cx-c").value,num=$("#cx-n").value.trim().replace(/^art(icle)?\.?\s*/i,"").replace(/\s+/g," ");if(!num){$("#cx-err").textContent=frStr("Indiquez un numéro d'article.");return;}
@@ -1496,7 +1530,7 @@ function pageCodes(){
 }
 function pageCode(slug,q){
   return {title:"Code",html:`<div class="wrap sec" id="code-v"><p class="loading">Chargement du code…</p></div>`,after(){
-    chargerCode(slug).then(c=>{const box=$("#code-v");if(!box)return;document.title=frStr(c.titre)+" | Le Relevé";
+    chargerCode(slug).then(c=>{const box=$("#code-v");if(!box)return;document.title=frStr(c.titre)+" | Aux Voix";
       const arbre={k:[],a:[]};c.articles.forEach(a=>{let nd=arbre;a.p.forEach(ti=>{let f=nd.k.find(x=>x.t===ti);if(!f){f={t:ti,k:[],a:[]};nd.k.push(f);}nd=f;});nd.a.push(a);});
       const rendre=(nd,d)=>nd.k.map(x=>`<details class="toc d${d}"${d===0&&nd.k.length<4?" open":""}><summary>${esc(c.toc[x.t])}</summary>${x.a.length?`<p class="toc-a">${x.a.map(a=>`<a href="#/code/${slug}/${encodeURIComponent(a.n)}">${esc(ARTL(a.n))}</a>`).join(" ")}</p>`:""}${rendre(x,d+1)}</details>`).join("");
       box.innerHTML=`<p class="meta"><a href="#/codes" style="color:var(--texte2)">Codes</a></p><h1 class="h1s">${esc(c.titre)}</h1>
@@ -1516,7 +1550,7 @@ function pageArticle(slug,num){
   return {title:"Article",html:`<div class="wrap sec" id="art-v" style="max-width:860px;margin-left:auto;margin-right:auto"><p class="loading">Chargement de l'article…</p></div>`,after(){
     chargerCode(slug).then(c=>{const box=$("#art-v");if(!box)return;const a=c.par[num];
       if(!a){box.innerHTML=`<p class="empty-note">L'article ${esc(num)} n'est pas en vigueur dans le ${esc(c.titre)}, ou n'existe pas. <a href="#/code/${slug}">Voir le sommaire</a></p>`;frTypo(box);return;}
-      document.title=frStr(`Article ${ARTL(a.n)}, ${c.titre}`)+" | Le Relevé";
+      document.title=frStr(`Article ${ARTL(a.n)}, ${c.titre}`)+" | Aux Voix";
       const cit=citations(c,a),s=texteSource(a.m),prec=c.articles[a.i-1],suiv=c.articles[a.i+1],ed=(ARTED||[]).find(x=>x.publie===true&&x.code===slug&&x.article===a.n);
       const df=a.v?diffMots(a.v.t,a.t):null;
       box.innerHTML=`<p class="meta"><a href="#/codes" style="color:var(--texte2)">Codes</a>, <a href="#/code/${slug}" style="color:var(--texte2)">${esc(c.titre)}</a></p>
@@ -1549,23 +1583,23 @@ function ouvrirCiter(titre,lignes){
 }
 function citerElu(dp){const g=grp(dp.groupe),q=dp.civ==="Mme"?"députée":"député",u=`${BASEURL()}/depute/${dp.id}/`;
   ouvrirCiter(dp.nc,[["Référence",`${dp.nc}, ${q}${dp.dept?` (${dp.dept}${dp.circ?", "+ord(dp.circ)+" circonscription":""})`:""}, groupe ${g.nom}, ${DATA.label}, Assemblée nationale.`],
-    ["Avec la source",`Le Relevé, fiche de ${dp.nc}, d'après les données de l'Assemblée nationale, ${u} (consulté le ${fd(TODAY_ISO)}).`],["Lien permanent",u]]);}
+    ["Avec la source",`Aux Voix, fiche de ${dp.nc}, d'après les données de l'Assemblée nationale, ${u} (consulté le ${fd(TODAY_ISO)}).`],["Lien permanent",u]]);}
 function citerScrutin(s){const u=estRetenu(s)?`${BASEURL()}/vote/${LEG}/${s.n}/`:offScr(s.n);
   ouvrirCiter(`scrutin n° ${s.n}`,[["Référence",`Assemblée nationale, scrutin public n° ${s.n} du ${fd(s.d)} (${DATA.label}), sur ${s.ti}.`],
     ["Avec le résultat",`Le ${fd(s.d)}, l'Assemblée nationale a ${s.adopte?"adopté":"rejeté"} ${s.ti}${s.moc?` (${n(s.po)} voix, ${n(s.rq)} requises)`:`, par ${n(s.po)} voix contre ${n(s.co)}`} (scrutin public n° ${s.n}).`],
     ["Lien permanent",u],["Source officielle",offScr(s.n)]]);}
 function citerLoi(l){const u=`${BASEURL()}/loi/${l.id}/`,t=cap(l.titre);
   ouvrirCiter(t.slice(0,60)+(t.length>60?"…":""),[["Référence",l.prom?`${l.prom.titre||t}, publiée au Journal officiel le ${fd(l.prom.date)}.`:`${t}, ${DATA.label}, dossier législatif de l'Assemblée nationale.`],
-    ["Avec la source",`Le Relevé, parcours de « ${t} », d'après les données de l'Assemblée nationale, ${u} (consulté le ${fd(TODAY_ISO)}).`],["Lien permanent",u]].concat(l.prom&&l.prom.url?[["Texte officiel",l.prom.url]]:[]));}
+    ["Avec la source",`Aux Voix, parcours de « ${t} », d'après les données de l'Assemblée nationale, ${u} (consulté le ${fd(TODAY_ISO)}).`],["Lien permanent",u]].concat(l.prom&&l.prom.url?[["Texte officiel",l.prom.url]]:[]));}
 function citerGroupe(g){const u=`${BASEURL()}/#/groupe/${g.id}`;
-  ouvrirCiter(g.sigle,[["Référence",`Groupe ${g.nom} (${g.sigle}), ${DATA.label}, Assemblée nationale.`],["Avec la source",`Le Relevé, fiche du groupe ${g.sigle}, d'après les données de l'Assemblée nationale, ${u} (consulté le ${fd(TODAY_ISO)}).`]]);}
+  ouvrirCiter(g.sigle,[["Référence",`Groupe ${g.nom} (${g.sigle}), ${DATA.label}, Assemblée nationale.`],["Avec la source",`Aux Voix, fiche du groupe ${g.sigle}, d'après les données de l'Assemblée nationale, ${u} (consulté le ${fd(TODAY_ISO)}).`]]);}
 /* ============ Visuel Flash ============ */
 const dlg=$("#dlg");
 function openDialog(title,html){$("#dlg-t").textContent=frStr(title);$("#dlg-b").innerHTML=html;frTypo($("#dlg-b"));if(!dlg.open)dlg.showModal();}
 $(".dlg-x").addEventListener("click",()=>dlg.close());dlg.addEventListener("click",e=>{if(e.target===dlg)dlg.close();});
 function wrapT(c,text,x,y,maxW,lh,draw){const words=text.split(" ");let line="",lines=[];for(const w of words){const t=line?line+" "+w:w;if(c.measureText(t).width>maxW&&line){lines.push(line);line=w;}else line=t;}if(line)lines.push(line);if(draw!==false)lines.forEach((l,i)=>c.fillText(l,x,y+i*lh));return {y:y+lines.length*lh,lines};}
 function flashData(kind,id){
-  const ref="Le Relevé, d'après les données officielles de l'Assemblée nationale au "+fd(DATA.maj.slice(0,10));
+  const ref="Aux Voix, d'après les données officielles de l'Assemblée nationale au "+fd(DATA.maj.slice(0,10));
   if(kind==="scr"){const s=SCN[id],ex=expliquer(s)[0]||"";
     return {s,date:cap(fd(s.d,true)),kicker:`${cap(s.tl||"scrutin public")} n° ${s.n}`,title:headline(s),sub:ex.length<200?ex:"",
       source:`Source : scrutin public n° ${s.n}, Assemblée nationale, ${DATA.label}.`,ref,file:`flash-scrutin-${LEG}-${s.n}.png`};}
@@ -1579,10 +1613,12 @@ async function drawFlash(cv,f){
   try{await Promise.all(['600 58px "Lexend"','700 40px "Lexend"','400 26px "Source Sans 3"','600 24px "Source Sans 3"','700 22px "Source Sans 3"'].map(x=>document.fonts.load(x)));}catch(err){}
   const W=1080,H=1350,X=72,LW=W-2*X;cv.width=W;cv.height=H;const c=cv.getContext("2d");
   const INK="#1B1D1F",INK2="#5A6169",GRIS="#F5F7F9",RULE="#DDE1E5",BLEU="#123B6D",TT='"Lexend", Arial, sans-serif',SS='"Source Sans 3", Arial, sans-serif';
-  const COL={1:"#1F6FB2",2:"#C2690A",3:"#8A9099"};
+  const COL={1:"#1F6FB2",2:"#B42318",3:"#8A9099"};
   c.fillStyle="#FFFFFF";c.fillRect(0,0,W,H);
   // en-tête
-  c.fillStyle=INK;c.font="700 38px "+TT;c.fillText("Le Relevé",X,96);c.fillStyle=BLEU;c.fillRect(X,110,52,5);
+  {const ex=X,ey=66,sc=0.62;c.save();c.strokeStyle=BLEU;c.lineWidth=6*sc;c.lineCap="round";
+    [17,28,39,50].forEach(r=>[[180,126],[114,66],[54,0]].forEach(([a1,a2])=>{c.beginPath();c.arc(ex+60*sc,ey+58*sc,r*sc,-a1*Math.PI/180,-a2*Math.PI/180);c.stroke();}));c.restore();
+    c.font="300 40px "+TT;c.fillStyle=INK;c.fillText("Aux ",X+86,104);const lw=c.measureText("Aux ").width;c.font="800 40px "+TT;c.fillStyle=BLEU;c.fillText("Voix",X+86+lw,104);}
   c.fillStyle=INK2;c.font="400 25px "+SS;c.textAlign="right";c.fillText(frStr(f.date),W-X,98);c.textAlign="left";
   c.fillStyle=RULE;c.fillRect(X,140,LW,2);
   // surtitre, titre, phrase
@@ -1683,7 +1719,7 @@ function route(){
     case "simulateur":pg=pageSim();nav="simulateur";break;case "codes":pg=pageCodes();nav="codes";break;
     case "code":pg=parts[2]?pageArticle(parts[1],parts[2]):pageCode(parts[1],q);nav="codes";break;case "classements":pg=pageElus();nav="elus";break;case "methode":pg=pageMethode();nav="methode";break;case "comprendre":pg=pageComprendre(parts[1]);break;default:pg=pageNotFound();}
   const rendre=()=>{
-  main.innerHTML=pg.html;document.title=(p0?frStr(pg.title)+" | ":"")+"Le Relevé";
+  main.innerHTML=pg.html;document.title=(p0?frStr(pg.title)+" | ":"")+"Aux Voix";
   $$(".nav a").forEach(a=>{if(a.dataset.nav===nav)a.setAttribute("aria-current","page");else a.removeAttribute("aria-current");});
   frTypo(main);if(pg.after)pg.after();embellir();if(!p0)momentAccueil();
   if(p0==="methode"&&parts[1]){const el=document.getElementById(parts[1]);if(el){el.scrollIntoView();first=false;return;}}
@@ -1706,7 +1742,7 @@ function chargerLeg(leg){
   main.innerHTML=`<div class="wrap loading"><b>Chargement</b>${esc(L.label)} : lecture des données officielles…</div>`;frTypo(main);
   return getJSON(L.fichier).then(d=>{prepare(d);try{localStorage.setItem("lr-leg",d.legislature);}catch(e){}
     $("#folio-maj").textContent=frStr(`Dernier scrutin : ${fd(last(SC).d)}. Données vérifiées le ${fd(d.maj.slice(0,10))}`);
-    $("#foot-maj").textContent=frStr(`Le Relevé, version bêta. Données de l'Assemblée nationale au ${fd(d.maj.slice(0,10))}, Licence Ouverte.`);
+    $("#foot-maj").textContent=frStr(`Aux Voix, version bêta. Données de l'Assemblée nationale au ${fd(d.maj.slice(0,10))}, Licence Ouverte.`);
     frTypo($(".folio"));frTypo($(".foot"));buildSearch();first=true;route();});
 }
 Promise.all([getJSON("index.json"),getJSON("contenu/lois.json",[]),getJSON("contenu/corrections.json",[]),getJSON("contenu/site.json",{}),getJSON("contenu/articles.json",[])]).then(([ix,ed,c,s,ae])=>{ARTED=Array.isArray(ae)?ae:[];

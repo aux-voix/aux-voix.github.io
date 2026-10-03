@@ -1,5 +1,5 @@
 #!/usr/bin/env python3
-"""Le Relevé : construit les données du site à partir des données ouvertes officielles
+"""Aux Voix : construit les données du site à partir des données ouvertes officielles
 de l'Assemblée nationale (Licence Ouverte). Python 3.9 ou plus, aucune dépendance."""
 import datetime, html, io, json, os, re, statistics, sys, time, urllib.error, urllib.parse, urllib.request, zipfile
 
@@ -46,7 +46,7 @@ def telecharger(url, requis=True):
     for essai in range(1, 4):
         try:
             print(f"Téléchargement : {url}")
-            req = urllib.request.Request(url, headers={"User-Agent": "LeReleve/2.0 (reutilisation donnees ouvertes)"})
+            req = urllib.request.Request(url, headers={"User-Agent": "AuxVoix/2.0 (reutilisation donnees ouvertes)"})
             with urllib.request.urlopen(req, timeout=300) as r:
                 data = r.read()
             print(f"  {len(data) / 1e6:.1f} Mo")
@@ -412,7 +412,7 @@ def charger_lois(data, numeros, leg, am_textes=None, gi=None):
 
 
 # ---------- photos libres (Wikidata + Wikimedia Commons) ----------
-UA = "LeReleve/2.0 (https://lereleve.github.io ; reutilisation de donnees ouvertes)"
+UA = "AuxVoix/2.0 (https://lereleve.github.io ; reutilisation de donnees ouvertes)"
 LICENCES_LIBRES = re.compile(r"^(cc0|public domain|pd|domaine public|cc[ -]by(-sa)?([ -][\d.]+)?)", re.I)
 def obtenir(url, accept=None, timeout=120):
     h = {"User-Agent": UA}
@@ -824,6 +824,17 @@ def verifier_contenus():
         except json.JSONDecodeError as e:
             erreurs.append(f"{nom}, ligne {e.lineno}, colonne {e.colno} : {e.msg} (virgule, guillemet ou crochet manquant ?)")
             continue
+        if nom == "site.json" and isinstance(contenu, dict) and contenu.get("public"):
+            # Ouverture au public : les mentions légales doivent être complètes (loi du 21 juin 2004, art. 1-1 ; délit puni par l'art. 1-2)
+            ment = contenu.get("mentions") or {}
+            if not ment.get("hebergeur"):
+                erreurs.append("site.json : « public » est activé mais les coordonnées de l'hébergeur sont vides")
+            if ment.get("anonyme") is not True:
+                for champ in ("editeur", "directeur_publication"):
+                    if not ment.get(champ):
+                        erreurs.append(f"site.json : « public » est activé mais « {champ} » est vide (ou passez « anonyme » à true pour un éditeur non professionnel)")
+            if not ment.get("contact"):
+                erreurs.append("site.json : « public » est activé mais l'adresse de contact est vide")
         if nom == "articles.json":
             for i, t in enumerate(contenu or []):
                 if isinstance(t, dict) and t.get("publie"):
