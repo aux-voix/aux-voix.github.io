@@ -612,25 +612,66 @@ main{view-transition-name:page}
 .t th.n .th-s{padding-right:0;padding-left:15px}
 .t th.n .th-s .sort-ic{left:0;right:auto}
 @media (max-width:1100px){.t.fit th,.th-s{white-space:normal}table.t.fit{table-layout:auto}.t.fit th{width:auto!important}}
+
+/* Bandeau unique, une seule ligne */
+.folio .wrap{display:flex;flex-wrap:nowrap;align-items:center;gap:12px;padding-top:7px;padding-bottom:7px;font-size:13px;white-space:nowrap}
+.folio #folio-maj{overflow:hidden;text-overflow:ellipsis;min-width:0}
+.folio .folio-m{margin-left:auto;flex:none}
+.beta{flex:none;font-size:11.5px;font-weight:700;letter-spacing:.02em;color:var(--bleu);background:var(--bleuclair);border:1px solid var(--bleubord);padding:1px 7px;border-radius:2px}
+.lien-leg{all:unset;cursor:pointer;color:var(--bleu2);text-decoration:underline;text-underline-offset:.18em;margin-left:6px}
+.lien-leg:focus-visible{outline:2px solid var(--bleu2);outline-offset:2px}
+/* Sous-menus des rubriques Votes et Groupes, choix de la législature */
+.sousnav-w{padding-top:18px}
+.sousnav{display:flex;flex-wrap:wrap;align-items:center;justify-content:space-between;gap:10px 24px;border-bottom:1px solid var(--bord);padding-bottom:0}
+.sous{display:flex;gap:4px 22px;flex-wrap:wrap}
+.sous a{font-size:var(--t-ui);font-weight:600;color:var(--texte2);text-decoration:none;padding:10px 0;border-bottom:2px solid transparent;margin-bottom:-1px;transition:color var(--anim),border-color var(--anim)}
+.sous a:hover{color:var(--bleu2)}
+.sous a[aria-current="page"]{color:var(--bleu2);border-bottom-color:var(--bleu2)}
+.legx{display:flex;align-items:center;gap:8px;font-size:13.5px;color:var(--texte2);padding:6px 0 8px;margin-left:auto}
+.legx select{font-size:13.5px;padding:4px 8px;height:34px}
+.sousnav-w + .sec,.sousnav-w + .wrap.sec{padding-top:var(--e5)}
+/* Accueil : trouver son député juste sous le titre */
+.trouver{margin:18px 0 6px;padding:14px 18px;border:1px solid var(--bord);border-left:4px solid var(--bleu);background:var(--gris)}
+.trouver .h3{margin:0 0 10px}
+.trouver-f{display:flex;flex-wrap:wrap;align-items:center;gap:8px 14px}
+.trouver-f select{height:42px;min-width:240px;max-width:100%}
+.trouver .circs{margin-top:12px}
+/* Fiche député : résumé en trois chiffres */
+.resume-elu{display:grid;grid-template-columns:repeat(3,minmax(0,1fr));gap:12px;margin:18px 0 6px;max-width:640px}
+.resume-elu button{all:unset;box-sizing:border-box;cursor:pointer;display:flex;flex-direction:column;gap:4px;padding:14px 16px;border:1px solid var(--bord);background:var(--fond);transition:border-color var(--anim),background var(--anim)}
+.resume-elu button:hover{border-color:var(--bleu2);background:var(--gris)}
+.resume-elu button:focus-visible{outline:2px solid var(--bleu2);outline-offset:2px}
+.resume-elu b{font-family:var(--titre);font-size:28px;font-weight:600;line-height:1.1;color:var(--bleu);font-variant-numeric:tabular-nums}
+.resume-elu span{font-size:13.5px;line-height:1.35;color:var(--texte2)}
+@media (max-width:520px){.resume-elu{gap:8px}.resume-elu button{padding:10px}.resume-elu b{font-size:22px}.resume-elu span{font-size:12.5px}}
+/* Fenêtre « Partager et citer » */
+.partage{list-style:none;margin:0;padding:0}
+.partage li{display:grid;grid-template-columns:minmax(0,auto) 1fr;gap:6px 14px;align-items:center;padding:12px 0;border-bottom:1px solid var(--bord2)}
+.partage li:last-child{border-bottom:0}
+.partage .btn{justify-content:flex-start;white-space:nowrap}
+@media (max-width:520px){.partage li{grid-template-columns:1fr}}
+/* Téléphone : logo et recherche sur la même ligne, menu à cinq onglets dessous */
+@media (max-width:560px){
+  .search{flex:1 1 120px;min-width:0;max-width:none}
+  .wordmark{font-size:19px;gap:8px}.wordmark .emb{width:34px;height:19px}
+  .mast .wrap{gap:8px 12px;padding-top:10px}
+  .nav{gap:18px;justify-content:space-between}
+  .folio .wrap{gap:8px;font-size:12px}
+}
 </style>
 </head>
 <body data-lv="2">
 <a class="skip" href="#main">Aller au contenu</a>
-<div class="proto"><div class="wrap">Version bêta. Votes et élus : données officielles de l'Assemblée nationale, vérifiées deux fois par jour. <a href="#/methode/sources">Sources et méthode</a></div></div>
-<div class="folio"><div class="wrap"><span id="today"></span><span id="folio-maj">Chargement des données officielles</span><span class="legsel"><label for="legsel">Législature</label> <select id="legsel"></select></span></div></div>
+<div class="folio"><div class="wrap"><span class="beta">Bêta</span><span id="folio-maj">Chargement des données officielles</span><a class="folio-m" href="#/methode/sources">Méthode</a></div></div>
 <header class="mast">
   <div class="wrap">
     <a class="wordmark" href="#/" aria-label="Aux Voix, accueil"><svg class="emb" viewBox="0 2 120 64" aria-hidden="true"><g fill="none" stroke="currentColor" stroke-width="6" stroke-linecap="round"><path d="M43.0 60.0 A17 17 0 0 1 50.0 46.2"/><path d="M53.1 44.5 A17 17 0 0 1 66.9 44.5"/><path d="M70.0 46.2 A17 17 0 0 1 77.0 60.0"/><path d="M32.0 60.0 A28 28 0 0 1 43.5 37.3"/><path d="M48.6 34.4 A28 28 0 0 1 71.4 34.4"/><path d="M76.5 37.3 A28 28 0 0 1 88.0 60.0"/><path d="M21.0 60.0 A39 39 0 0 1 37.1 28.4"/><path d="M44.1 24.4 A39 39 0 0 1 75.9 24.4"/><path d="M82.9 28.4 A39 39 0 0 1 99.0 60.0"/><path d="M10.0 60.0 A50 50 0 0 1 30.6 19.5"/><path d="M39.7 14.3 A50 50 0 0 1 80.3 14.3"/><path d="M89.4 19.5 A50 50 0 0 1 110.0 60.0"/></g></svg><span><span class="wm1">Aux </span><span class="wm2">Voix</span></span></a>
     <nav class="nav" aria-label="Rubriques">
       <a href="#/lois" data-nav="lois">Lois</a>
-      <a href="#/codes" data-nav="codes">Codes</a>
+      <a href="#/votes" data-nav="votes">Votes</a>
       <a href="#/elus" data-nav="elus">Élus</a>
       <a href="#/groupes" data-nav="groupes">Groupes</a>
-      <a href="#/votes" data-nav="votes">Votes</a>
-      <a href="#/themes" data-nav="themes">Thèmes</a>
-      <a href="#/simulateur" data-nav="simulateur">Coalitions</a>
-      <a href="#/calendrier" data-nav="calendrier">Calendrier</a>
-      <a href="#/methode" data-nav="methode">Méthode</a>
+      <a href="#/codes" data-nav="codes">Codes</a>
     </nav>
     <div class="search" role="search"><label class="sr" for="q">Rechercher</label>
       <input id="q" type="search" role="combobox" aria-autocomplete="list" aria-haspopup="listbox" placeholder="Un nom, une loi, un n° de scrutin" autocomplete="off" aria-controls="qr" aria-expanded="false"><div id="qr" class="search-res" role="listbox" aria-label="Résultats de recherche" hidden></div></div>
@@ -832,12 +873,13 @@ function pageHome(){
     <p class="lede">${esc(positionsResume(s))}</p>
     <p class="meta">${esc(cap(s.tl||"scrutin public"))} n° ${s.n}, ${fd(s.d,true)}. Source : ${ext(offScr(s.n),"Assemblée nationale")}.</p>
     <p class="acts"><a href="#/scrutin/${s.n}">Comprendre ce vote</a>${SCR2LOI[s.n]?`<a href="#/loi/${esc(SCR2LOI[s.n].id)}">Voir le texte et son parcours</a>`:""}</p>
+    ${COURANTE?`<section class="trouver" aria-labelledby="cp-t"><h2 class="h3" id="cp-t">Qui vous représente ?</h2>
+      <div class="trouver-f"><label class="sr" for="dsel">Votre département</label><select id="dsel"><option value="">Choisir votre département</option>${depts.map(x=>{const[nd,dn]=x.split("|");return `<option value="${esc(dn)}">${esc(nd)} ${esc(dn)}</option>`;}).join("")}</select><span class="meta">ou cherchez un nom dans la barre de recherche</span></div>
+      <ul class="circs" id="dres"></ul></section>`:""}
     <figure class="hemi-fig" style="margin-left:0;margin-right:0">${hemicycle(s,{anim:true})}<figcaption>${legendHTML(s)}</figcaption></figure></div>
     <aside class="une-side" aria-labelledby="ag-t"><h2 class="h3" id="ag-t">Scrutins solennels précédents</h2>
       <ul class="side-list">${recents.map(x=>`<li><a href="#/scrutin/${x.n}">${esc(cap(x.ti))}</a><div class="meta">${fds(x.d)} : ${x.adopte?"adopté":"rejeté"}, ${n(x.po)} pour, ${n(x.co)} contre</div></li>`).join("")}</ul>
       <p class="acts meta" style="margin-top:14px"><a href="#/calendrier">Le mois en résumé</a><a href="#/votes">Tous les scrutins</a></p></aside></section>
-  ${COURANTE?`<section class="band" aria-labelledby="cp-t"><div class="wrap"><div><h2 class="h2" id="cp-t">Qui vous représente ?</h2><p class="ui" style="margin-top:10px;max-width:30em">Choisissez votre département : chaque circonscription mène à la fiche de son député, avec ses votes.</p></div>
-    <div><label class="lab" for="dsel">Département</label><select id="dsel"><option value="">Choisir un département</option>${depts.map(x=>{const[nd,dn]=x.split("|");return `<option value="${esc(dn)}">${esc(nd)} ${esc(dn)}</option>`;}).join("")}</select><ul class="circs" id="dres"></ul></div></div></section>`:""}
   <section class="wrap sec" aria-labelledby="rj-t"><div class="sec-h"><h2 class="h2" id="rj-t">Le relevé</h2><span class="meta">${esc(DATA.label)}</span></div>
     <div class="trio">
       <div><p class="cat">Un chiffre</p><h3 class="h3">${pc(MED[K].partS)} : participation médiane des députés ${enExercice()} aux scrutins solennels</h3><p class="meta" style="margin-top:8px">Aux scrutins publics de toute nature, souvent tenus tard le soir sur des amendements : ${pc(MED[K].part)}. <a href="#/methode/indicateurs">Comment c'est calculé</a></p></div>
@@ -1045,7 +1087,8 @@ function pageLoi(id){
       ${scr.length?`<h3 class="h3" style="margin-top:24px">Tous les votes publics sur ce texte</h3><div class="tw" style="margin-top:10px"><table class="t"><thead><tr><th>Date</th><th>Scrutin</th><th>Résultat</th></tr></thead><tbody>${scr.slice().reverse().map(s=>`<tr><td class="dt">${fds(s.d)}</td><td class="w"><a href="#/scrutin/${s.n}">${esc(cap(s.ti))}</a></td><td class="dt">${s.adopte?"Adopté":"Rejeté"} <span class="meta">(${n(s.po)} pour, ${n(s.co)} contre)</span></td></tr>`).join("")}</tbody></table></div>`:""}
       <h3 class="h3" style="margin-top:24px">Sources officielles</h3><ul class="pieces" style="margin-top:10px"><li>${ext(offDos(l),"Dossier législatif sur le site de l'Assemblée nationale")}</li>${safeUrl(l.senat)?`<li>${ext(l.senat,"Dossier législatif sur le site du Sénat")}</li>`:""}${l.prom&&l.prom.url?`<li>${ext(l.prom.url,"Texte promulgué sur Légifrance")}</li>`:""}${l.cc&&l.cc.url?`<li>${ext(l.cc.url,"Décision du Conseil constitutionnel")}</li>`:""}${fin?`<li>${ext(offScr(fin.n),"Scrutin n° "+fin.n+" sur le site de l'Assemblée")}</li>`:""}</ul>
       ${ed?`<p class="meta" style="margin-top:12px">Résumé rédigé par ${esc(ed.auteur)}, vérifié par ${esc(ed.verif)}.</p>`:""}</section>
-    <p class="dlg-acts" style="margin-top:28px"><button type="button" class="btn" id="cite-loi">Citer ce texte</button>${fin?`<button type="button" class="btn btn-q" data-flash="loi:${esc(l.id)}">Visuel Flash à télécharger</button>`:""}</p></div>`,after(){bindLv();$("#cite-loi").addEventListener("click",()=>citerLoi(l));}};
+    <p class="dlg-acts" style="margin-top:28px"><button type="button" class="btn btn-p" id="partager">${fin?"Partager et citer":"Citer ce texte"}</button></p></div>`,after(){bindLv();
+    $("#partager").addEventListener("click",()=>fin?partager("Partager et citer ce texte",[["Citer ce texte","Référence prête à coller dans un devoir ou un article.",()=>citerLoi(l)],["Visuel Flash","Image au format des réseaux sociaux, avec la source incrustée.",()=>openFlash("loi:"+l.id)]]):citerLoi(l));}};
 }
 /* ============ Élus ============ */
 let EF={q:"",g:"all",d:"",anc:false,lim:60,sort:{k:"nom",dir:1}};
@@ -1104,7 +1147,7 @@ function pageElu(id){
   const ph=dp.photo?`<figure style="margin:0"><div class="portrait"><img src="${esc(dp.photo.f)}" alt="Portrait de ${esc(dp.nc)}" width="132" height="160"></div><figcaption class="phcap">Photo : ${esc(dp.photo.a)}, ${esc(dp.photo.l)}, ${ext(dp.photo.u,"Wikimedia Commons")}</figcaption></figure>`:`<div><div class="portrait" aria-hidden="true">${esc(initials(dp))}</div><p class="phcap">Aucune photo sous licence libre trouvée.</p></div>`;
   return {title:dp.nc,html:`<div class="wrap"><div class="elu-h">${ph}
     <div style="min-width:0"><p class="meta"><a href="#/elus" style="color:var(--ink-2)">Élus</a></p><h1 class="h1s">${esc(dp.nc)}</h1>
-      <p class="lede" style="margin:8px 0 0">${deputeW(dp)}${dp.actif?"":" (mandat terminé)"}, ${esc(circL(dp))}.</p><dl class="facts">${bio.map(b=>`<dt>${b[0]}</dt><dd>${b[1]}</dd>`).join("")}</dl></div></div>
+      <p class="lede" style="margin:8px 0 0">${deputeW(dp)}${dp.actif?"":" (mandat terminé)"}, ${esc(circL(dp))}.</p>${resumeElu(dp)}<dl class="facts">${bio.map(b=>`<dt>${b[0]}</dt><dd>${b[1]}</dd>`).join("")}</dl></div></div>
     <div class="elu-grid"><div>
       <section id="profil"><h2 class="h2">Présence et participation aux votes</h2>
         <p class="ui" style="margin:8px 0 0">L'Assemblée ne publie pas de relevé de présence en séance : l'indicateur le plus proche, présenté ici, est la participation aux votes publics.</p>
@@ -1172,6 +1215,13 @@ function activite(dp){
     <h3 class="h3" style="margin-top:22px">Textes qu'il a déposés</h3>${aut.length?lst(aut):`<p class="meta">Aucune proposition de loi déposée comme auteur dans les dossiers législatifs de cette législature.</p>`}
     ${rap.length?`<h3 class="h3" style="margin-top:22px">Textes dont il est rapporteur</h3>${lst(rap)}`:""}`;
 }
+
+function resumeElu(dp){
+  const K=PER.length,st=dp.st[K],amOk=DATA.amendements&&DATA.amendements.total>0,dif=st.alN?st.alN-st.al:null;
+  const c=(id,v,l)=>`<button type="button" data-ancre="${id}"><b>${v}</b><span>${l}</span></button>`;
+  return `<nav class="resume-elu" aria-label="En bref">${c("profil",pc(st.partS),"de participation aux scrutins solennels")}${c("activite",amOk&&dp.am?n(dp.am[0]):"—","amendements déposés")}${c("votes",dif==null?"—":n(dif),"votes différents de son groupe")}</nav>`;
+}
+document.addEventListener("click",e=>{const b=e.target.closest&&e.target.closest("[data-ancre]");if(!b)return;const el=document.getElementById(b.dataset.ancre);if(el)el.scrollIntoView({behavior:matchMedia("(prefers-reduced-motion: reduce)").matches?"auto":"smooth",block:"start"});});
 /* ============ Votes ============ */
 let VF={type:"all",per:"all",res:"all",q:"",lim:50,sort:{k:"n",dir:-1}};
 function pageVotes(){
@@ -1219,8 +1269,11 @@ function pageScrutin(num){
       <p class="meta">Votants : ${n(s.vo)}. Par usage, le président de séance ne prend pas part au vote.${s.dm?" Scrutin demandé par : "+esc(s.dm)+".":""}</p>
       <h3 class="h3" style="margin-top:24px">Vote de chaque député</h3><p class="meta" style="margin:6px 0 10px">Classés selon le groupe dans lequel l'Assemblée les a enregistrés pour ce scrutin.</p>${nominal(s)}${mises}
       <p class="dlg-acts" style="margin-top:24px">${ext(offScr(s.n),"Voir ce scrutin sur le site de l'Assemblée nationale")}</p></section>
-    <p class="dlg-acts" style="margin-top:24px"><button type="button" class="btn" id="cite-scr">Citer ce vote</button><button type="button" class="btn btn-q" data-flash="scr:${s.n}">Visuel Flash</button><button type="button" class="btn btn-q" id="csv">Télécharger les votes (CSV)</button></p></div>`,
-  after(){bindLv();$("#cite-scr").addEventListener("click",()=>citerScrutin(s));$("#csv").addEventListener("click",()=>download(`scrutin-${LEG}-${s.n}-votes.csv`,new Blob([csvScrutin(s)],{type:"text/csv;charset=utf-8"})));}};
+    <p class="dlg-acts" style="margin-top:24px"><button type="button" class="btn btn-p" id="partager">Partager et citer</button></p></div>`,
+  after(){bindLv();$("#partager").addEventListener("click",()=>partager("Partager et citer ce vote",[
+    ["Citer ce vote","Référence prête à coller dans un devoir ou un article.",()=>citerScrutin(s)],
+    ["Visuel Flash","Image au format des réseaux sociaux, avec la source incrustée.",()=>openFlash("scr:"+s.n)],
+    ["Télécharger les votes (CSV)","Le vote de chaque député, à ouvrir dans un tableur.",()=>{dlg.close();download(`scrutin-${LEG}-${s.n}-votes.csv`,new Blob([csvScrutin(s)],{type:"text/csv;charset=utf-8"}));}]]));}};
 }
 
 /* ============ Comparateur ============ */
@@ -1662,6 +1715,10 @@ function openFlash(spec){const i=spec.indexOf(":"),f=flashData(spec.slice(0,i),s
   const cv=$("#fcv");drawFlash(cv,f);$("#f-dl").addEventListener("click",()=>cv.toBlob(b=>{if(b)download(f.file,b);},"image/png"));}
 document.addEventListener("click",e=>{const f=e.target.closest("[data-flash]");if(f)openFlash(f.dataset.flash);});
 
+function partager(titre,options){
+  const L=options.filter(Boolean);openDialog(titre,`<ul class="partage">${L.map((o,i)=>`<li><button type="button" class="btn" data-opt="${i}">${esc(o[0])}</button><span class="meta">${esc(o[1])}</span></li>`).join("")}</ul>`);
+  $$("#dlg-b [data-opt]").forEach(b=>b.addEventListener("click",()=>L[+b.dataset.opt][2]()));
+}
 /* ============ Recherche ============ */
 let IDXS=[];
 function buildSearch(){IDXS=[].concat(DEP.map(dp=>({l:dp.nc+(dp.actif?"":" (ancien)"),s:grp(dp.groupe).sigle+", "+circL(dp),h:"#/elu/"+dp.id,k:norm(dp.nc+" "+dp.dept),a:dp.actif?0:1})),
@@ -1705,6 +1762,19 @@ function compter(el,de,a,ms,suf){if(PRM){el.textContent=frStr(n(a)+(suf||""));re
 /* Le moment orchestré de l'accueil : les sièges se remplissent, les totaux suivent au même rythme */
 function momentAccueil(){if(PRM)return;$$(".hemi-fig .legend b").forEach(b=>{const v=+b.textContent.replace(/\D/g,"");if(v)compter(b,0,v,1000);});}
 function embellir(){animer(main);navInd();segs();}
+
+/* ============ Sous-menus et choix de la législature ============ */
+const FAMILLES=[[["votes","Tous les votes"],["themes","Par thème"],["calendrier","Mois par mois"],["comparateur","Comparer"]],[["groupes","Les groupes"],["simulateur","Simulateur de coalition"]]];
+const AVEC_LEG=["votes","themes","calendrier","comparateur","groupes","simulateur","elus","lois"];
+let LEGOPTS="";
+function barreHaut(p0){
+  const fam=FAMILLES.find(f=>f.some(x=>x[0]===p0)),leg=AVEC_LEG.includes(p0)&&IDX&&IDX.legislatures.length>1;
+  if(!fam&&!leg)return "";
+  return `<div class="wrap sousnav-w"><div class="sousnav">${fam?`<nav class="sous" aria-label="Affichage">${fam.map(([k,l])=>`<a href="#/${k}"${k===p0?' aria-current="page"':""}>${l}</a>`).join("")}</nav>`:""}${leg?`<span class="legx"><label for="legx">Législature</label><select id="legx" class="legsel-x">${LEGOPTS.replace(`value="${LEG}"`,`value="${LEG}" selected`)}</select></span>`:""}</div></div>`;
+}
+document.addEventListener("change",e=>{const s=e.target.closest&&e.target.closest(".legsel-x");if(s)chargerLeg(s.value).catch(erreur);});
+document.addEventListener("click",e=>{const b=e.target.closest&&e.target.closest("[data-leg]");if(b){e.preventDefault();chargerLeg(b.dataset.leg).catch(erreur);}});
+
 /* ============ Routeur ============ */
 const main=$("#main");let first=true;
 function route(){
@@ -1715,11 +1785,11 @@ function route(){
   switch(p0){case undefined:pg=pageHome();break;case "lois":pg=pageLois();nav="lois";break;case "loi":pg=pageLoi(parts[1]);nav="lois";break;
     case "elus":pg=pageElus();nav="elus";break;case "elu":pg=pageElu(parts[1]);nav="elus";break;case "groupes":pg=pageGroupes();nav="groupes";break;case "groupe":pg=pageGroupe(parts[1]);nav="groupes";break;
     case "votes":pg=pageVotes();nav="votes";break;case "scrutin":pg=pageScrutin(parts[1]);nav="votes";break;case "comparateur":pg=pageCmp(q);nav="votes";break;
-    case "calendrier":pg=pageCal(q);nav="calendrier";break;case "themes":pg=pageThemes(q);nav="themes";break;
-    case "simulateur":pg=pageSim();nav="simulateur";break;case "codes":pg=pageCodes();nav="codes";break;
-    case "code":pg=parts[2]?pageArticle(parts[1],parts[2]):pageCode(parts[1],q);nav="codes";break;case "classements":pg=pageElus();nav="elus";break;case "methode":pg=pageMethode();nav="methode";break;case "comprendre":pg=pageComprendre(parts[1]);break;default:pg=pageNotFound();}
+    case "calendrier":pg=pageCal(q);nav="votes";break;case "themes":pg=pageThemes(q);nav="votes";break;
+    case "simulateur":pg=pageSim();nav="groupes";break;case "codes":pg=pageCodes();nav="codes";break;
+    case "code":pg=parts[2]?pageArticle(parts[1],parts[2]):pageCode(parts[1],q);nav="codes";break;case "classements":pg=pageElus();nav="elus";break;case "methode":pg=pageMethode();nav="";break;case "comprendre":pg=pageComprendre(parts[1]);break;default:pg=pageNotFound();}
   const rendre=()=>{
-  main.innerHTML=pg.html;document.title=(p0?frStr(pg.title)+" | ":"")+"Aux Voix";
+  main.innerHTML=barreHaut(p0)+pg.html;document.title=(p0?frStr(pg.title)+" | ":"")+"Aux Voix";
   $$(".nav a").forEach(a=>{if(a.dataset.nav===nav)a.setAttribute("aria-current","page");else a.removeAttribute("aria-current");});
   frTypo(main);if(pg.after)pg.after();embellir();if(!p0)momentAccueil();
   if(p0==="methode"&&parts[1]){const el=document.getElementById(parts[1]);if(el){el.scrollIntoView();first=false;return;}}
@@ -1735,23 +1805,24 @@ window.addEventListener("hashchange",route);
 function measure(){document.documentElement.style.setProperty("--mast-h",$(".mast").offsetHeight+"px");}
 if(document.fonts&&document.fonts.ready)document.fonts.ready.then(measure);
 window.addEventListener("resize",measure);if(document.fonts&&document.fonts.ready)document.fonts.ready.then(measure);measure();
-$("#today").textContent=frStr(cap(fd(TODAY_ISO,true)));frTypo($(".proto"));
+if(innerWidth<560)$("#q").setAttribute("placeholder","Rechercher");
 function erreur(err){main.innerHTML=`<div class="wrap loading"><b>Les données n'ont pas pu être chargées</b>Les fichiers de données sont produits deux fois par jour par l'automatisation GitHub ; vérifiez l'onglet « Actions » du dépôt. Ouvert directement depuis un ordinateur, le site ne peut pas lire ses données : il doit être servi par GitHub Pages.<br><span class="meta">${esc(err.message)}</span></div>`;frTypo(main);}
 function chargerLeg(leg){
   const L=IDX.legislatures.find(x=>x.leg===leg)||IDX.legislatures[0];
   main.innerHTML=`<div class="wrap loading"><b>Chargement</b>${esc(L.label)} : lecture des données officielles…</div>`;frTypo(main);
   return getJSON(L.fichier).then(d=>{prepare(d);try{localStorage.setItem("lr-leg",d.legislature);}catch(e){}
-    $("#folio-maj").textContent=frStr(`Dernier scrutin : ${fd(last(SC).d)}. Données vérifiées le ${fd(d.maj.slice(0,10))}`);
+    const fm=$("#folio-maj");fm.innerHTML=COURANTE?esc(frStr(`Données officielles de l'Assemblée nationale, vérifiées le ${fd(d.maj.slice(0,10))}`))
+      :`${esc(frStr(`Archives : ${d.label}`))} <button type="button" class="lien-leg" data-leg="${esc(IDX.legislatures[0].leg)}">${esc(frStr("Revenir à la législature actuelle"))}</button>`;
     $("#foot-maj").textContent=frStr(`Aux Voix, version bêta. Données de l'Assemblée nationale au ${fd(d.maj.slice(0,10))}, Licence Ouverte.`);
     frTypo($(".folio"));frTypo($(".foot"));buildSearch();first=true;route();});
 }
 Promise.all([getJSON("index.json"),getJSON("contenu/lois.json",[]),getJSON("contenu/corrections.json",[]),getJSON("contenu/site.json",{}),getJSON("contenu/articles.json",[])]).then(([ix,ed,c,s,ae])=>{ARTED=Array.isArray(ae)?ae:[];
   IDX=ix;EDIT=Array.isArray(ed)?ed:[];CORR=(Array.isArray(c)?c:[]).slice().sort((a,b)=>a.date<b.date?1:-1);SITE=s||{};
   if(!IDX.legislatures||!IDX.legislatures.length)throw new Error("index.json vide");
-  const sel=$("#legsel");sel.innerHTML=IDX.legislatures.map(x=>`<option value="${esc(x.leg)}">${esc(x.label)} (${x.du.slice(0,4)}-${x.au?x.au.slice(0,4):"aujourd'hui"})</option>`).join("");
+  LEGOPTS=IDX.legislatures.map(x=>`<option value="${esc(x.leg)}">${esc(x.label)} (${x.du.slice(0,4)}-${x.au?x.au.slice(0,4):"aujourd'hui"})</option>`).join("");
   if(CORR.length)$("#foot-corr").innerHTML=CORR.slice(0,3).map(x=>`<li><span class="meta">${fd(x.date)}</span><br>${esc(x.texte)}</li>`).join("");
   let leg=IDX.legislatures[0].leg;try{const s2=localStorage.getItem("lr-leg");if(s2&&IDX.legislatures.some(x=>x.leg===s2))leg=s2;}catch(e){}
-  sel.value=leg;sel.addEventListener("change",()=>{location.hash="#/";chargerLeg(sel.value).catch(erreur);});
+
   return chargerLeg(leg);
 }).catch(erreur);
 })();
