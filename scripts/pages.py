@@ -70,6 +70,9 @@ class Generateur:
             pass
         self.public = bool(cfg.get("public"))
         self.url = (cfg.get("url") or "https://lereleve.github.io").rstrip("/")
+        gc = str((cfg.get("mesure_audience") or {}).get("goatcounter") or "").strip().lower()
+        self.audience = (f'<script data-goatcounter="https://{gc}.goatcounter.com/count" async src="https://gc.zgo.at/count.js"></script>'
+                         if re.fullmatch(r"[a-z0-9][a-z0-9-]{1,40}", gc) else "")
         self.urls = {"deputes": [], "votes": [], "lois": [], "codes": []}
         self.deputes_faits = set()   # un député élu sous plusieurs législatures garde la page de la plus récente
         self.aujourdhui = datetime.date.today().isoformat()
@@ -78,9 +81,9 @@ class Generateur:
         robots = "" if self.public else '<meta name="robots" content="noindex, nofollow">\n'
         alt = f'<link rel="alternate" type="application/rss+xml" title="{ESC(rss[1])}" href="{ESC(rss[0])}">\n' if rss else ""
         doc = f"""<!doctype html><html lang="fr"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width, initial-scale=1">
-<title>{ESC(titre)} | Aux Voix</title><link rel="icon" type="image/svg+xml" href="/favicon.svg"><meta name="description" content="{ESC(description[:300])}">
+<title>{ESC(titre)} | Aux Voix</title><link rel="icon" type="image/svg+xml" href="/favicon.svg">{self.audience}<meta name="description" content="{ESC(description[:300])}">
 {robots}<link rel="canonical" href="{ESC(self.url + chemin)}">{alt}<link rel="stylesheet" href="/statique.css"></head><body>
-{'' if self.public else '<div class="beta"><div class="w">Version bêta du site.</div></div>'}
+{'' if self.public else '<aside class="beta" aria-label="État du site"><div class="w">Version bêta du site.</div></aside>'}
 <header><div class="w"><a class="logo" href="/" aria-label="Aux Voix, accueil"><svg class="emb" viewBox="0 2 120 64" aria-hidden="true"><g fill="none" stroke="currentColor" stroke-width="6" stroke-linecap="round"><path d="M43.0 60.0 A17 17 0 0 1 50.0 46.2"/><path d="M53.1 44.5 A17 17 0 0 1 66.9 44.5"/><path d="M70.0 46.2 A17 17 0 0 1 77.0 60.0"/><path d="M32.0 60.0 A28 28 0 0 1 43.5 37.3"/><path d="M48.6 34.4 A28 28 0 0 1 71.4 34.4"/><path d="M76.5 37.3 A28 28 0 0 1 88.0 60.0"/><path d="M21.0 60.0 A39 39 0 0 1 37.1 28.4"/><path d="M44.1 24.4 A39 39 0 0 1 75.9 24.4"/><path d="M82.9 28.4 A39 39 0 0 1 99.0 60.0"/><path d="M10.0 60.0 A50 50 0 0 1 30.6 19.5"/><path d="M39.7 14.3 A50 50 0 0 1 80.3 14.3"/><path d="M89.4 19.5 A50 50 0 0 1 110.0 60.0"/></g></svg><span><span class="wm1">Aux </span><span class="wm2">Voix</span></span></a><nav aria-label="Rubriques"><a href="/#/lois">Lois</a><a href="/#/votes">Votes</a><a href="/#/elus">Élus</a><a href="/#/groupes">Groupes</a><a href="/#/codes">Codes</a></nav></div></header>
 <main id="main"><div class="w">{corps}</div></main>
 <footer><div class="w"><p>Données officielles de l'Assemblée nationale et de la DILA (Légifrance), sous Licence Ouverte, mises à jour le {fd(self.aujourdhui)}.</p>
@@ -93,7 +96,7 @@ class Generateur:
         return chemin
 
     def bloc_citer(self, ident, lignes):
-        out = '<div class="cite" aria-label="Citer cette page"><h3 style="font-size:16px;margin:0 0 8px">Citer cette page</h3>'
+        out = '<div class="cite" aria-label="Citer cette page"><h2 style="font-size:16px;margin:0 0 8px">Citer cette page</h2>'
         for i, (lib, txt) in enumerate(lignes):
             out += f'<p><span class="meta">{ESC(lib)}</span><br><span id="{ident}-{i}">{ESC(txt)}</span> <button type="button" data-copie="{ident}-{i}">Copier</button></p>'
         return out + "</div>"
