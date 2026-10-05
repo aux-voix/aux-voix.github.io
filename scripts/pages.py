@@ -41,7 +41,7 @@ a{color:var(--bl2);text-underline-offset:.18em}h1,h2,h3{font-family:"Lexend","So
 .w{max-width:900px;margin:0 auto;padding:0 20px}.beta{background:var(--blc);border-bottom:1px solid #D2DFEC;font-size:14px;padding:8px 0}
 header{border-bottom:1px solid var(--b)}header .w{display:flex;flex-wrap:wrap;gap:8px 22px;align-items:center;min-height:62px}
 .logo{display:inline-flex;align-items:center;gap:9px;font:20px/1 "Lexend",Arial,sans-serif;letter-spacing:-.03em;color:var(--t);text-decoration:none}.logo .emb{width:40px;height:22px;color:var(--bl)}.logo .wm1{font-weight:300}.logo .wm2{font-weight:800;color:var(--bl)}
-nav a{font-weight:600;color:var(--t);text-decoration:none;margin-right:16px;font-size:15px}nav a:hover{color:var(--bl2)}
+nav a{display:inline-block;padding:6px 0;min-height:24px;font-weight:600;color:var(--t);text-decoration:none;margin-right:16px;font-size:15px}nav a:hover{color:var(--bl2)}
 main{padding:30px 0 50px}.fil{font-size:14px;color:var(--t2);margin:0 0 6px}h1{font-size:clamp(24px,3.4vw,32px);margin-bottom:10px}
 h2{font-size:20px;margin:30px 0 10px;padding-bottom:8px;border-bottom:2px solid var(--t)}.lede{font-size:18px;color:var(--t2);margin:0 0 14px}
 .cta{display:inline-block;background:var(--bl);color:#fff;text-decoration:none;font-weight:600;padding:10px 16px;margin:8px 10px 8px 0}.cta:hover{background:var(--bl2)}
@@ -70,6 +70,8 @@ class Generateur:
             pass
         self.public = bool(cfg.get("public"))
         self.url = (cfg.get("url") or "https://aux-voix.github.io").rstrip("/")
+        from urllib.parse import urlparse
+        self.base = urlparse(self.url).path.rstrip("/")   # « /Auxvoix.github.io » si le site n'est pas à la racine
         gc = str((cfg.get("mesure_audience") or {}).get("goatcounter") or "").strip().lower()
         self.audience = (f'<script data-goatcounter="https://{gc}.goatcounter.com/count" async src="https://gc.zgo.at/count.js"></script>'
                          if re.fullmatch(r"[a-z0-9][a-z0-9-]{1,40}", gc) else "")
@@ -90,6 +92,8 @@ class Generateur:
 <p><a href="/#/methode/sources">Sources</a><a href="/#/methode/mentions">Mentions légales</a><a href="/#/methode/accessibilite">Accessibilité</a><a href="/flux/">Flux de suivi</a></p></div></footer>
 <script src="/statique.js" defer></script></body></html>"""
         doc = doc.replace("<table>", '<div class="tw"><table>').replace("</table>", "</table></div>")
+        if self.base:
+            doc = re.sub(r'(href|src)="/(?!/)', lambda m: f'{m.group(1)}="{self.base}/', doc)
         dest = os.path.join(self.site, chemin.strip("/"), "index.html")
         os.makedirs(os.path.dirname(dest), exist_ok=True)
         open(dest, "w", encoding="utf-8").write(doc)
@@ -308,7 +312,7 @@ class Generateur:
         # page d'accueil des flux
         liens = "".join(f'<li><a href="/flux/{f}">{t}</a></li>' for f, t in (("votes.xml", "Votes importants de l'Assemblée"), ("lois.xml", "Étapes des lois")))
         self.page("/flux/", "Flux de suivi", "Suivre les votes, les lois et les modifications des codes avec un lecteur de flux RSS.",
-                  f"<h1>Flux de suivi</h1><p class='lede'>Ajoutez ces adresses à un lecteur de flux (Feedly, Thunderbird, NetNewsWire…) pour être prévenu automatiquement. Chaque fiche de député et chaque code a aussi son propre flux.</p><ul class='l'>{liens}</ul>")
+                  f"<h1>Flux de suivi</h1><p class='lede'>Un flux RSS est une adresse que l'on ne lit pas dans le navigateur : on la colle dans une application de lecture (Feedly, Inoreader, Thunderbird, NetNewsWire…), qui vous prévient à chaque nouveauté. Si vous ouvrez un flux directement, votre navigateur affiche du code : c'est normal. Ajoutez ces adresses à votre lecteur pour être prévenu automatiquement. Chaque fiche de député et chaque code a aussi son propre flux.</p><ul class='l'>{liens}</ul>")
         # l'interrupteur s'applique aussi à la page principale du site
         idx = os.path.join(self.site, "index.html")
         if self.public and os.path.exists(idx):

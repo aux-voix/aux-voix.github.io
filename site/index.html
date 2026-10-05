@@ -735,6 +735,31 @@ main{view-transition-name:page}
 .presi-acc-l{display:flex;flex-direction:column;gap:2px;align-self:center}
 .presi-acc-l a{font-weight:600;padding:8px 0;border-bottom:1px solid var(--bord)}
 @media (max-width:760px){.presi-acc-b{grid-template-columns:1fr;padding:18px}}
+
+/* Onglet Présidentielle */
+.nav a.nav-presi{color:var(--bleu2)}
+.nav a.nav-presi[aria-current="page"]{color:var(--bleu2)}
+@media (max-width:560px){
+  .np-an{display:none}
+  .nav{gap:0;justify-content:space-between}
+  .nav a{font-size:14.5px}
+}
+/* Accueil sur téléphone : l'essentiel d'abord, le détail à un clic */
+@media (max-width:640px){
+  .presi-acc{padding-top:14px}
+  .presi-acc-b{padding:14px 16px;gap:10px}
+  .presi-acc-b .ui{display:none}
+  .presi-acc-l{display:grid;grid-template-columns:1fr 1fr;gap:8px}
+  .presi-acc-l a{border:1px solid var(--bord);background:var(--fond);padding:10px 12px;text-decoration:none;font-size:14px;line-height:1.3}
+  .trouver-w{padding-top:12px}
+  .une{padding-top:18px!important}
+  .une .lede,.une .hemi-fig,.une-side,.rel-sec{display:none}
+  .une h1{font-size:24px;line-height:1.2}
+  .une .notice{font-size:14px;padding:10px 14px}
+}
+
+/* Adresses et mots très longs : coupés plutôt que de déborder */
+main,dialog{overflow-wrap:break-word}
 </style>
 </head>
 <body data-lv="2">
@@ -744,6 +769,7 @@ main{view-transition-name:page}
   <div class="wrap">
     <a class="wordmark" href="#/" aria-label="Aux Voix, accueil"><svg class="emb" viewBox="0 2 120 64" aria-hidden="true"><g fill="none" stroke="currentColor" stroke-width="6" stroke-linecap="round"><path d="M43.0 60.0 A17 17 0 0 1 50.0 46.2"/><path d="M53.1 44.5 A17 17 0 0 1 66.9 44.5"/><path d="M70.0 46.2 A17 17 0 0 1 77.0 60.0"/><path d="M32.0 60.0 A28 28 0 0 1 43.5 37.3"/><path d="M48.6 34.4 A28 28 0 0 1 71.4 34.4"/><path d="M76.5 37.3 A28 28 0 0 1 88.0 60.0"/><path d="M21.0 60.0 A39 39 0 0 1 37.1 28.4"/><path d="M44.1 24.4 A39 39 0 0 1 75.9 24.4"/><path d="M82.9 28.4 A39 39 0 0 1 99.0 60.0"/><path d="M10.0 60.0 A50 50 0 0 1 30.6 19.5"/><path d="M39.7 14.3 A50 50 0 0 1 80.3 14.3"/><path d="M89.4 19.5 A50 50 0 0 1 110.0 60.0"/></g></svg><span><span class="wm1">Aux </span><span class="wm2">Voix</span></span></a>
     <nav class="nav" aria-label="Rubriques">
+      <a href="#/presidentielle" data-nav="presidentielle" class="nav-presi">Présidentielle<span class="np-an"> 2027</span></a>
       <a href="#/lois" data-nav="lois">Lois</a>
       <a href="#/votes" data-nav="votes">Votes</a>
       <a href="#/elus" data-nav="elus">Élus</a>
@@ -754,7 +780,6 @@ main{view-transition-name:page}
       <input id="q" type="search" role="combobox" aria-autocomplete="list" aria-haspopup="listbox" placeholder="Un nom, une loi, un n° de scrutin" autocomplete="off" aria-controls="qr" aria-expanded="false"><div id="qr" class="search-res" role="listbox" aria-label="Résultats de recherche" hidden></div></div>
   </div>
 </header>
-<nav class="presi-w" aria-label="Présidentielle 2027"><div class="wrap"><a class="presi-band" id="presi-band" href="#/presidentielle"><span class="pb-k">Présidentielle 2027</span><span id="pb-t">Premier tour le dimanche 18 avril 2027</span><span class="pb-go">Comprendre l'élection</span></a></div></nav>
 <main id="main" tabindex="-1"><div class="wrap loading"><b>Chargement</b>Lecture des données officielles de l'Assemblée nationale…</div></main>
 <footer class="foot"><div class="wrap">
   <div><h2>Dernières corrections</h2><ul id="foot-corr"><li class="meta">Aucune correction publiée.</li></ul><p class="meta"><a href="#/methode/corrections">Journal des corrections</a></p></div>
@@ -965,7 +990,7 @@ function pageHome(){
     <aside class="une-side" aria-labelledby="ag-t"><h2 class="h3" id="ag-t">Autres votes importants</h2>
       <ul class="side-list">${recents.map(x=>`<li><a href="#/scrutin/${x.n}">${esc(cap(x.ti))}</a><div class="meta">${fds(x.d)} : ${x.adopte?"adopté":"rejeté"}, ${n(x.po)} pour, ${n(x.co)} contre</div></li>`).join("")}</ul>
       <p class="acts meta" style="margin-top:14px"><a href="#/calendrier">Le mois en résumé</a><a href="#/votes">Tous les scrutins</a></p></aside></section>
-  <section class="wrap sec" aria-labelledby="rj-t"><div class="sec-h"><h2 class="h2" id="rj-t">Le relevé</h2><span class="meta">${esc(DATA.label)}</span></div>
+  <section class="wrap sec rel-sec" aria-labelledby="rj-t"><div class="sec-h"><h2 class="h2" id="rj-t">Le relevé</h2><span class="meta">${esc(DATA.label)}</span></div>
     <div class="trio">
       <div><p class="cat">Un chiffre</p><h3 class="h3">${pc(MED[K].partS)} : participation médiane des députés ${enExercice()} aux scrutins solennels</h3><p class="meta" style="margin-top:8px">Aux scrutins publics de toute nature, souvent tenus tard le soir sur des amendements : ${pc(MED[K].part)}. <a href="#/methode/indicateurs">Comment c'est calculé</a></p></div>
       <div><p class="cat">Dernière loi promulguée</p>${lp?`<h3 class="h3"><a href="#/loi/${esc(lp.id)}">${esc(cap(lp.titre))}</a></h3><p class="meta" style="margin-top:8px">Promulguée le ${fd(lp.prom.date)}.</p>`:`<h3 class="h3">Aucune loi promulguée dans les données de cette législature</h3>`}</div>
@@ -1954,6 +1979,12 @@ function partager(titre,options){
   const L=options.filter(Boolean);openDialog(titre,`<ul class="partage">${L.map((o,i)=>`<li><button type="button" class="btn" data-opt="${i}">${esc(o[0])}</button><span class="meta">${esc(o[1])}</span></li>`).join("")}</ul>`);
   $$("#dlg-b [data-opt]").forEach(b=>b.addEventListener("click",()=>L[+b.dataset.opt][2]()));
 }
+document.addEventListener("click",e=>{const a=e.target.closest&&e.target.closest('a[href$=".xml"]');if(!a||e.ctrlKey||e.metaKey)return;e.preventDefault();
+  const u=new URL(a.getAttribute("href"),location.href).href;
+  openDialog("Suivre avec un flux RSS",`<p class="ui">Un flux RSS vous prévient à chaque nouveauté, sans créer de compte sur ce site. Copiez cette adresse et collez-la dans une application de lecture de flux (Feedly, Inoreader, Thunderbird, NetNewsWire…).</p>
+    <p><label class="lab" for="rss-u">Adresse du flux</label><input id="rss-u" type="text" readonly value="${esc(u)}" style="width:100%"></p>
+    <p class="dlg-acts"><button type="button" class="btn btn-p" id="rss-c">Copier l'adresse</button><a class="btn" href="flux/">Tous les flux</a></p>`);
+  $("#rss-c").addEventListener("click",ev=>copier(u,ev.currentTarget));$("#rss-u").addEventListener("focus",ev=>ev.target.select());});
 /* ============ Recherche ============ */
 let IDXS=[];
 function buildSearch(){IDXS=[].concat(DEP.map(dp=>({l:dp.nc+(dp.actif?"":" (ancien)"),s:grp(dp.groupe).sigle+", "+circL(dp),h:"#/elu/"+dp.id,k:norm(dp.nc+" "+dp.dept),a:dp.actif?0:1})),
@@ -2038,12 +2069,11 @@ function route(){
     case "votes":pg=pageVotes();nav="votes";break;case "scrutin":pg=pageScrutin(parts[1]);nav="votes";break;case "comparateur":pg=pageCmp(q);nav="votes";break;
     case "calendrier":pg=pageCal(q);nav="votes";break;case "themes":pg=pageThemes(q);nav="votes";break;
     case "simulateur":pg=pageSim();nav="groupes";break;case "codes":pg=pageCodes();nav="codes";break;
-    case "presidentielle":pg=pagePresi();nav="";break;case "candidats":pg=pageCandidats();nav="";break;case "propositions":pg=pagePropositions(q);nav="";break;
-    case "elections":pg=pageElections();nav="";break;case "actualites":pg=pageActualites(q);nav="";break;
+    case "presidentielle":pg=pagePresi();nav="presidentielle";break;case "candidats":pg=pageCandidats();nav="presidentielle";break;case "propositions":pg=pagePropositions(q);nav="presidentielle";break;
+    case "elections":pg=pageElections();nav="presidentielle";break;case "actualites":pg=pageActualites(q);nav="presidentielle";break;
     case "code":pg=parts[2]?pageArticle(parts[1],parts[2]):pageCode(parts[1],q);nav="codes";break;case "classements":pg=pageElus();nav="elus";break;case "methode":pg=pageMethode();nav="";break;case "comprendre":pg=pageComprendre(parts[1]);break;default:pg=pageNotFound();}
   if(dlg.open)dlg.close();
   const rendre=()=>{
-  {const pb=$("#presi-band");if(pb){if(["presidentielle","candidats","propositions","elections","actualites"].includes(p0))pb.setAttribute("aria-current","page");else pb.removeAttribute("aria-current");}}
   main.innerHTML=barreHaut(p0)+pg.html;document.title=(p0?frStr(pg.title)+" | ":"")+"Aux Voix";
   $$(".nav a").forEach(a=>{if(a.dataset.nav===nav)a.setAttribute("aria-current","page");else a.removeAttribute("aria-current");});
   frTypo(main);if(pg.after)pg.after();embellir();if(!p0)momentAccueil();compterPage();
