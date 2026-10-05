@@ -814,7 +814,7 @@ def construire_legislature(L, acteurs, organes, aujourd_hui, credits=None):
 def verifier_contenus():
     dossier = os.path.join(SITE, "contenu")
     erreurs = []
-    for nom in ("lois.json", "corrections.json", "site.json", "articles.json"):
+    for nom in ("lois.json", "corrections.json", "site.json", "articles.json", "candidats.json", "actualites.json"):
         chemin = os.path.join(dossier, nom)
         if not os.path.exists(chemin):
             erreurs.append(f"{nom} : fichier manquant")
@@ -835,6 +835,19 @@ def verifier_contenus():
                         erreurs.append(f"site.json : « public » est activé mais « {champ} » est vide (ou passez « anonyme » à true pour un éditeur non professionnel)")
             if not ment.get("contact"):
                 erreurs.append("site.json : « public » est activé mais l'adresse de contact est vide")
+        if nom in ("candidats.json", "actualites.json"):
+            for i, t in enumerate(contenu or []):
+                if not (isinstance(t, dict) and t.get("publie")):
+                    continue
+                champs = ("prenom", "nom", "statut", "auteur", "verif") if nom == "candidats.json" else ("date", "titre", "source", "auteur", "verif")
+                for champ in champs:
+                    if not t.get(champ):
+                        erreurs.append(f"{nom}, fiche {i + 1} : le champ « {champ} » est vide")
+                if t.get("auteur") and t.get("auteur") == t.get("verif"):
+                    erreurs.append(f"{nom}, fiche {i + 1} : l'auteur et le vérificateur doivent être deux personnes différentes")
+                sources = [t.get("source")] if nom == "actualites.json" else [(t.get("declaration") or {}).get("source")] + [p.get("source") for p in t.get("propositions") or []]
+                if any(not str(u or "").startswith("https://") for u in sources):
+                    erreurs.append(f"{nom}, fiche {i + 1} : chaque information doit avoir une source en https")
         if nom == "articles.json":
             for i, t in enumerate(contenu or []):
                 if isinstance(t, dict) and t.get("publie"):

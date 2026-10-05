@@ -69,7 +69,7 @@ class Generateur:
         except Exception:
             pass
         self.public = bool(cfg.get("public"))
-        self.url = (cfg.get("url") or "https://lereleve.github.io").rstrip("/")
+        self.url = (cfg.get("url") or "https://aux-voix.github.io").rstrip("/")
         gc = str((cfg.get("mesure_audience") or {}).get("goatcounter") or "").strip().lower()
         self.audience = (f'<script data-goatcounter="https://{gc}.goatcounter.com/count" async src="https://gc.zgo.at/count.js"></script>'
                          if re.fullmatch(r"[a-z0-9][a-z0-9-]{1,40}", gc) else "")

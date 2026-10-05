@@ -1,0 +1,23 @@
+{
+  "publie": false,
+  "statut": "declare",
+  "prenom": "Prénom",
+  "nom": "Nom",
+  "soutien": "Parti ou soutien tel que déclaré par la personne",
+  "declaration": {
+    "date": "2026-10-01",
+    "source": "https://lien-vers-la-declaration-publique"
+  },
+  "site": "https://site-officiel-de-campagne",
+  "programme": "https://lien-vers-le-programme-officiel",
+  "depute": "PA000000 (facultatif : identifiant Assemblée si la personne est ou a été députée)",
+  "propositions": [
+    {
+      "theme": "sante",
+      "texte": "Proposition reprise du programme officiel, sans reformulation qui en change le sens.",
+      "source": "https://lien-vers-la-page-du-programme"
+    }
+  ],
+  "auteur": "Prénom Nom",
+  "verif": "Prénom Nom (une autre personne)"
+}
