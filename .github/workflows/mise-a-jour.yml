@@ -18,7 +18,7 @@ concurrency:
 
 jobs:
   construire:
-    runs-on: ubuntu-latest
+    runs-on: ubuntu-24.04   # version fixée : évite le passage automatique à Ubuntu 26 le 19 octobre 2026
     timeout-minutes: 100
     steps:
       - uses: actions/checkout@v4
@@ -54,7 +54,7 @@ jobs:
 
   publier:
     needs: construire
-    runs-on: ubuntu-latest
+    runs-on: ubuntu-24.04   # version fixée : évite le passage automatique à Ubuntu 26 le 19 octobre 2026
     environment:
       name: github-pages
       url: ${{ steps.deploiement.outputs.page_url }}
