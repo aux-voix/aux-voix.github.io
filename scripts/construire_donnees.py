@@ -633,6 +633,42 @@ def personnes_citees(lois, index, acteurs):
     print(f"  noms retrouvés pour {len(out)} auteurs ou rapporteurs non députés de la législature")
     return out
 
+# ---------- actualités officielles : vie-publique.fr (DILA), titres et liens seulement ----------
+FLUX_OFFICIELS = [
+    ("https://www.vie-publique.fr/actualites-feeds.xml", "vie-publique.fr", "Actualité des politiques publiques"),
+    ("https://www.vie-publique.fr/lois-feeds.xml", "vie-publique.fr", "Panorama des lois"),
+]
+
+def actualites_officielles():
+    import email.utils
+    import xml.etree.ElementTree as ET
+    sortie = os.path.join(SITE, "actualites-officielles.json")
+    if os.environ.get("RELEVE_LOCAL"):
+        if not os.path.exists(sortie):
+            json.dump([], open(sortie, "w", encoding="utf-8"))
+        return
+    items, vus = [], set()
+    for url, source, rubrique in FLUX_OFFICIELS:
+        try:
+            req = urllib.request.Request(url, headers={"User-Agent": UA})
+            racine = ET.fromstring(urllib.request.urlopen(req, timeout=60).read())
+            for it in racine.iter("item"):
+                titre = html.unescape(re.sub(r"\s+", " ", it.findtext("title") or "")).strip()
+                lien = (it.findtext("link") or "").strip()
+                try:
+                    date = email.utils.parsedate_to_datetime(it.findtext("pubDate") or "").date().isoformat()
+                except Exception:
+                    date = ""
+                if titre and lien.startswith("https://") and date and lien not in vus:
+                    vus.add(lien)
+                    items.append({"date": date, "titre": titre, "lien": lien, "source": source, "rubrique": rubrique})
+        except Exception as e:
+            print(f"Actualités officielles : {url} indisponible ({e})")
+    items.sort(key=lambda x: x["date"], reverse=True)
+    if items or not os.path.exists(sortie):
+        json.dump(items[:80], open(sortie, "w", encoding="utf-8"), ensure_ascii=False, separators=(",", ":"))
+    print(f"Actualités officielles : {len(items)} titres récupérés")
+
 # ---------- calcul d'une législature ----------
 def periodes(L, aujourd_hui):
     fin_leg = L["au"] or aujourd_hui
@@ -814,7 +850,7 @@ def construire_legislature(L, acteurs, organes, aujourd_hui, credits=None):
 def verifier_contenus():
     dossier = os.path.join(SITE, "contenu")
     erreurs = []
-    for nom in ("lois.json", "corrections.json", "site.json", "articles.json", "candidats.json", "actualites.json"):
+    for nom in ("lois.json", "corrections.json", "site.json", "articles.json", "candidats.json", "actualites.json", "programmes.json"):
         chemin = os.path.join(dossier, nom)
         if not os.path.exists(chemin):
             erreurs.append(f"{nom} : fichier manquant")
@@ -835,6 +871,18 @@ def verifier_contenus():
                         erreurs.append(f"site.json : « public » est activé mais « {champ} » est vide (ou passez « anonyme » à true pour un éditeur non professionnel)")
             if not ment.get("contact"):
                 erreurs.append("site.json : « public » est activé mais l'adresse de contact est vide")
+        if nom == "programmes.json":
+            for i, t in enumerate(contenu or []):
+                if not (isinstance(t, dict) and t.get("publie")):
+                    continue
+                for champ in ("parti", "auteur", "verif"):
+                    if not t.get(champ):
+                        erreurs.append(f"programmes.json, fiche {i + 1} : le champ « {champ} » est vide")
+                if t.get("auteur") and t.get("auteur") == t.get("verif"):
+                    erreurs.append(f"programmes.json, fiche {i + 1} : l'auteur et le vérificateur doivent être deux personnes différentes")
+                urls = [(t.get("document") or {}).get("url")] + [x.get("source") for x in t.get("extraits") or []]
+                if any(not str(u or "").startswith("https://") for u in urls):
+                    erreurs.append(f"programmes.json, fiche {i + 1} : le document et chaque extrait doivent avoir une source en https")
         if nom in ("candidats.json", "actualites.json"):
             for i, t in enumerate(contenu or []):
                 if not (isinstance(t, dict) and t.get("publie")):
@@ -897,6 +945,10 @@ def main():
             index.append(r)
     with open(os.path.join(SITE, "index.json"), "w", encoding="utf-8") as f:
         json.dump({"maj": datetime.datetime.now(datetime.timezone.utc).strftime("%Y-%m-%dT%H:%MZ"), "legislatures": index}, f, ensure_ascii=False)
+    try:
+        actualites_officielles()
+    except Exception as e:
+        print(f"Actualités officielles : collecte interrompue ({e})")
     # Codes consolidés (Constitution, Code civil…) : facultatif, ne bloque jamais le reste du site
     if not os.environ.get("RELEVE_LOCAL") or os.environ.get("RELEVE_LEGI_LOCAL"):
         try:

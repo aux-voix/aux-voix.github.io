@@ -1,0 +1,20 @@
+{
+  "publie": false,
+  "parti": "Nom officiel du parti",
+  "groupe": "Sigle de son groupe à l'Assemblée (facultatif)",
+  "document": {
+    "titre": "Titre du programme",
+    "url": "https://lien-vers-le-programme-officiel",
+    "date": "2026-10-01"
+  },
+  "extraits": [
+    {
+      "theme": "sante",
+      "texte": "Phrase recopiée mot pour mot depuis le programme, sans coupure qui en change le sens.",
+      "source": "https://lien-vers-le-document",
+      "page": 12
+    }
+  ],
+  "auteur": "Prénom Nom",
+  "verif": "Prénom Nom (une autre personne)"
+}

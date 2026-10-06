@@ -760,6 +760,9 @@ main{view-transition-name:page}
 
 /* Adresses et mots très longs : coupés plutôt que de déborder */
 main,dialog{overflow-wrap:break-word}
+
+.cand q{quotes:"« " " »"}
+.cand q::before{content:open-quote}.cand q::after{content:close-quote}
 </style>
 </head>
 <body data-lv="2">
@@ -1514,7 +1517,7 @@ function pageMethode(){
       <p class="ui">Résumés de lois : la phrase « en bref » est générée à partir des données officielles (dates, étapes, résultats des votes). Les résumés du contenu d'un texte sont rédigés et vérifiés par deux personnes distinctes avant publication, et signalés comme tels.</p></section>
     <section id="themes" style="margin-top:40px"><h2 class="h2">Thèmes, classements et limites</h2>
       <p style="margin-top:12px">Chaque scrutin reçoit au plus un thème, d'après les mots du titre du texte concerné. La liste des mots-clés est la suivante ; un texte qui n'en contient aucun reste sans thème.</p>
-      <div class="tw"><table class="t"><thead><tr><th>Thème</th><th>Mots recherchés dans le titre</th></tr></thead><tbody>${THEMES.map(t=>`<tr><td>${t[1]}</td><td class="meta">${esc(String(t[2]).slice(1,-1).replace(/\\b/g,"").split("|").join(", "))}</td></tr>`).join("")}</tbody></table></div>
+      <div class="tw"><table class="t"><thead><tr><th>Thème</th><th>Mots recherchés dans le titre</th></tr></thead><tbody>${THEMES.map(t=>`<tr><td>${t[1]}</td><td class="meta">${esc(t[2].source.replace(/\\b|\(\?:|\)|\?|s\?/g,"").split("|").join(", "))}</td></tr>`).join("")}</tbody></table></div>
       <p class="ui">Amendements : comptés dans le fichier officiel des amendements de l'Assemblée, relu une fois par semaine en raison de son volume. Sont comptés les amendements déposés en premier signataire, ceux qui ont été adoptés, et les cosignatures.</p>
       <p class="ui">Présence : l'Assemblée ne publie pas de relevé de présence en séance. Aucun site ne peut donc afficher un vrai taux de présence ; nous affichons la participation aux votes, sous ce nom.</p>
       <p class="ui">Codes : textes consolidés issus de la base LEGI de la Direction de l'information légale et administrative (la base de Légifrance), sous Licence Ouverte, relus chaque semaine. « Ce qui a changé » compare automatiquement la version en vigueur à la précédente, mot à mot. Les références à citer suivent l'usage universitaire (abréviation du code, numéro d'article, texte d'origine de la rédaction). Les explications de fond ne sont publiées que si elles ont été rédigées et vérifiées par deux personnes distinctes. Seule la publication au Journal officiel fait foi.</p>
@@ -1549,21 +1552,22 @@ function pageMethode(){
 function pageComprendre(id){const c=COMP.find(x=>x.id===id);if(!c)return pageNotFound();return {title:c.titre,html:`<div class="wrap sec col" style="--col:760px"><p class="meta">Comprendre</p><h1 class="h1s">${c.titre}</h1><p class="lede" style="margin-top:12px;color:var(--texte2)">${c.sous}.</p><div class="prose" style="margin-top:28px">${c.corps.map(p=>`<p>${p}</p>`).join("")}</div><p class="ui" style="margin-top:36px;border-top:1px solid var(--bord);padding-top:14px">Voir aussi : ${COMP.filter(x=>x.id!==id).map(x=>`<a href="#/comprendre/${x.id}">${x.titre}</a>`).join(", ")}.</p></div>`};}
 function pageNotFound(){return {title:"Page introuvable",html:`<div class="wrap sec" style="max-width:760px"><h1 class="h1s">Cette page n'existe pas</h1><p class="lede" style="margin-top:12px">Elle appartient peut-être à une autre législature : changez de législature en haut de page, ou reprenez depuis <a href="#/">l'accueil</a>.</p></div>`};}
 /* ============ Thèmes (classement des scrutins par mots-clés du titre du texte) ============ */
+const RX=s=>new RegExp("\\b(?:"+s+")");
 const THEMES=[
-  ["agriculture","Agriculture et alimentation",/agricol|agricult|eleveu|elevage|pesticid|alimentation|peche|foret|phytosanit|viticult|semence/],
-  ["logement","Logement et immobilier",/logement|loyer|locati|immobili|urbanis|copropri|\bhlm\b|habitat/],
-  ["energie","Énergie, climat et environnement",/energ|climat|electric|nucleaire|carbone|renouvel|environnement|biodiversit|\beau\b|dechet|pollution/],
-  ["sante","Santé",/sante|medic|hopita|soins|pharmac|maladie|fin de vie|hospital|infirmi/],
-  ["social","Travail, retraites et protection sociale",/retraite|travail|emploi|chomage|salari|securite sociale|handicap|pauvret|solidarit|minima/],
-  ["economie","Économie, budget et fiscalité",/loi de finances|finances publiques|budget|fiscal|impot|taxe|entreprise|econom|commerce|banque|comptes/],
-  ["securite","Sécurité et justice",/securite interieure|police|justice|penal|prison|terror|narcotrafic|delinquan|ordre public|gendarm|violences/],
-  ["immigration","Immigration et nationalité",/immigra|asile|etranger|nationalite|integration/],
-  ["education","Éducation et recherche",/educ|ecole|enseign|universit|recherche|etudiant|scolaire|apprentissage/],
-  ["numerique","Numérique",/numerique|internet|donnees|intelligence artificielle|reseaux sociaux|cyber|plateforme/],
-  ["transports","Transports",/transport|ferroviaire|routier|aerien|mobilit|autoroute/],
-  ["institutions","Institutions et collectivités",/constitution|electoral|election|collectivit|parlement|reglement de l|decentralis|outre-mer|corse|nouvelle-caledonie/],
-  ["defense","Défense et international",/defense|armee|militaire|programmation militaire|traite|accord entre|convention entre|ukraine|europeen/],
-  ["culture","Culture, sport et médias",/cultur|sport|audiovisuel|patrimoine|presse|olympi|livre|cinema/]
+  ["agriculture","Agriculture et alimentation",RX("agricol|agricult|eleveu|elevage|pesticid|alimentation|peche|forets?\\b|forest|phytosanit|phytopharma|viticult|semence|engrais|paysan")],
+  ["logement","Logement et immobilier",RX("logement|relog|loyer|locati|immobili|urbanis|copropri|hlm\\b|habitat|bail")],
+  ["energie","Énergie, climat et environnement",RX("energ|hydroelectri|electric|nucleaire|carbone|decarbon|renouvel|environnement|biodiversit|eau\\b|eaux\\b|dechet|pollution|depollu|ecofiscal|climat")],
+  ["sante","Santé",RX("sante\\b|medic|medecin|hopita|hospital|soins\\b|pharmac|maladie|fin de vie|infirmi|patient|vaccin")],
+  ["social","Travail, retraites et protection sociale",RX("retraite|travail|teletravail|emploi\\b|emplois\\b|chomage|salari|securite sociale|handicap|pauvret|solidarit|minima\\b|allocation")],
+  ["economie","Économie, budget et fiscalité",RX("loi de finances|finances publiques|budget|fiscal|impot|taxe\\b|taxes\\b|entreprise|microentreprise|econom|commerce|banque|bancaire|approbation des comptes|reglement du budget")],
+  ["securite","Sécurité et justice",RX("securite interieure|police|policier|justice|judiciaire|penale?s?\\b|penaux|prison|penitentiaire|terroris|narcotrafic|delinquan|ordre public|gendarm|violences")],
+  ["immigration","Immigration et nationalité",RX("immigra|asile|etrangers?\\b|nationalite")],
+  ["education","Éducation et recherche",RX("educ|ecole|enseign|universit|recherche|etudiant|scolaire|apprentissage")],
+  ["numerique","Numérique",RX("numerique|internet|donnees|intelligence artificielle|reseaux sociaux|cyber|plateforme")],
+  ["transports","Transports",RX("transport|ferroviaire|routier|routiere|aerien|aeroport|mobilit|autoroute|vehicule")],
+  ["institutions","Institutions et collectivités",RX("constitution|electoral|elections?\\b|collectivit|parlement|reglement de l|decentralis|outre-mer|corse|nouvelle-caledonie")],
+  ["defense","Défense et international",RX("defense|armee|militaire|programmation militaire|traite\\b|accord entre|convention entre|ukraine|europeen")],
+  ["culture","Culture, sport et médias",RX("cultur|sport|audiovisuel|patrimoine|presse\\b|medias|olympi|livre\\b|cinema|musee")]
 ];
 const THEMEL={};THEMES.forEach(t=>THEMEL[t[0]]=t[1]);
 function themeOf(s){const t=norm(texteDe(s.ti)||s.ti);for(const th of THEMES)if(th[2].test(t))return th[0];return null;}
@@ -1771,7 +1775,7 @@ function citerGroupe(g){const u=`${BASEURL()}/#/groupe/${g.id}`;
 const PRESI={t1:"2027-04-18",t2:"2027-05-02",t1om:"2027-04-17",t2om:"2027-05-01",
   srcAnnonce:"https://www.service-public.gouv.fr/particuliers/actualites/A15053",
   srcDates:"https://www.service-public.gouv.fr/particuliers/vosdroits/F1939",verif:"2026-07-01"};
-let PCAND=[],PACTU=[];
+let PCAND=[],PACTU=[],PPROG=[],POFF=[];
 const SP=k=>`https://www.service-public.gouv.fr/particuliers/vosdroits/${k}`;
 function joursAvant(iso){return Math.round((new Date(iso+"T12:00:00")-new Date(TODAY_ISO+"T12:00:00"))/864e5);}
 function compteRebours(iso){const j=joursAvant(iso);return j>1?`dans ${n(j)} jours`:j===1?"demain":j===0?"aujourd'hui":"";}
@@ -1805,20 +1809,21 @@ function pagePresi(){
     </ul>
 
     <div class="notice" style="margin-top:28px"><strong>Notre engagement de neutralité.</strong> Tous les candidats et tous les groupes sont présentés selon le même gabarit, dans l'ordre alphabétique, à partir de leurs propres documents ou des données officielles. Nous ne publions ni sondage, ni pronostic, ni note, et nous ne qualifions pas les positions de quiconque. Chaque information renvoie à sa source. <a href="#/methode/neutralite">Nos règles en détail</a>.</div>
-    <p class="acts" style="margin-top:22px"><a href="#/candidats">Les candidats</a><a href="#/propositions">Ce que proposent les groupes</a><a href="#/elections">Toutes les dates de vote</a><a href="#/actualites">Actualités</a></p></div>`};
+    <p class="acts" style="margin-top:22px"><a href="#/candidats">Les candidats</a><a href="#/programmes">Programmes des partis</a><a href="#/propositions">Ce que proposent les groupes</a><a href="#/elections">Toutes les dates de vote</a><a href="#/actualites">Actualités</a></p></div>`};
 }
 
-function pageCandidats(){
-  const L=PCAND.filter(c=>c.publie===true).sort((a,b)=>(a.nom+" "+a.prenom).localeCompare(b.nom+" "+b.prenom,"fr"));
+function pageCandidats(q){
+  const brouillon=q&&q.get("brouillons")==="1",L=PCAND.filter(c=>c.publie===true||brouillon).sort((a,b)=>(a.nom+" "+a.prenom).localeCompare(b.nom+" "+b.prenom,"fr"));
   const officiels=L.some(c=>c.statut==="officiel");
   const fiche=c=>{const dp=c.depute&&DEPID[c.depute];
-    return `<article class="cand"><h2 class="h3">${esc(c.prenom+" "+c.nom)}</h2>
+    return `<article class="cand"><h2 class="h3">${esc(c.prenom+" "+c.nom)}${c.publie!==true?' <span class="tag">Brouillon à vérifier</span>':""}</h2>${c.publie!==true&&c.a_verifier?`<p class="meta">Sources à contrôler : ${(c.a_verifier||[]).filter(safeUrl).map((u,i)=>ext(u,"source "+(i+1))).join(", ")}. ${esc(c.note||"")}</p>`:""}
       <p class="meta">${esc(c.statut==="officiel"?"Candidature officielle, liste du Conseil constitutionnel":"Candidature déclarée")}${c.soutien?", "+esc(c.soutien):""}. ${c.declaration&&safeUrl(c.declaration.source)?`Déclaration du ${fd(c.declaration.date)} : ${ext(c.declaration.source,"source")}.`:""}</p>
       ${c.site&&safeUrl(c.site)?`<p class="ui">${ext(c.site,"Site de campagne")}${c.programme&&safeUrl(c.programme)?`, ${ext(c.programme,"programme officiel")}`:""}</p>`:""}
       <table class="t"><thead><tr><th>Thème</th><th>Ce qu'il ou elle propose, d'après ses propres documents</th></tr></thead><tbody>${THEMES.map(t=>{const P=(c.propositions||[]).filter(p=>p.theme===t[0]);
         return `<tr><td>${esc(t[1])}</td><td>${P.length?P.map(p=>`${esc(p.texte)} ${safeUrl(p.source)?ext(p.source,"source"):""}`).join("<br>"):'<span class="meta">Aucune proposition publiée sur ce thème à ce jour</span>'}</td></tr>`;}).join("")}</tbody></table>
       ${dp?`<p class="ui">${esc(c.prenom+" "+c.nom)} est ou a été député : ${eluLink(dp)}, ses votes et sa participation.</p>`:""}</article>`;};
   return {title:"Candidats à la présidentielle",html:`<div class="wrap sec col" style="--col:960px">
+    ${brouillon?`<div class="notice"><strong>Mode relecture.</strong> Les fiches marquées « Brouillon à vérifier » ne sont pas publiées : contrôlez chaque source, puis indiquez votre nom dans « verif » et passez « publie » à true dans contenu/candidats.json.</div>`:""}
     <h1 class="h1s">Les candidats</h1>
     <p class="lede intro">La liste officielle des candidats est publiée par le Conseil constitutionnel, après vérification des 500 parrainages, quelques semaines avant le premier tour. Jusque-là, nous ne présentons que les candidatures déclarées publiquement, une fiche par personne, avec sa source, après double vérification.</p>
     <div class="notice"><strong>Mêmes règles pour tous.</strong> Ordre alphabétique ; même grille de thèmes pour chacun, avec la mention « aucune proposition publiée » quand c'est le cas ; propositions reprises des documents des candidats eux-mêmes, avec leur source ; ni sondage, ni pronostic, ni personnalité « pressentie ».${officiels?"":" La liste officielle n'est pas encore publiée."}</div>
@@ -1859,6 +1864,24 @@ function pagePropositions(q){
     ${D.map(carte).join("")}</div>`};
 }
 
+/* Programmes des partis : leurs textes, mot pour mot, à côté des votes de leur groupe */
+function votesThemeGroupe(sigle){const g=GRP.find(x=>x.sigle===sigle&&x.effectif>0);if(!g)return null;const c={};
+  SC.forEach(s=>{if(!s.th||!estEnsemble(s))return;const b=blockOf(s,g.i);if(!b||b[2]<1||b[2]>3)return;const x=c[s.th]=c[s.th]||[0,0,0,0];x[b[2]]++;x[0]++;});return {g,c};}
+function pageProgrammes(){
+  const L=PPROG.filter(p=>p.publie===true).sort((a,b)=>a.parti.localeCompare(b.parti,"fr"));
+  const fiche=p=>{const v=p.groupe?votesThemeGroupe(p.groupe):null,d=p.document||{};
+    return `<article class="cand"><h2 class="h3">${esc(p.parti)}</h2>
+      <p class="meta">${safeUrl(d.url)?ext(d.url,esc(d.titre||"Programme officiel")):esc(d.titre||"")}${d.date?`, publié le ${fd(d.date)}`:""}${v?`. Groupe à l'Assemblée : <a href="#/groupe/${v.g.id}">${esc(v.g.nom)}</a>`:""}.</p>
+      <div class="tw"><table class="t"><thead><tr><th>Thème</th><th>Ce que dit le programme (texte du parti)</th><th>Votes de son groupe à l'Assemblée sur ce thème</th></tr></thead><tbody>${THEMES.map(t=>{const X=(p.extraits||[]).filter(x=>x.theme===t[0]),c=v&&v.c[t[0]];
+        return `<tr><td>${esc(t[1])}</td><td>${X.length?X.map(x=>`<q>${esc(x.texte)}</q> ${safeUrl(x.source)?ext(x.source,"source"+(x.page?", p. "+esc(String(x.page)):"")):""}`).join("<br>"):'<span class="meta">Pas d\'extrait publié sur ce thème</span>'}</td>
+        <td>${c?`${n(c[1])} pour, ${n(c[2])} contre, ${n(c[3])} abstention${c[3]>1?"s":""} <a href="#/themes?t=${t[0]}">voir les textes</a>`:'<span class="meta">Aucun vote sur l\'ensemble d\'un texte de ce thème</span>'}</td></tr>`;}).join("")}</tbody></table></div></article>`;};
+  return {title:"Programmes des partis",html:`<div class="wrap sec">
+    <h1 class="h1s">Programmes des partis</h1>
+    <p class="lede intro">Ce que les partis écrivent dans leurs programmes, à côté de ce que leurs groupes ont voté à l'Assemblée. Partis classés par ordre alphabétique.</p>
+    <div class="notice"><strong>Ces textes sont ceux des partis.</strong> Les extraits sont reproduits mot pour mot depuis les documents officiels publiés par chaque parti, avec leur source. Aux Voix ne les modifie pas, ne les résume pas, ne les commente pas et n'en évalue pas la faisabilité : ils engagent leurs seuls auteurs. Les votes, eux, viennent des données officielles de l'Assemblée.</div>
+    ${L.length?L.map(fiche).join(""):`<p class="empty-note">Aucun programme n'est encore publié ici. Chaque fiche est constituée à partir du document officiel du parti, puis relue par une seconde personne avant publication. Les programmes pour 2027 seront ajoutés au fur et à mesure de leur publication par les partis.</p>`}</div>`};
+}
+
 function pageElections(){
   const E=[["Élection présidentielle","Dimanche 18 avril et dimanche 2 mai 2027","Avril 2022",SP("F1940")],["Élections départementales","Mars 2028","Juin 2021",SP("F1958")],["Élections régionales","Mars 2028","Juin 2021",SP("F1958")],
     ["Élections européennes","2029","Juin 2024",SP("F1944")],["Élections législatives","2029, sauf dissolution","Juin et juillet 2024",SP("F1943")],["Élections municipales","2032","Mars 2026",SP("F1952")]];
@@ -1885,25 +1908,26 @@ function actualites(){
   SC.forEach(s=>{if(s.moc)A.push({date:s.d,cat:"assemblee",titre:cap(s.ti),lien:`#/scrutin/${s.n}`,txt:s.adopte?"Motion de censure adoptée : le Gouvernement est renversé.":`Motion de censure rejetée : ${n(s.po)} voix, ${n(s.rq)} nécessaires.`});
     else if(s.sol)A.push({date:s.d,cat:"assemblee",titre:cap(headline(s)),lien:`#/scrutin/${s.n}`,txt:`Vote solennel : ${s.adopte?"adopté":"rejeté"}, ${n(s.po)} pour et ${n(s.co)} contre.`});});
   PACTU.filter(a=>a.publie===true).forEach(a=>A.push({date:a.date,cat:a.categorie==="presidentielle"?"presidentielle":"assemblee",titre:a.titre,lien:safeUrl(a.source)?a.source:"",txt:a.resume||"",ext:true}));
+  POFF.forEach(o=>A.push({date:o.date,cat:"publiques",titre:o.titre,lien:o.lien,txt:`${o.rubrique}, ${o.source}`,ext:true}));
   A.push({date:PRESI.verif,cat:"presidentielle",titre:"Dates de l'élection présidentielle arrêtées : 18 avril et 2 mai 2027",lien:PRESI.srcAnnonce,txt:"Annoncées à l'issue du Conseil des ministres du 1er juillet 2026.",ext:true});
   return A.filter(a=>a.date).sort((a,b)=>a.date<b.date?1:-1);
 }
 function pageActualites(q){
   const c=q.get("c")||"",A=actualites().filter(a=>!c||a.cat===c).slice(0,60);
-  const lib={presidentielle:"Présidentielle",assemblee:"Assemblée"};
+  const lib={presidentielle:"Présidentielle",assemblee:"Assemblée",publiques:"Politiques publiques"};
   return {title:"Actualités",html:`<div class="wrap sec col" style="--col:900px">
     <h1 class="h1s">Actualités</h1>
-    <p class="lede intro">Les faits marquants, datés et sourcés : lois promulguées, votes solennels, motions de censure, étapes officielles de l'élection présidentielle. Aucun commentaire, aucune opinion.</p>
-    <nav class="chips" aria-label="Catégories"><a href="#/actualites"${!c?' aria-current="page"':""}>Tout</a><a href="#/actualites?c=presidentielle"${c==="presidentielle"?' aria-current="page"':""}>Présidentielle</a><a href="#/actualites?c=assemblee"${c==="assemblee"?' aria-current="page"':""}>Assemblée</a></nav>
+    <p class="lede intro">Les faits politiques importants, datés et sourcés, chaque jour : lois promulguées, votes solennels, motions de censure, actualité des politiques publiques, étapes de l'élection présidentielle. Uniquement des sources officielles, sans commentaire ni opinion.</p>
+    <nav class="chips" aria-label="Catégories"><a href="#/actualites"${!c?' aria-current="page"':""}>Tout</a><a href="#/actualites?c=presidentielle"${c==="presidentielle"?' aria-current="page"':""}>Présidentielle</a><a href="#/actualites?c=assemblee"${c==="assemblee"?' aria-current="page"':""}>Assemblée</a><a href="#/actualites?c=publiques"${c==="publiques"?' aria-current="page"':""}>Politiques publiques</a></nav>
     ${A.length?`<ol class="fil-actu">${A.map(a=>`<li><span class="dt">${fd(a.date)}</span><span class="tag">${lib[a.cat]}</span><b>${a.lien?(a.ext?ext(a.lien,esc(a.titre)):`<a href="${esc(a.lien)}">${esc(a.titre)}</a>`):esc(a.titre)}</b>${a.txt?`<p>${esc(a.txt)}</p>`:""}</li>`).join("")}</ol>`:`<p class="empty-note">Aucune actualité dans cette catégorie pour la législature affichée.</p>`}
-    <p class="meta">Les actualités de l'Assemblée sont produites automatiquement à partir des données officielles. Les autres sont rédigées, sourcées et relues par une seconde personne avant publication.</p></div>`};
+    <p class="meta">Sources : les données officielles de l'Assemblée nationale, produites automatiquement ; les titres de vie-publique.fr, le site d'information de l'État édité par la Direction de l'information légale et administrative, repris tels quels avec un lien vers l'article ; et des faits rédigés, sourcés et relus par une seconde personne. Aucun commentaire ni opinion n'est ajouté.</p></div>`};
 }
 
 function encartPresiAccueil(){
   const c=compteRebours(PRESI.t1);
   return `<section class="wrap presi-acc" aria-labelledby="pa-t"><div class="presi-acc-b">
     <div><p class="cat">${c?cap(c):"2027"}</p><h2 class="h2" id="pa-t">Présidentielle 2027</h2><p class="ui">Premier tour le dimanche 18 avril 2027, second tour le dimanche 2 mai. Les règles, les dates, les candidats et ce que proposent les groupes, expliqués simplement et sans parti pris.</p></div>
-    <nav class="presi-acc-l" aria-label="Rubriques de la section Présidentielle"><a href="#/presidentielle">L'essentiel</a><a href="#/candidats">Les candidats</a><a href="#/propositions">Ce que proposent les groupes</a><a href="#/elections">Toutes les dates de vote</a><a href="#/actualites">Actualités</a></nav></div></section>`;
+    <nav class="presi-acc-l" aria-label="Rubriques de la section Présidentielle"><a href="#/presidentielle">L'essentiel</a><a href="#/candidats">Les candidats</a><a href="#/programmes">Programmes des partis</a><a href="#/propositions">Ce que proposent les groupes</a><a href="#/elections">Toutes les dates de vote</a><a href="#/actualites">Actualités</a></nav></div></section>`;
 }
 /* ============ Visuel Flash ============ */
 const dlg=$("#dlg");
@@ -2037,7 +2061,7 @@ addEventListener("resize",()=>tableauxDefilants());
 function embellir(){animer(main);navInd();segs();tableauxDefilants();}
 
 /* ============ Sous-menus et choix de la législature ============ */
-const FAMILLES=[[["presidentielle","L'essentiel"],["candidats","Les candidats"],["propositions","Ce que proposent les groupes"],["elections","Calendrier des élections"],["actualites","Actualités"]],[["votes","Tous les votes"],["themes","Par thème"],["calendrier","Mois par mois"],["comparateur","Comparer"]],[["groupes","Les groupes"],["simulateur","Simulateur de coalition"]]];
+const FAMILLES=[[["presidentielle","L'essentiel"],["candidats","Les candidats"],["programmes","Programmes des partis"],["propositions","Ce que proposent les groupes"],["elections","Calendrier des élections"],["actualites","Actualités"]],[["votes","Tous les votes"],["themes","Par thème"],["calendrier","Mois par mois"],["comparateur","Comparer"]],[["groupes","Les groupes"],["simulateur","Simulateur de coalition"]]];
 const AVEC_LEG=["votes","themes","calendrier","comparateur","groupes","simulateur","elus","lois"];
 let LEGOPTS="";
 function barreHaut(p0){
@@ -2069,7 +2093,7 @@ function route(){
     case "votes":pg=pageVotes();nav="votes";break;case "scrutin":pg=pageScrutin(parts[1]);nav="votes";break;case "comparateur":pg=pageCmp(q);nav="votes";break;
     case "calendrier":pg=pageCal(q);nav="votes";break;case "themes":pg=pageThemes(q);nav="votes";break;
     case "simulateur":pg=pageSim();nav="groupes";break;case "codes":pg=pageCodes();nav="codes";break;
-    case "presidentielle":pg=pagePresi();nav="presidentielle";break;case "candidats":pg=pageCandidats();nav="presidentielle";break;case "propositions":pg=pagePropositions(q);nav="presidentielle";break;
+    case "presidentielle":pg=pagePresi();nav="presidentielle";break;case "candidats":pg=pageCandidats(q);nav="presidentielle";break;case "programmes":pg=pageProgrammes();nav="presidentielle";break;case "propositions":pg=pagePropositions(q);nav="presidentielle";break;
     case "elections":pg=pageElections();nav="presidentielle";break;case "actualites":pg=pageActualites(q);nav="presidentielle";break;
     case "code":pg=parts[2]?pageArticle(parts[1],parts[2]):pageCode(parts[1],q);nav="codes";break;case "classements":pg=pageElus();nav="elus";break;case "methode":pg=pageMethode();nav="";break;case "comprendre":pg=pageComprendre(parts[1]);break;default:pg=pageNotFound();}
   if(dlg.open)dlg.close();
@@ -2101,7 +2125,7 @@ function chargerLeg(leg){
     $("#foot-maj").textContent=frStr(`Aux Voix, version bêta. Données de l'Assemblée nationale au ${fd(d.maj.slice(0,10))}, Licence Ouverte.`);
     frTypo($(".folio"));frTypo($(".foot"));buildSearch();first=true;route();});
 }
-Promise.all([getJSON("index.json"),getJSON("contenu/lois.json",[]),getJSON("contenu/corrections.json",[]),getJSON("contenu/site.json",{}),getJSON("contenu/articles.json",[]),getJSON("contenu/candidats.json",[]),getJSON("contenu/actualites.json",[])]).then(([ix,ed,c,s,ae,pc_,pa_])=>{ARTED=Array.isArray(ae)?ae:[];PCAND=Array.isArray(pc_)?pc_:[];PACTU=Array.isArray(pa_)?pa_:[];bandePresi();
+Promise.all([getJSON("index.json"),getJSON("contenu/lois.json",[]),getJSON("contenu/corrections.json",[]),getJSON("contenu/site.json",{}),getJSON("contenu/articles.json",[]),getJSON("contenu/candidats.json",[]),getJSON("contenu/actualites.json",[]),getJSON("contenu/programmes.json",[]),getJSON("actualites-officielles.json",[])]).then(([ix,ed,c,s,ae,pc_,pa_,pp_,po_])=>{ARTED=Array.isArray(ae)?ae:[];PCAND=Array.isArray(pc_)?pc_:[];PACTU=Array.isArray(pa_)?pa_:[];PPROG=Array.isArray(pp_)?pp_:[];POFF=Array.isArray(po_)?po_:[];bandePresi();
   IDX=ix;EDIT=Array.isArray(ed)?ed:[];CORR=(Array.isArray(c)?c:[]).slice().sort((a,b)=>a.date<b.date?1:-1);SITE=s||{};brancherAudience();
   if(!IDX.legislatures||!IDX.legislatures.length)throw new Error("index.json vide");
   LEGOPTS=IDX.legislatures.map(x=>`<option value="${esc(x.leg)}">${esc(x.label)} (${x.du.slice(0,4)}-${x.au?x.au.slice(0,4):"aujourd'hui"})</option>`).join("");
