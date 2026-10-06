@@ -1,7 +1,7 @@
 [
  {
-  "publie": false,
-  "statut": "declare",
+  "publie": true,
+  "statut": "annonce",
   "prenom": "Nathalie",
   "nom": "Arthaud",
   "soutien": "Lutte ouvrière",
@@ -20,8 +20,8 @@
   "verif": ""
  },
  {
-  "publie": false,
-  "statut": "declare",
+  "publie": true,
+  "statut": "annonce",
   "prenom": "François",
   "nom": "Asselineau",
   "soutien": "Union populaire républicaine",
@@ -40,8 +40,8 @@
   "verif": ""
  },
  {
-  "publie": false,
-  "statut": "declare",
+  "publie": true,
+  "statut": "annonce",
   "prenom": "Gabriel",
   "nom": "Attal",
   "soutien": "Renaissance",
@@ -60,8 +60,8 @@
   "verif": ""
  },
  {
-  "publie": false,
-  "statut": "declare",
+  "publie": true,
+  "statut": "annonce",
   "prenom": "Delphine",
   "nom": "Batho",
   "soutien": "Génération écologie",
@@ -80,8 +80,8 @@
   "verif": ""
  },
  {
-  "publie": false,
-  "statut": "declare",
+  "publie": true,
+  "statut": "annonce",
   "prenom": "Olivier",
   "nom": "Becht",
   "soutien": "",
@@ -99,8 +99,8 @@
   "verif": ""
  },
  {
-  "publie": false,
-  "statut": "declare",
+  "publie": true,
+  "statut": "annonce",
   "prenom": "Xavier",
   "nom": "Bertrand",
   "soutien": "Nous France",
@@ -118,8 +118,8 @@
   "verif": ""
  },
  {
-  "publie": false,
-  "statut": "declare",
+  "publie": true,
+  "statut": "annonce",
   "prenom": "Karim",
   "nom": "Bouamrane",
   "soutien": "Parti socialiste, hors primaire",
@@ -138,8 +138,8 @@
   "verif": ""
  },
  {
-  "publie": false,
-  "statut": "declare",
+  "publie": true,
+  "statut": "annonce",
   "prenom": "Juan",
   "nom": "Branco",
   "soutien": "Sans étiquette",
@@ -157,8 +157,8 @@
   "verif": ""
  },
  {
-  "publie": false,
-  "statut": "declare",
+  "publie": true,
+  "statut": "annonce",
   "prenom": "Bernard",
   "nom": "Cazeneuve",
   "soutien": "La Convention",
@@ -177,8 +177,8 @@
   "verif": ""
  },
  {
-  "publie": false,
-  "statut": "declare",
+  "publie": true,
+  "statut": "annonce",
   "prenom": "Nicolas",
   "nom": "Dupont-Aignan",
   "soutien": "Debout la France",
@@ -196,8 +196,8 @@
   "verif": ""
  },
  {
-  "publie": false,
-  "statut": "declare",
+  "publie": true,
+  "statut": "annonce",
   "prenom": "Clara",
   "nom": "Egger",
   "soutien": "Solution démocratique",
@@ -212,11 +212,17 @@
   ],
   "note": "",
   "auteur": "Claude (assistant IA), recherche du 5 octobre 2026",
-  "verif": ""
+  "verif": "",
+  "programme": {
+   "titre": "Présidentielle 2027 : le programme de la candidate",
+   "url": "https://solutiondemocratique.fr/notre-solution/calendrier-president/",
+   "note": "",
+   "releve": "2026-10-06"
+  }
  },
  {
-  "publie": false,
-  "statut": "declare",
+  "publie": true,
+  "statut": "annonce",
   "prenom": "Anasse",
   "nom": "Kazib",
   "soutien": "Révolution permanente",
@@ -234,8 +240,8 @@
   "verif": ""
  },
  {
-  "publie": false,
-  "statut": "declare",
+  "publie": true,
+  "statut": "annonce",
   "prenom": "Selma",
   "nom": "Labib",
   "soutien": "NPA-Révolutionnaires",
@@ -271,8 +277,8 @@
   "verif": ""
  },
  {
-  "publie": false,
-  "statut": "declare",
+  "publie": true,
+  "statut": "annonce",
   "prenom": "Marine",
   "nom": "Le Pen",
   "soutien": "Rassemblement national",
@@ -291,8 +297,8 @@
   "verif": ""
  },
  {
-  "publie": false,
-  "statut": "declare",
+  "publie": true,
+  "statut": "annonce",
   "prenom": "David",
   "nom": "Lisnard",
   "soutien": "Nouvelle Énergie",
@@ -365,8 +371,8 @@
   "verif": ""
  },
  {
-  "publie": false,
-  "statut": "declare",
+  "publie": true,
+  "statut": "annonce",
   "prenom": "Jean-Luc",
   "nom": "Mélenchon",
   "soutien": "La France insoumise",
@@ -382,7 +388,13 @@
   ],
   "note": "Date de déclaration à préciser.",
   "auteur": "Claude (assistant IA), recherche du 5 octobre 2026",
-  "verif": ""
+  "verif": "",
+  "programme": {
+   "titre": "L'Avenir en commun, édition 2025",
+   "url": "https://melenchon2027.fr/programme/decouvrir/",
+   "note": "Nouvelle édition annoncée pour le 6 novembre 2026.",
+   "releve": "2026-10-06"
+  }
  },
  {
   "publie": false,
@@ -403,8 +415,8 @@
   "verif": ""
  },
  {
-  "publie": false,
-  "statut": "declare",
+  "publie": true,
+  "statut": "annonce",
   "prenom": "Florian",
   "nom": "Philippot",
   "soutien": "Les Patriotes",
@@ -422,8 +434,8 @@
   "verif": ""
  },
  {
-  "publie": false,
-  "statut": "declare",
+  "publie": true,
+  "statut": "annonce",
   "prenom": "Édouard",
   "nom": "Philippe",
   "soutien": "Horizons",
@@ -442,8 +454,8 @@
   "verif": ""
  },
  {
-  "publie": false,
-  "statut": "declare",
+  "publie": true,
+  "statut": "annonce",
   "prenom": "Bruno",
   "nom": "Retailleau",
   "soutien": "Les Républicains",
@@ -462,8 +474,8 @@
   "verif": ""
  },
  {
-  "publie": false,
-  "statut": "declare",
+  "publie": true,
+  "statut": "annonce",
   "prenom": "François",
   "nom": "Ruffin",
   "soutien": "Debout !",
@@ -481,8 +493,8 @@
   "verif": ""
  },
  {
-  "publie": false,
-  "statut": "declare",
+  "publie": true,
+  "statut": "annonce",
   "prenom": "Marine",
   "nom": "Tondelier",
   "soutien": "Les Écologistes",

@@ -887,6 +887,15 @@ def verifier_contenus():
             for i, t in enumerate(contenu or []):
                 if not (isinstance(t, dict) and t.get("publie")):
                     continue
+                if nom == "candidats.json" and t.get("programme") and not str((t.get("programme") or {}).get("url") or "").startswith("https://"):
+                    erreurs.append(f"candidats.json, fiche {i + 1} : le lien du programme doit être une adresse https")
+                if nom == "candidats.json" and t.get("statut") == "annonce":
+                    sources = [u for u in t.get("a_verifier") or [] if str(u).startswith("https://")]
+                    if len(sources) < 2 or not t.get("nom"):
+                        erreurs.append(f"candidats.json, fiche {i + 1} : une annonce de candidature doit citer au moins deux sources en https")
+                    if t.get("propositions"):
+                        erreurs.append(f"candidats.json, fiche {i + 1} : des propositions ne peuvent être publiées qu'après relecture (statut « declare » ou « officiel »)")
+                    continue
                 champs = ("prenom", "nom", "statut", "auteur", "verif") if nom == "candidats.json" else ("date", "titre", "source", "auteur", "verif")
                 for champ in champs:
                     if not t.get(champ):

@@ -763,6 +763,10 @@ main,dialog{overflow-wrap:break-word}
 
 .cand q{quotes:"« " " »"}
 .cand q::before{content:open-quote}.cand q::after{content:close-quote}
+
+.cand-l{list-style:none;margin:14px 0 0;padding:0;columns:2 340px;column-gap:34px}
+.cand-l li{break-inside:avoid;padding:10px 0;border-bottom:1px solid var(--bord2);display:flex;flex-direction:column;gap:3px}
+.cand-l b{font-family:var(--titre);font-weight:600}
 </style>
 </head>
 <body data-lv="2">
@@ -1815,6 +1819,10 @@ function pagePresi(){
 function pageCandidats(q){
   const brouillon=q&&q.get("brouillons")==="1",L=PCAND.filter(c=>c.publie===true||brouillon).sort((a,b)=>(a.nom+" "+a.prenom).localeCompare(b.nom+" "+b.prenom,"fr"));
   const officiels=L.some(c=>c.statut==="officiel");
+  const annonce=c=>{const S=(c.a_verifier||[]).filter(safeUrl);
+    return `<li class="cand-a"><b>${esc(c.prenom+" "+c.nom)}</b>${c.soutien?` <span class="meta">${esc(c.soutien)}</span>`:""}
+      <span class="meta">${c.declaration&&c.declaration.date?`Annonce du ${fd(c.declaration.date)}. `:""}Sources : ${S.map((u,i)=>ext(u,`source ${i+1}`)).join(", ")}.${c.note?" "+esc(c.note):""}</span>
+      <span class="ui">Programme : ${c.programme&&safeUrl(c.programme.url)?`${ext(c.programme.url,esc(c.programme.titre||"programme officiel"))}${c.programme.note?". "+esc(c.programme.note):""}`:"non relevé à ce jour"}</span></li>`;};
   const fiche=c=>{const dp=c.depute&&DEPID[c.depute];
     return `<article class="cand"><h2 class="h3">${esc(c.prenom+" "+c.nom)}${c.publie!==true?' <span class="tag">Brouillon à vérifier</span>':""}</h2>${c.publie!==true&&c.a_verifier?`<p class="meta">Sources à contrôler : ${(c.a_verifier||[]).filter(safeUrl).map((u,i)=>ext(u,"source "+(i+1))).join(", ")}. ${esc(c.note||"")}</p>`:""}
       <p class="meta">${esc(c.statut==="officiel"?"Candidature officielle, liste du Conseil constitutionnel":"Candidature déclarée")}${c.soutien?", "+esc(c.soutien):""}. ${c.declaration&&safeUrl(c.declaration.source)?`Déclaration du ${fd(c.declaration.date)} : ${ext(c.declaration.source,"source")}.`:""}</p>
@@ -1827,7 +1835,11 @@ function pageCandidats(q){
     <h1 class="h1s">Les candidats</h1>
     <p class="lede intro">La liste officielle des candidats est publiée par le Conseil constitutionnel, après vérification des 500 parrainages, quelques semaines avant le premier tour. Jusque-là, nous ne présentons que les candidatures déclarées publiquement, une fiche par personne, avec sa source, après double vérification.</p>
     <div class="notice"><strong>Mêmes règles pour tous.</strong> Ordre alphabétique ; même grille de thèmes pour chacun, avec la mention « aucune proposition publiée » quand c'est le cas ; propositions reprises des documents des candidats eux-mêmes, avec leur source ; ni sondage, ni pronostic, ni personnalité « pressentie ».${officiels?"":" La liste officielle n'est pas encore publiée."}</div>
-    ${L.length?L.map(fiche).join(""):`<p class="empty-note">Aucune fiche n'est encore publiée. Chaque fiche est ajoutée avec ses sources, puis relue par une seconde personne avant publication, pour qu'aucune candidature ne soit présentée avant les autres sans vérification.</p>`}
+    ${(()=>{const A=L.filter(c=>c.statut==="annonce"),F=L.filter(c=>c.statut!=="annonce");
+      return (A.length?`<h2 class="h2" style="margin-top:28px">Candidatures annoncées <span class="meta">(${n(A.length)})</span></h2>
+        <p class="ui">Personnes ayant annoncé publiquement leur candidature, d'après au moins deux sources de presse. Ce ne sont pas encore des candidatures officielles : il faut 500 parrainages, vérifiés par le Conseil constitutionnel. La primaire du Parti socialiste et de Place publique a lieu les 9-10 et 16-17 octobre 2026 ; la personne désignée sera ajoutée ensuite.</p>
+        <ul class="cand-l">${A.map(annonce).join("")}</ul>
+        <p class="meta">« Programme : non relevé à ce jour » signifie que nous n'avons pas encore relevé de programme complet publié par la personne ou son parti, pas qu'il n'en existe aucun. Un programme a été publié ? Signalez-le-nous.</p>`:"")+(F.length?F.map(fiche).join(""):(A.length?"":`<p class="empty-note">Aucune fiche n'est encore publiée. Chaque fiche est ajoutée avec ses sources, puis relue par une seconde personne avant publication, pour qu'aucune candidature ne soit présentée avant les autres sans vérification.</p>`));})()}
     <p class="meta" style="margin-top:22px">Une erreur ou un oubli ? Signalez-le : chaque correction est publiée dans le <a href="#/methode/corrections">journal des corrections</a>.</p></div>`};
 }
 
@@ -1879,7 +1891,13 @@ function pageProgrammes(){
     <h1 class="h1s">Programmes des partis</h1>
     <p class="lede intro">Ce que les partis écrivent dans leurs programmes, à côté de ce que leurs groupes ont voté à l'Assemblée. Partis classés par ordre alphabétique.</p>
     <div class="notice"><strong>Ces textes sont ceux des partis.</strong> Les extraits sont reproduits mot pour mot depuis les documents officiels publiés par chaque parti, avec leur source. Aux Voix ne les modifie pas, ne les résume pas, ne les commente pas et n'en évalue pas la faisabilité : ils engagent leurs seuls auteurs. Les votes, eux, viennent des données officielles de l'Assemblée.</div>
-    ${L.length?L.map(fiche).join(""):`<p class="empty-note">Aucun programme n'est encore publié ici. Chaque fiche est constituée à partir du document officiel du parti, puis relue par une seconde personne avant publication. Les programmes pour 2027 seront ajoutés au fur et à mesure de leur publication par les partis.</p>`}</div>`};
+    ${(()=>{const P=PCAND.filter(c=>c.publie===true&&c.programme&&safeUrl(c.programme.url)).sort((a,b)=>(a.nom+a.prenom).localeCompare(b.nom+b.prenom,"fr"));
+      return `<h2 class="h2" style="margin-top:28px">Programmes publiés par les candidats</h2>
+      <p class="ui">Relevé du ${fd("2026-10-06")}, par ordre alphabétique. Liens vers les documents officiels, sans résumé ni sélection de mesures.</p>
+      ${P.length?`<ul class="cand-l">${P.map(c=>`<li><b>${esc(c.prenom+" "+c.nom)}</b><span class="meta">${esc(c.soutien||"")}</span><span class="ui">${ext(c.programme.url,esc(c.programme.titre||"Programme officiel"))}${c.programme.note?". "+esc(c.programme.note):""}</span></li>`).join("")}</ul>`:""}
+      <p class="meta">Pour les autres candidatures annoncées, aucun programme complet n'a été relevé à ce jour. La plupart des programmes pour 2027 sont attendus dans les prochains mois ; ils seront ajoutés de la même façon pour tous dès leur publication. <a href="#/candidats">Toutes les candidatures annoncées</a>.</p>
+      <h2 class="h2" style="margin-top:34px">Extraits des programmes, thème par thème</h2>`;})()}
+    ${L.length?L.map(fiche).join(""):`<p class="empty-note">Aucun extrait n'est encore publié ici. Les extraits sont recopiés mot pour mot depuis les documents officiels, sur les mêmes thèmes pour tous, puis relus par une seconde personne. Nous attendons que les programmes 2027 soient publiés pour ne pas présenter un parti avant les autres.</p>`}</div>`};
 }
 
 function pageElections(){
