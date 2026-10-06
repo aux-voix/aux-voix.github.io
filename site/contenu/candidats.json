@@ -6,17 +6,17 @@
   "nom": "Arthaud",
   "soutien": "Lutte ouvrière",
   "declaration": {
-   "date": "2025-12-08",
-   "source": "https://electionpresidentielle2027.com/candidats-presidentielle-2027/"
+   "date": ""
   },
-  "propositions": [],
-  "a_verifier": [
-   "https://electionpresidentielle2027.com/candidats-presidentielle-2027/",
-   "https://www.france-vote.fr/actualites/candidats-presidentielle-2027-qui-se-presente",
-   "https://www.sudradio.fr/sud-radio/presidentielle-2027-qui-sont-les-candidats-declares"
+  "sources": [
+   {
+    "nom": "liste de LCP (24 septembre 2026)",
+    "url": "https://lcp.fr/actualites/presidentielle-2027-la-liste-des-candidats-deja-en-lice-et-des-pretendants-436373"
+   }
   ],
   "note": "",
-  "auteur": "Claude (assistant IA), recherche du 5 octobre 2026",
+  "propositions": [],
+  "auteur": "Claude (assistant IA), relevé du 6 octobre 2026 d'après LCP",
   "verif": ""
  },
  {
@@ -26,17 +26,17 @@
   "nom": "Asselineau",
   "soutien": "Union populaire républicaine",
   "declaration": {
-   "date": "2023-08-31",
-   "source": "https://electionpresidentielle2027.com/candidats-presidentielle-2027/"
+   "date": ""
   },
-  "propositions": [],
-  "a_verifier": [
-   "https://electionpresidentielle2027.com/candidats-presidentielle-2027/",
-   "https://elections2027.com/candidats",
-   "https://election-presidentielle-francaise-2027.fr/les-candidats-declares-pour-lelection-de-2027/"
+  "sources": [
+   {
+    "nom": "liste de LCP (24 septembre 2026)",
+    "url": "https://lcp.fr/actualites/presidentielle-2027-la-liste-des-candidats-deja-en-lice-et-des-pretendants-436373"
+   }
   ],
   "note": "",
-  "auteur": "Claude (assistant IA), recherche du 5 octobre 2026",
+  "propositions": [],
+  "auteur": "Claude (assistant IA), relevé du 6 octobre 2026 d'après LCP",
   "verif": ""
  },
  {
@@ -46,17 +46,21 @@
   "nom": "Attal",
   "soutien": "Renaissance",
   "declaration": {
-   "date": "2026-05-22",
-   "source": "https://electionpresidentielle2027.com/candidats-presidentielle-2027/"
+   "date": "2026-05-22"
   },
-  "propositions": [],
-  "a_verifier": [
-   "https://electionpresidentielle2027.com/candidats-presidentielle-2027/",
-   "https://www.france24.com/fr/france/20260524-france-presidentielle-2027-qui-sont-les-candidats-officiellement-declares",
-   "https://elections2027.com/candidats"
+  "sources": [
+   {
+    "nom": "liste de LCP (24 septembre 2026)",
+    "url": "https://lcp.fr/actualites/presidentielle-2027-la-liste-des-candidats-deja-en-lice-et-des-pretendants-436373"
+   },
+   {
+    "nom": "article de LCP",
+    "url": "https://lcp.fr/actualites/presidentielle-2027-gabriel-attal-officialise-sa-candidature-436721"
+   }
   ],
   "note": "",
-  "auteur": "Claude (assistant IA), recherche du 5 octobre 2026",
+  "propositions": [],
+  "auteur": "Claude (assistant IA), relevé du 6 octobre 2026 d'après LCP",
   "verif": ""
  },
  {
@@ -66,17 +70,21 @@
   "nom": "Batho",
   "soutien": "Génération écologie",
   "declaration": {
-   "date": "2025-11-26",
-   "source": "https://electionpresidentielle2027.com/candidats-presidentielle-2027/"
+   "date": "2025-11-25"
   },
-  "propositions": [],
-  "a_verifier": [
-   "https://electionpresidentielle2027.com/candidats-presidentielle-2027/",
-   "https://www.touteleurope.eu/vie-politique-des-etats-membres/presidentielle-2027-qui-sont-les-candidats-deja-declares/",
-   "https://elections2027.com/candidats"
+  "sources": [
+   {
+    "nom": "liste de LCP (24 septembre 2026)",
+    "url": "https://lcp.fr/actualites/presidentielle-2027-la-liste-des-candidats-deja-en-lice-et-des-pretendants-436373"
+   },
+   {
+    "nom": "L'Obs",
+    "url": "https://www.nouvelobs.com/politique/20251125.OBS110076/delphine-batho-je-suis-candidate-a-l-election-presidentielle-pour-reconstruire-une-ecologie-capable-de-gouverner.html"
+   }
   ],
   "note": "",
-  "auteur": "Claude (assistant IA), recherche du 5 octobre 2026",
+  "propositions": [],
+  "auteur": "Claude (assistant IA), relevé du 6 octobre 2026 d'après LCP",
   "verif": ""
  },
  {
@@ -84,18 +92,23 @@
   "statut": "annonce",
   "prenom": "Olivier",
   "nom": "Becht",
-  "soutien": "",
+  "soutien": "Apparenté Ensemble pour la République",
   "declaration": {
-   "date": "2026-09-24",
-   "source": "https://elections2027.com/candidats"
+   "date": "2026-09-24"
   },
-  "propositions": [],
-  "a_verifier": [
-   "https://elections2027.com/candidats",
-   "https://repere2027.fr/candidats/"
+  "sources": [
+   {
+    "nom": "liste de LCP (24 septembre 2026)",
+    "url": "https://lcp.fr/actualites/presidentielle-2027-la-liste-des-candidats-deja-en-lice-et-des-pretendants-436373"
+   },
+   {
+    "nom": "Paris Match",
+    "url": "https://www.parismatch.com/actu/politique/exclusif-je-suis-candidat-a-la-presidentielle-un-ancien-ministre-delisabeth-borne-sort-du-bois-276281"
+   }
   ],
-  "note": "Parti ou soutien à préciser.",
-  "auteur": "Claude (assistant IA), recherche du 5 octobre 2026",
+  "note": "",
+  "propositions": [],
+  "auteur": "Claude (assistant IA), relevé du 6 octobre 2026 d'après LCP",
   "verif": ""
  },
  {
@@ -105,16 +118,21 @@
   "nom": "Bertrand",
   "soutien": "Nous France",
   "declaration": {
-   "date": "2026-08-26",
-   "source": "https://electionpresidentielle2027.com/candidats-presidentielle-2027/"
+   "date": "2026-08-26"
   },
-  "propositions": [],
-  "a_verifier": [
-   "https://electionpresidentielle2027.com/candidats-presidentielle-2027/",
-   "https://election-presidentielle-francaise-2027.fr/les-candidats-declares-pour-lelection-de-2027/"
+  "sources": [
+   {
+    "nom": "liste de LCP (24 septembre 2026)",
+    "url": "https://lcp.fr/actualites/presidentielle-2027-la-liste-des-candidats-deja-en-lice-et-des-pretendants-436373"
+   },
+   {
+    "nom": "article de LCP",
+    "url": "https://lcp.fr/actualites/2027-figure-de-la-droite-xavier-bertrand-confirme-qu-il-sera-candidat-a-l-election"
+   }
   ],
-  "note": "Absent de certaines listes : candidature à confirmer.",
-  "auteur": "Claude (assistant IA), recherche du 5 octobre 2026",
+  "note": "",
+  "propositions": [],
+  "auteur": "Claude (assistant IA), relevé du 6 octobre 2026 d'après LCP",
   "verif": ""
  },
  {
@@ -124,21 +142,377 @@
   "nom": "Bouamrane",
   "soutien": "Parti socialiste, hors primaire",
   "declaration": {
-   "date": "2026-06-09",
-   "source": "https://electionpresidentielle2027.com/candidats-presidentielle-2027/"
+   "date": ""
   },
-  "propositions": [],
-  "a_verifier": [
-   "https://electionpresidentielle2027.com/candidats-presidentielle-2027/",
-   "https://www.france24.com/fr/france/20260524-france-presidentielle-2027-qui-sont-les-candidats-officiellement-declares",
-   "https://www.touteleurope.eu/vie-politique-des-etats-membres/presidentielle-2027-qui-sont-les-candidats-deja-declares/"
+  "sources": [
+   {
+    "nom": "liste de LCP (24 septembre 2026)",
+    "url": "https://lcp.fr/actualites/presidentielle-2027-la-liste-des-candidats-deja-en-lice-et-des-pretendants-436373"
+   },
+   {
+    "nom": "Compte X de Karim Bouamrane",
+    "url": "https://x.com/karim_bouamrane/status/2064254272712130638"
+   }
   ],
   "note": "",
-  "auteur": "Claude (assistant IA), recherche du 5 octobre 2026",
+  "propositions": [],
+  "auteur": "Claude (assistant IA), relevé du 6 octobre 2026 d'après LCP",
   "verif": ""
  },
  {
   "publie": true,
+  "statut": "annonce",
+  "prenom": "Bernard",
+  "nom": "Cazeneuve",
+  "soutien": "La Convention",
+  "declaration": {
+   "date": "2026-07-16"
+  },
+  "sources": [
+   {
+    "nom": "liste de LCP (24 septembre 2026)",
+    "url": "https://lcp.fr/actualites/presidentielle-2027-la-liste-des-candidats-deja-en-lice-et-des-pretendants-436373"
+   },
+   {
+    "nom": "Le Parisien",
+    "url": "https://www.leparisien.fr/elections/presidentielle/cest-par-un-contrat-qui-me-lie-aux-francais-que-je-presente-ma-candidature-bernard-cazeneuve-devoile-sa-lettre-pour-2027-16-07-2026-IZIQSDYXKBBT5MZBHIDBXGXFYE.php"
+   }
+  ],
+  "note": "Hors primaire.",
+  "propositions": [],
+  "auteur": "Claude (assistant IA), relevé du 6 octobre 2026 d'après LCP",
+  "verif": ""
+ },
+ {
+  "publie": true,
+  "statut": "annonce",
+  "prenom": "Nicolas",
+  "nom": "Dupont-Aignan",
+  "soutien": "Debout la France",
+  "declaration": {
+   "date": ""
+  },
+  "sources": [
+   {
+    "nom": "liste de LCP (24 septembre 2026)",
+    "url": "https://lcp.fr/actualites/presidentielle-2027-la-liste-des-candidats-deja-en-lice-et-des-pretendants-436373"
+   }
+  ],
+  "note": "",
+  "propositions": [],
+  "auteur": "Claude (assistant IA), relevé du 6 octobre 2026 d'après LCP",
+  "verif": ""
+ },
+ {
+  "publie": true,
+  "statut": "annonce",
+  "prenom": "Clara",
+  "nom": "Egger",
+  "soutien": "Solution démocratique",
+  "declaration": {
+   "date": ""
+  },
+  "sources": [
+   {
+    "nom": "liste de LCP (24 septembre 2026)",
+    "url": "https://lcp.fr/actualites/presidentielle-2027-la-liste-des-candidats-deja-en-lice-et-des-pretendants-436373"
+   }
+  ],
+  "note": "",
+  "propositions": [],
+  "auteur": "Claude (assistant IA), relevé du 6 octobre 2026 d'après LCP",
+  "verif": "",
+  "programme": {
+   "titre": "Présidentielle 2027 : le programme de la candidate",
+   "url": "https://solutiondemocratique.fr/notre-solution/calendrier-president/",
+   "note": "",
+   "releve": "2026-10-06"
+  }
+ },
+ {
+  "publie": true,
+  "statut": "annonce",
+  "prenom": "Francis",
+  "nom": "Lalanne",
+  "soutien": "France Libre",
+  "declaration": {
+   "date": ""
+  },
+  "sources": [
+   {
+    "nom": "liste de LCP (24 septembre 2026)",
+    "url": "https://lcp.fr/actualites/presidentielle-2027-la-liste-des-candidats-deja-en-lice-et-des-pretendants-436373"
+   }
+  ],
+  "note": "",
+  "propositions": [],
+  "auteur": "Claude (assistant IA), relevé du 6 octobre 2026 d'après LCP",
+  "verif": ""
+ },
+ {
+  "publie": true,
+  "statut": "annonce",
+  "prenom": "Marine",
+  "nom": "Le Pen",
+  "soutien": "Rassemblement national",
+  "declaration": {
+   "date": "2026-07-07"
+  },
+  "sources": [
+   {
+    "nom": "liste de LCP (24 septembre 2026)",
+    "url": "https://lcp.fr/actualites/presidentielle-2027-la-liste-des-candidats-deja-en-lice-et-des-pretendants-436373"
+   },
+   {
+    "nom": "article de LCP",
+    "url": "https://lcp.fr/actualites/ce-soir-je-suis-candidate-a-l-election-presidentielle-annonce-marine-le-pen-438886"
+   }
+  ],
+  "note": "",
+  "propositions": [],
+  "auteur": "Claude (assistant IA), relevé du 6 octobre 2026 d'après LCP",
+  "verif": ""
+ },
+ {
+  "publie": true,
+  "statut": "annonce",
+  "prenom": "David",
+  "nom": "Lisnard",
+  "soutien": "Nouvelle Énergie",
+  "declaration": {
+   "date": ""
+  },
+  "sources": [
+   {
+    "nom": "liste de LCP (24 septembre 2026)",
+    "url": "https://lcp.fr/actualites/presidentielle-2027-la-liste-des-candidats-deja-en-lice-et-des-pretendants-436373"
+   },
+   {
+    "nom": "article de LCP",
+    "url": "https://lcp.fr/actualites/je-suis-candidat-david-lisnard-quitte-lr-et-relance-le-debat-sur-une-primaire-a-droite"
+   }
+  ],
+  "note": "Candidature annoncée fin mars 2026.",
+  "propositions": [],
+  "auteur": "Claude (assistant IA), relevé du 6 octobre 2026 d'après LCP",
+  "verif": ""
+ },
+ {
+  "publie": true,
+  "statut": "annonce",
+  "prenom": "Jean-Luc",
+  "nom": "Mélenchon",
+  "soutien": "La France insoumise",
+  "declaration": {
+   "date": ""
+  },
+  "sources": [
+   {
+    "nom": "liste de LCP (24 septembre 2026)",
+    "url": "https://lcp.fr/actualites/presidentielle-2027-la-liste-des-candidats-deja-en-lice-et-des-pretendants-436373"
+   },
+   {
+    "nom": "article de LCP",
+    "url": "https://lcp.fr/actualites/presidentielle-jean-luc-melenchon-officialise-sa-candidature-pour-2027-435851"
+   }
+  ],
+  "note": "Candidature confirmée fin mai 2026.",
+  "propositions": [],
+  "auteur": "Claude (assistant IA), relevé du 6 octobre 2026 d'après LCP",
+  "verif": "",
+  "programme": {
+   "titre": "L'Avenir en commun, édition 2025",
+   "url": "https://melenchon2027.fr/programme/decouvrir/",
+   "note": "Nouvelle édition annoncée pour le 6 novembre 2026.",
+   "releve": "2026-10-06"
+  }
+ },
+ {
+  "publie": true,
+  "statut": "annonce",
+  "prenom": "Antoine",
+  "nom": "Mikolajczak",
+  "soutien": "Equinoxe",
+  "declaration": {
+   "date": ""
+  },
+  "sources": [
+   {
+    "nom": "liste de LCP (24 septembre 2026)",
+    "url": "https://lcp.fr/actualites/presidentielle-2027-la-liste-des-candidats-deja-en-lice-et-des-pretendants-436373"
+   }
+  ],
+  "note": "",
+  "propositions": [],
+  "auteur": "Claude (assistant IA), relevé du 6 octobre 2026 d'après LCP",
+  "verif": ""
+ },
+ {
+  "publie": true,
+  "statut": "annonce",
+  "prenom": "Florian",
+  "nom": "Philippot",
+  "soutien": "Les Patriotes",
+  "declaration": {
+   "date": ""
+  },
+  "sources": [
+   {
+    "nom": "liste de LCP (24 septembre 2026)",
+    "url": "https://lcp.fr/actualites/presidentielle-2027-la-liste-des-candidats-deja-en-lice-et-des-pretendants-436373"
+   }
+  ],
+  "note": "",
+  "propositions": [],
+  "auteur": "Claude (assistant IA), relevé du 6 octobre 2026 d'après LCP",
+  "verif": ""
+ },
+ {
+  "publie": true,
+  "statut": "annonce",
+  "prenom": "Édouard",
+  "nom": "Philippe",
+  "soutien": "Horizons",
+  "declaration": {
+   "date": "2024-09-03"
+  },
+  "sources": [
+   {
+    "nom": "liste de LCP (24 septembre 2026)",
+    "url": "https://lcp.fr/actualites/presidentielle-2027-la-liste-des-candidats-deja-en-lice-et-des-pretendants-436373"
+   },
+   {
+    "nom": "Le Point",
+    "url": "https://www.lepoint.fr/politique/exclusif-edouard-philippe-je-serai-candidat-a-la-prochaine-election-presidentielle-03-09-2024-2569359_20.php"
+   }
+  ],
+  "note": "",
+  "propositions": [],
+  "auteur": "Claude (assistant IA), relevé du 6 octobre 2026 d'après LCP",
+  "verif": ""
+ },
+ {
+  "publie": true,
+  "statut": "annonce",
+  "prenom": "Bruno",
+  "nom": "Retailleau",
+  "soutien": "Les Républicains",
+  "declaration": {
+   "date": ""
+  },
+  "sources": [
+   {
+    "nom": "liste de LCP (24 septembre 2026)",
+    "url": "https://lcp.fr/actualites/presidentielle-2027-la-liste-des-candidats-deja-en-lice-et-des-pretendants-436373"
+   },
+   {
+    "nom": "article de LCP",
+    "url": "https://lcp.fr/actualites/presidentielle-bruno-retailleau-choisi-comme-candidat-officiel-des-republicains-435440"
+   }
+  ],
+  "note": "Désigné par les adhérents de son parti mi-avril 2026.",
+  "propositions": [],
+  "auteur": "Claude (assistant IA), relevé du 6 octobre 2026 d'après LCP",
+  "verif": ""
+ },
+ {
+  "publie": true,
+  "statut": "annonce",
+  "prenom": "Fabien",
+  "nom": "Roussel",
+  "soutien": "Parti communiste français",
+  "declaration": {
+   "date": "2026-09-06"
+  },
+  "sources": [
+   {
+    "nom": "liste de LCP (24 septembre 2026)",
+    "url": "https://lcp.fr/actualites/presidentielle-2027-la-liste-des-candidats-deja-en-lice-et-des-pretendants-436373"
+   },
+   {
+    "nom": "article de LCP",
+    "url": "https://lcp.fr/actualites/fabien-roussel-officiellement-candidat-du-pcf-a-l-election-presidentielle-de-2027-441389"
+   }
+  ],
+  "note": "",
+  "propositions": [],
+  "auteur": "Claude (assistant IA), relevé du 6 octobre 2026 d'après LCP",
+  "verif": ""
+ },
+ {
+  "publie": true,
+  "statut": "annonce",
+  "prenom": "François",
+  "nom": "Ruffin",
+  "soutien": "Debout !",
+  "declaration": {
+   "date": ""
+  },
+  "sources": [
+   {
+    "nom": "liste de LCP (24 septembre 2026)",
+    "url": "https://lcp.fr/actualites/presidentielle-2027-la-liste-des-candidats-deja-en-lice-et-des-pretendants-436373"
+   },
+   {
+    "nom": "article de LCP",
+    "url": "https://lcp.fr/actualites/presidentielle-2027-s-il-n-y-a-pas-de-primaire-moi-j-y-vais-annonce-francois-ruffin"
+   }
+  ],
+  "note": "Maintient sa candidature après l'abandon de la primaire unitaire de la gauche.",
+  "propositions": [],
+  "auteur": "Claude (assistant IA), relevé du 6 octobre 2026 d'après LCP",
+  "verif": ""
+ },
+ {
+  "publie": true,
+  "statut": "annonce",
+  "prenom": "Marine",
+  "nom": "Tondelier",
+  "soutien": "Les Écologistes",
+  "declaration": {
+   "date": ""
+  },
+  "sources": [
+   {
+    "nom": "liste de LCP (24 septembre 2026)",
+    "url": "https://lcp.fr/actualites/presidentielle-2027-la-liste-des-candidats-deja-en-lice-et-des-pretendants-436373"
+   },
+   {
+    "nom": "article de LCP",
+    "url": "https://lcp.fr/actualites/les-adherents-du-ps-ont-decide-d-enterrer-la-primaire-marine-tondelier-acte-la-rupture"
+   }
+  ],
+  "note": "Maintient sa candidature après l'abandon de la primaire unitaire de la gauche.",
+  "propositions": [],
+  "auteur": "Claude (assistant IA), relevé du 6 octobre 2026 d'après LCP",
+  "verif": ""
+ },
+ {
+  "publie": true,
+  "statut": "annonce",
+  "prenom": "Éric",
+  "nom": "Zemmour",
+  "soutien": "Reconquête",
+  "declaration": {
+   "date": "2026-09-17"
+  },
+  "sources": [
+   {
+    "nom": "liste de LCP (24 septembre 2026)",
+    "url": "https://lcp.fr/actualites/presidentielle-2027-la-liste-des-candidats-deja-en-lice-et-des-pretendants-436373"
+   },
+   {
+    "nom": "article de LCP",
+    "url": "https://lcp.fr/actualites/presidentielle-2027-eric-zemmour-officialise-sa-candidature-441871"
+   }
+  ],
+  "note": "",
+  "propositions": [],
+  "auteur": "Claude (assistant IA), relevé du 6 octobre 2026 d'après LCP",
+  "verif": ""
+ },
+ {
+  "publie": false,
   "statut": "annonce",
   "prenom": "Juan",
   "nom": "Branco",
@@ -152,76 +526,12 @@
    "https://www.france-vote.fr/actualites/candidats-presidentielle-2027-qui-se-presente",
    "https://elections2027.com/candidats"
   ],
-  "note": "Déclaré depuis décembre 2025 selon France-Vote : date exacte à préciser.",
+  "note": "Déclaré depuis décembre 2025 selon France-Vote : date exacte à préciser. Absent de la liste de référence de LCP : à vérifier.",
   "auteur": "Claude (assistant IA), recherche du 5 octobre 2026",
   "verif": ""
  },
  {
-  "publie": true,
-  "statut": "annonce",
-  "prenom": "Bernard",
-  "nom": "Cazeneuve",
-  "soutien": "La Convention",
-  "declaration": {
-   "date": "2026-07-16",
-   "source": "https://electionpresidentielle2027.com/candidats-presidentielle-2027/"
-  },
-  "propositions": [],
-  "a_verifier": [
-   "https://electionpresidentielle2027.com/candidats-presidentielle-2027/",
-   "https://repere2027.fr/candidats/",
-   "https://www.touteleurope.eu/vie-politique-des-etats-membres/presidentielle-2027-qui-sont-les-candidats-deja-declares/"
-  ],
-  "note": "",
-  "auteur": "Claude (assistant IA), recherche du 5 octobre 2026",
-  "verif": ""
- },
- {
-  "publie": true,
-  "statut": "annonce",
-  "prenom": "Nicolas",
-  "nom": "Dupont-Aignan",
-  "soutien": "Debout la France",
-  "declaration": {
-   "date": "",
-   "source": "https://elections2027.com/candidats"
-  },
-  "propositions": [],
-  "a_verifier": [
-   "https://elections2027.com/candidats",
-   "https://election-presidentielle-francaise-2027.fr/les-candidats-declares-pour-lelection-de-2027/"
-  ],
-  "note": "Date de déclaration à préciser.",
-  "auteur": "Claude (assistant IA), recherche du 5 octobre 2026",
-  "verif": ""
- },
- {
-  "publie": true,
-  "statut": "annonce",
-  "prenom": "Clara",
-  "nom": "Egger",
-  "soutien": "Solution démocratique",
-  "declaration": {
-   "date": "2026-04-20",
-   "source": "https://elections2027.com/candidats"
-  },
-  "propositions": [],
-  "a_verifier": [
-   "https://elections2027.com/candidats",
-   "https://www.france24.com/fr/france/20260524-france-presidentielle-2027-qui-sont-les-candidats-officiellement-declares"
-  ],
-  "note": "",
-  "auteur": "Claude (assistant IA), recherche du 5 octobre 2026",
-  "verif": "",
-  "programme": {
-   "titre": "Présidentielle 2027 : le programme de la candidate",
-   "url": "https://solutiondemocratique.fr/notre-solution/calendrier-president/",
-   "note": "",
-   "releve": "2026-10-06"
-  }
- },
- {
-  "publie": true,
+  "publie": false,
   "statut": "annonce",
   "prenom": "Anasse",
   "nom": "Kazib",
@@ -235,12 +545,12 @@
    "https://www.france-vote.fr/actualites/candidats-presidentielle-2027-qui-se-presente",
    "https://elections2027.com/candidats"
   ],
-  "note": "Date de déclaration à préciser.",
+  "note": "Date de déclaration à préciser. Absent de la liste de référence de LCP : à vérifier.",
   "auteur": "Claude (assistant IA), recherche du 5 octobre 2026",
   "verif": ""
  },
  {
-  "publie": true,
+  "publie": false,
   "statut": "annonce",
   "prenom": "Selma",
   "nom": "Labib",
@@ -254,83 +564,7 @@
    "https://www.france24.com/fr/france/20260524-france-presidentielle-2027-qui-sont-les-candidats-officiellement-declares",
    "https://www.france-vote.fr/actualites/candidats-presidentielle-2027-qui-se-presente"
   ],
-  "note": "Désignée en juin 2026 selon France 24 : date exacte à préciser.",
-  "auteur": "Claude (assistant IA), recherche du 5 octobre 2026",
-  "verif": ""
- },
- {
-  "publie": false,
-  "statut": "declare",
-  "prenom": "Francis",
-  "nom": "Lalanne",
-  "soutien": "",
-  "declaration": {
-   "date": "",
-   "source": "https://elections2027.com/candidats"
-  },
-  "propositions": [],
-  "a_verifier": [
-   "https://elections2027.com/candidats"
-  ],
-  "note": "Une seule source trouvée : à confirmer.",
-  "auteur": "Claude (assistant IA), recherche du 5 octobre 2026",
-  "verif": ""
- },
- {
-  "publie": true,
-  "statut": "annonce",
-  "prenom": "Marine",
-  "nom": "Le Pen",
-  "soutien": "Rassemblement national",
-  "declaration": {
-   "date": "2026-07-07",
-   "source": "https://elections2027.com/candidats"
-  },
-  "propositions": [],
-  "a_verifier": [
-   "https://elections2027.com/candidats",
-   "https://www.france24.com/fr/france/20260524-france-presidentielle-2027-qui-sont-les-candidats-officiellement-declares",
-   "https://election-presidentielle-francaise-2027.fr/les-candidats-declares-pour-lelection-de-2027/"
-  ],
-  "note": "Situation judiciaire à vérifier (pourvoi en cassation mentionné par certaines sources).",
-  "auteur": "Claude (assistant IA), recherche du 5 octobre 2026",
-  "verif": ""
- },
- {
-  "publie": true,
-  "statut": "annonce",
-  "prenom": "David",
-  "nom": "Lisnard",
-  "soutien": "Nouvelle Énergie",
-  "declaration": {
-   "date": "2026-03-31",
-   "source": "https://electionpresidentielle2027.com/candidats-presidentielle-2027/"
-  },
-  "propositions": [],
-  "a_verifier": [
-   "https://electionpresidentielle2027.com/candidats-presidentielle-2027/",
-   "https://www.touteleurope.eu/vie-politique-des-etats-membres/presidentielle-2027-qui-sont-les-candidats-deja-declares/",
-   "https://elections2027.com/candidats"
-  ],
-  "note": "",
-  "auteur": "Claude (assistant IA), recherche du 5 octobre 2026",
-  "verif": ""
- },
- {
-  "publie": false,
-  "statut": "declare",
-  "prenom": "Benjamin",
-  "nom": "Lucas",
-  "soutien": "",
-  "declaration": {
-   "date": "",
-   "source": "https://elections2027.com/candidats"
-  },
-  "propositions": [],
-  "a_verifier": [
-   "https://elections2027.com/candidats"
-  ],
-  "note": "Une seule source trouvée : à confirmer.",
+  "note": "Désignée en juin 2026 selon France 24 : date exacte à préciser. Absent de la liste de référence de LCP : à vérifier.",
   "auteur": "Claude (assistant IA), recherche du 5 octobre 2026",
   "verif": ""
  },
@@ -348,167 +582,7 @@
   "a_verifier": [
    "https://elections2027.com/candidats"
   ],
-  "note": "Une seule source trouvée : à confirmer.",
-  "auteur": "Claude (assistant IA), recherche du 5 octobre 2026",
-  "verif": ""
- },
- {
-  "publie": false,
-  "statut": "declare",
-  "prenom": "Lydie",
-  "nom": "Massard",
-  "soutien": "",
-  "declaration": {
-   "date": "",
-   "source": "https://elections2027.com/candidats"
-  },
-  "propositions": [],
-  "a_verifier": [
-   "https://elections2027.com/candidats"
-  ],
-  "note": "Une seule source trouvée : à confirmer.",
-  "auteur": "Claude (assistant IA), recherche du 5 octobre 2026",
-  "verif": ""
- },
- {
-  "publie": true,
-  "statut": "annonce",
-  "prenom": "Jean-Luc",
-  "nom": "Mélenchon",
-  "soutien": "La France insoumise",
-  "declaration": {
-   "date": "",
-   "source": "https://www.france-vote.fr/actualites/candidats-presidentielle-2027-qui-se-presente"
-  },
-  "propositions": [],
-  "a_verifier": [
-   "https://www.france-vote.fr/actualites/candidats-presidentielle-2027-qui-se-presente",
-   "https://www.france24.com/fr/france/20260524-france-presidentielle-2027-qui-sont-les-candidats-officiellement-declares",
-   "https://www.sudradio.fr/sud-radio/presidentielle-2027-qui-sont-les-candidats-declares"
-  ],
-  "note": "Date de déclaration à préciser.",
-  "auteur": "Claude (assistant IA), recherche du 5 octobre 2026",
-  "verif": "",
-  "programme": {
-   "titre": "L'Avenir en commun, édition 2025",
-   "url": "https://melenchon2027.fr/programme/decouvrir/",
-   "note": "Nouvelle édition annoncée pour le 6 novembre 2026.",
-   "releve": "2026-10-06"
-  }
- },
- {
-  "publie": false,
-  "statut": "declare",
-  "prenom": "Antoine",
-  "nom": "Mikolajczak",
-  "soutien": "",
-  "declaration": {
-   "date": "",
-   "source": "https://elections2027.com/candidats"
-  },
-  "propositions": [],
-  "a_verifier": [
-   "https://elections2027.com/candidats"
-  ],
-  "note": "Une seule source trouvée : à confirmer.",
-  "auteur": "Claude (assistant IA), recherche du 5 octobre 2026",
-  "verif": ""
- },
- {
-  "publie": true,
-  "statut": "annonce",
-  "prenom": "Florian",
-  "nom": "Philippot",
-  "soutien": "Les Patriotes",
-  "declaration": {
-   "date": "2026-05-09",
-   "source": "https://electionpresidentielle2027.com/candidats-presidentielle-2027/"
-  },
-  "propositions": [],
-  "a_verifier": [
-   "https://electionpresidentielle2027.com/candidats-presidentielle-2027/",
-   "https://elections2027.com/candidats"
-  ],
-  "note": "",
-  "auteur": "Claude (assistant IA), recherche du 5 octobre 2026",
-  "verif": ""
- },
- {
-  "publie": true,
-  "statut": "annonce",
-  "prenom": "Édouard",
-  "nom": "Philippe",
-  "soutien": "Horizons",
-  "declaration": {
-   "date": "",
-   "source": "https://www.france24.com/fr/france/20260524-france-presidentielle-2027-qui-sont-les-candidats-officiellement-declares"
-  },
-  "propositions": [],
-  "a_verifier": [
-   "https://www.france24.com/fr/france/20260524-france-presidentielle-2027-qui-sont-les-candidats-officiellement-declares",
-   "https://www.sudradio.fr/sud-radio/presidentielle-2027-qui-sont-les-candidats-declares",
-   "https://election-presidentielle-francaise-2027.fr/les-candidats-declares-pour-lelection-de-2027/"
-  ],
-  "note": "Déclaré depuis septembre 2024 : date exacte à préciser.",
-  "auteur": "Claude (assistant IA), recherche du 5 octobre 2026",
-  "verif": ""
- },
- {
-  "publie": true,
-  "statut": "annonce",
-  "prenom": "Bruno",
-  "nom": "Retailleau",
-  "soutien": "Les Républicains",
-  "declaration": {
-   "date": "",
-   "source": "https://www.sudradio.fr/sud-radio/presidentielle-2027-qui-sont-les-candidats-declares"
-  },
-  "propositions": [],
-  "a_verifier": [
-   "https://www.sudradio.fr/sud-radio/presidentielle-2027-qui-sont-les-candidats-declares",
-   "https://www.france24.com/fr/france/20260524-france-presidentielle-2027-qui-sont-les-candidats-officiellement-declares",
-   "https://elections2027.com/candidats"
-  ],
-  "note": "Date de déclaration à préciser.",
-  "auteur": "Claude (assistant IA), recherche du 5 octobre 2026",
-  "verif": ""
- },
- {
-  "publie": true,
-  "statut": "annonce",
-  "prenom": "François",
-  "nom": "Ruffin",
-  "soutien": "Debout !",
-  "declaration": {
-   "date": "",
-   "source": "https://www.france-vote.fr/actualites/candidats-presidentielle-2027-qui-se-presente"
-  },
-  "propositions": [],
-  "a_verifier": [
-   "https://www.france-vote.fr/actualites/candidats-presidentielle-2027-qui-se-presente",
-   "https://elections2027.com/candidats"
-  ],
-  "note": "Date de déclaration à préciser.",
-  "auteur": "Claude (assistant IA), recherche du 5 octobre 2026",
-  "verif": ""
- },
- {
-  "publie": true,
-  "statut": "annonce",
-  "prenom": "Marine",
-  "nom": "Tondelier",
-  "soutien": "Les Écologistes",
-  "declaration": {
-   "date": "",
-   "source": "https://www.france24.com/fr/france/20260524-france-presidentielle-2027-qui-sont-les-candidats-officiellement-declares"
-  },
-  "propositions": [],
-  "a_verifier": [
-   "https://www.france24.com/fr/france/20260524-france-presidentielle-2027-qui-sont-les-candidats-officiellement-declares",
-   "https://elections2027.com/candidats",
-   "https://www.touteleurope.eu/vie-politique-des-etats-membres/presidentielle-2027-qui-sont-les-candidats-deja-declares/"
-  ],
-  "note": "Date de déclaration à préciser.",
+  "note": "Une seule source trouvée : à confirmer. Absent de la liste de référence de LCP : à vérifier.",
   "auteur": "Claude (assistant IA), recherche du 5 octobre 2026",
   "verif": ""
  },
@@ -526,43 +600,7 @@
   "a_verifier": [
    "https://elections2027.com/candidats"
   ],
-  "note": "Une seule source trouvée : à confirmer.",
-  "auteur": "Claude (assistant IA), recherche du 5 octobre 2026",
-  "verif": ""
- },
- {
-  "publie": false,
-  "statut": "declare",
-  "prenom": "Éric",
-  "nom": "Zemmour",
-  "soutien": "Reconquête",
-  "declaration": {
-   "date": "2026-09-17",
-   "source": "https://electionpresidentielle2027.com/candidats-presidentielle-2027/"
-  },
-  "propositions": [],
-  "a_verifier": [
-   "https://electionpresidentielle2027.com/candidats-presidentielle-2027/"
-  ],
-  "note": "Une seule source trouvée : à confirmer.",
-  "auteur": "Claude (assistant IA), recherche du 5 octobre 2026",
-  "verif": ""
- },
- {
-  "publie": false,
-  "statut": "declare",
-  "prenom": "Philippe",
-  "nom": "Brun",
-  "soutien": "",
-  "declaration": {
-   "date": "",
-   "source": "https://elections2027.com/candidats"
-  },
-  "propositions": [],
-  "a_verifier": [
-   "https://elections2027.com/candidats"
-  ],
-  "note": "Une seule source trouvée ; peut-être candidat à une primaire : à vérifier.",
+  "note": "Une seule source trouvée : à confirmer. Absent de la liste de référence de LCP : à vérifier.",
   "auteur": "Claude (assistant IA), recherche du 5 octobre 2026",
   "verif": ""
  }

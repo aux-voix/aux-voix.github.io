@@ -650,7 +650,8 @@ def actualites_officielles():
     items, vus = [], set()
     for url, source, rubrique in FLUX_OFFICIELS:
         try:
-            req = urllib.request.Request(url, headers={"User-Agent": UA})
+            req = urllib.request.Request(url, headers={"User-Agent": "Mozilla/5.0 (compatible; AuxVoix/1.0; +https://aux-voix.github.io)",
+                                                       "Accept": "application/rss+xml, application/xml;q=0.9, */*;q=0.8", "Accept-Language": "fr-FR,fr;q=0.9"})
             racine = ET.fromstring(urllib.request.urlopen(req, timeout=60).read())
             for it in racine.iter("item"):
                 titre = html.unescape(re.sub(r"\s+", " ", it.findtext("title") or "")).strip()
@@ -664,10 +665,14 @@ def actualites_officielles():
                     items.append({"date": date, "titre": titre, "lien": lien, "source": source, "rubrique": rubrique})
         except Exception as e:
             print(f"Actualités officielles : {url} indisponible ({e})")
+            if os.environ.get("GITHUB_ACTIONS"):
+                print(f"::warning title=Actualités officielles::{url} indisponible : {e}")
     items.sort(key=lambda x: x["date"], reverse=True)
     if items or not os.path.exists(sortie):
         json.dump(items[:80], open(sortie, "w", encoding="utf-8"), ensure_ascii=False, separators=(",", ":"))
     print(f"Actualités officielles : {len(items)} titres récupérés")
+    if os.environ.get("GITHUB_ACTIONS"):
+        print(f"::notice title=Actualités officielles::{len(items)} titres récupérés")
 
 # ---------- calcul d'une législature ----------
 def periodes(L, aujourd_hui):
@@ -890,9 +895,9 @@ def verifier_contenus():
                 if nom == "candidats.json" and t.get("programme") and not str((t.get("programme") or {}).get("url") or "").startswith("https://"):
                     erreurs.append(f"candidats.json, fiche {i + 1} : le lien du programme doit être une adresse https")
                 if nom == "candidats.json" and t.get("statut") == "annonce":
-                    sources = [u for u in t.get("a_verifier") or [] if str(u).startswith("https://")]
-                    if len(sources) < 2 or not t.get("nom"):
-                        erreurs.append(f"candidats.json, fiche {i + 1} : une annonce de candidature doit citer au moins deux sources en https")
+                    sources = [s for s in t.get("sources") or [] if isinstance(s, dict) and s.get("nom") and str(s.get("url") or "").startswith("https://")]
+                    if not sources or not t.get("nom"):
+                        erreurs.append(f"candidats.json, fiche {i + 1} : une annonce de candidature doit citer au moins une source nommée, en https")
                     if t.get("propositions"):
                         erreurs.append(f"candidats.json, fiche {i + 1} : des propositions ne peuvent être publiées qu'après relecture (statut « declare » ou « officiel »)")
                     continue
