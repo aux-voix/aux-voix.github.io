@@ -1,7 +1,7 @@
 #!/usr/bin/env python3
 """Aux Voix : construit les données du site à partir des données ouvertes officielles
 de l'Assemblée nationale (Licence Ouverte). Python 3.9 ou plus, aucune dépendance."""
-import datetime, html, io, json, os, re, statistics, sys, time, urllib.error, urllib.parse, urllib.request, zipfile
+import datetime, gzip, html, io, json, os, re, statistics, sys, time, urllib.error, urllib.parse, urllib.request, zipfile
 
 R = "https://data.assemblee-nationale.fr/static/openData/repository/"
 LEGISLATURES = [
@@ -360,9 +360,11 @@ def charger_lois(data, numeros, leg, am_textes=None, gi=None):
                 lib = txt(premier(a.get("libelleActe") or {}, "nomCanonique", "libelleCourt"))
                 date = txt(a.get("dateActe"))[:10]
                 for v in liste(premier(a.get("voteRefs") or {}, "voteRef")):
-                    m = re.search(r"V(\d+)$", txt(v))
-                    if m and int(m.group(1)) in numeros:
-                        scr.add(int(m.group(1)))
+                    # référence du type VTANR5L17V1234 : la législature doit être celle traitée, sinon un
+                    # dossier de la 16e législature serait relié au scrutin de même numéro de la 17e
+                    m = re.search(r"(?:L(\d+))?V(\d+)$", txt(v))
+                    if m and (not m.group(1) or m.group(1) == str(leg)) and int(m.group(2)) in numeros:
+                        scr.add(int(m.group(2)))
                 jo = a.get("infoJO") or {}
                 if code.startswith("PROM") and (jo or a.get("titreLoi")):
                     prom = {"date": txt(jo.get("dateJO"))[:10] or date, "url": txt(jo.get("urlLegifrance")) or None,
@@ -633,46 +635,81 @@ def personnes_citees(lois, index, acteurs):
     print(f"  noms retrouvés pour {len(out)} auteurs ou rapporteurs non députés de la législature")
     return out
 
-# ---------- actualités officielles : vie-publique.fr (DILA), titres et liens seulement ----------
+# ---------- actualités : sources publiques (titres et liens seulement, sans publicité ni commentaire) ----------
+# (adresse du flux, nom affiché, rubrique, segment d'adresse exigé pour ne garder que les articles d'actualité)
 FLUX_OFFICIELS = [
-    ("https://www.vie-publique.fr/actualites-feeds.xml", "vie-publique.fr", "Actualité des politiques publiques"),
-    ("https://www.vie-publique.fr/lois-feeds.xml", "vie-publique.fr", "Panorama des lois"),
+    ("https://lcp.fr/rss.xml", "LCP", "Politique", "/actualites/"),
+    ("https://www.publicsenat.fr/feed", "Public Sénat", "Politique", "/actualites/"),
+    ("https://www.vie-publique.fr/actualites-feeds.xml", "vie-publique.fr", "Politiques publiques", ""),
 ]
+# (le flux « lois » de vie-publique.fr n'est plus repris : les lois ont déjà leur rubrique, tirée des données de l'Assemblée)
+
+def lien_propre(lien):
+    """Retire les paramètres de suivi (egn-…, utm_…, xtor…) ajoutés aux liens des flux."""
+    p = urllib.parse.urlsplit(lien)
+    q = [(k, v) for k, v in urllib.parse.parse_qsl(p.query, keep_blank_values=True) if not re.match(r"(egn-|utm_|xtor|at_)", k, re.I)]
+    return urllib.parse.urlunsplit((p.scheme, p.netloc, p.path, urllib.parse.urlencode(q), ""))
+
+def lire_flux(url):
+    req = urllib.request.Request(url, headers={"User-Agent": "Mozilla/5.0 (compatible; AuxVoix/1.0; +https://aux-voix.github.io)",
+                                               "Accept": "application/rss+xml, application/xml;q=0.9, */*;q=0.8", "Accept-Language": "fr-FR,fr;q=0.9"})
+    with urllib.request.urlopen(req, timeout=60) as r:
+        brut = r.read()
+        # vie-publique.fr envoie ses flux compressés même sans le demander : sans cette étape, le flux est illisible
+        if (r.headers.get("Content-Encoding") or "").lower() == "gzip" or brut[:2] == b"\x1f\x8b":
+            brut = gzip.decompress(brut)
+    return brut
+
+PRESI_RE = re.compile(r"pr[ée]sidentiel|primaire (?:socialiste|ps|de la gauche|de la droite|des [ée]cologistes|des r[ée]publicains)|parrainages?\b|"
+                      r"candidat(?:e|s|es)? (?:[àa] l['’][ée]lection|[àa] la pr[ée]sidence)|candidature (?:[àa] l['’][ée]lection|pour 2027)|campagne pr[ée]sidentielle|[ée]lys[ée]e 2027", re.I)
+
+def date_flux(texte):
+    import email.utils
+    texte = (texte or "").strip()
+    try:
+        return email.utils.parsedate_to_datetime(texte).date().isoformat()
+    except Exception:
+        pass
+    try:
+        return datetime.datetime.fromisoformat(texte.replace("Z", "+00:00")).date().isoformat()
+    except Exception:
+        return ""
 
 def actualites_officielles():
-    import email.utils
     import xml.etree.ElementTree as ET
     sortie = os.path.join(SITE, "actualites-officielles.json")
-    if os.environ.get("RELEVE_LOCAL"):
+    if os.environ.get("RELEVE_LOCAL") and not os.environ.get("RELEVE_FLUX_TEST"):
         if not os.path.exists(sortie):
             json.dump([], open(sortie, "w", encoding="utf-8"))
         return
-    items, vus = [], set()
-    for url, source, rubrique in FLUX_OFFICIELS:
+    items, vus, bilan = [], set(), []
+    for url, source, rubrique, chemin in FLUX_OFFICIELS:
+        n = 0
         try:
-            req = urllib.request.Request(url, headers={"User-Agent": "Mozilla/5.0 (compatible; AuxVoix/1.0; +https://aux-voix.github.io)",
-                                                       "Accept": "application/rss+xml, application/xml;q=0.9, */*;q=0.8", "Accept-Language": "fr-FR,fr;q=0.9"})
-            racine = ET.fromstring(urllib.request.urlopen(req, timeout=60).read())
+            racine = ET.fromstring(lire_flux(url))
             for it in racine.iter("item"):
                 titre = html.unescape(re.sub(r"\s+", " ", it.findtext("title") or "")).strip()
-                lien = (it.findtext("link") or "").strip()
-                try:
-                    date = email.utils.parsedate_to_datetime(it.findtext("pubDate") or "").date().isoformat()
-                except Exception:
-                    date = ""
-                if titre and lien.startswith("https://") and date and lien not in vus:
-                    vus.add(lien)
-                    items.append({"date": date, "titre": titre, "lien": lien, "source": source, "rubrique": rubrique})
+                lien = lien_propre((it.findtext("link") or "").strip())
+                date = date_flux(it.findtext("pubDate") or it.findtext("{http://purl.org/dc/elements/1.1/}date"))
+                if not (titre and lien.startswith("https://") and date) or lien in vus or (chemin and chemin not in lien):
+                    continue
+                cats = " ".join((c.text or "") for c in it.findall("category"))
+                vus.add(lien)
+                items.append({"date": date, "titre": titre, "lien": lien, "source": source, "rubrique": rubrique,
+                              "presi": bool(PRESI_RE.search(titre + " " + cats))})
+                n += 1
+            bilan.append(f"{source} : {n}")
         except Exception as e:
-            print(f"Actualités officielles : {url} indisponible ({e})")
+            bilan.append(f"{source} : indisponible ({e})")
+            print(f"Actualités : {url} indisponible ({e})")
             if os.environ.get("GITHUB_ACTIONS"):
-                print(f"::warning title=Actualités officielles::{url} indisponible : {e}")
+                print(f"::warning title=Actualités::{url} indisponible : {e}")
     items.sort(key=lambda x: x["date"], reverse=True)
     if items or not os.path.exists(sortie):
-        json.dump(items[:80], open(sortie, "w", encoding="utf-8"), ensure_ascii=False, separators=(",", ":"))
-    print(f"Actualités officielles : {len(items)} titres récupérés")
+        json.dump(items[:160], open(sortie, "w", encoding="utf-8"), ensure_ascii=False, separators=(",", ":"))
+    print("Actualités : " + " ; ".join(bilan))
     if os.environ.get("GITHUB_ACTIONS"):
-        print(f"::notice title=Actualités officielles::{len(items)} titres récupérés")
+        print("::notice title=Actualités::" + " ; ".join(bilan))
 
 # ---------- calcul d'une législature ----------
 def periodes(L, aujourd_hui):

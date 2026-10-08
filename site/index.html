@@ -767,6 +767,146 @@ main,dialog{overflow-wrap:break-word}
 .cand-l{list-style:none;margin:14px 0 0;padding:0;columns:2 340px;column-gap:34px}
 .cand-l li{break-inside:avoid;padding:10px 0;border-bottom:1px solid var(--bord2);display:flex;flex-direction:column;gap:3px}
 .cand-l b{font-family:var(--titre);font-weight:600}
+
+/* ===== Accueil : une vraie porte d'entrée, sobre et rangée ===== */
+.acc-hero{padding-top:var(--e7);padding-bottom:var(--e6)}
+.acc-hero .h1{max-width:20ch;margin:0}
+.acc-hero .lede{max-width:62ch;margin:14px 0 0}
+.acc-portes{display:grid;grid-template-columns:repeat(4,minmax(0,1fr));gap:12px;margin-top:var(--e6)}
+.acc-portes a{display:flex;flex-direction:column;gap:6px;padding:18px 18px 20px;border:1px solid var(--bord);border-top:3px solid var(--bleu);color:var(--texte);text-decoration:none;transition:background var(--anim),border-color var(--anim)}
+.acc-portes a:hover{background:var(--gris);border-color:var(--bleu2)}
+.acc-portes .h3{margin:0;font-size:var(--t-md)}
+.acc-trouver{display:flex;flex-wrap:wrap;align-items:center;gap:8px 14px;margin-top:22px}
+.acc-trouver .lab{margin:0;font-family:var(--titre);font-weight:600;font-size:var(--t-base);color:var(--texte)}
+.acc-trouver select{height:42px;min-width:260px;max-width:100%}
+.acc-trouver .circs{flex-basis:100%;margin:6px 0 0}
+.acc-trouver .circs:empty{display:none}
+.acc-col{display:flex;flex-direction:column;gap:16px}
+.acc-carte{border:1px solid var(--bord);padding:16px 18px}
+.acc-carte .h3{margin:4px 0 8px;line-height:1.35}
+.acc-carte .h3 a{color:var(--texte);text-decoration:none}
+.acc-carte .h3 a:hover{color:var(--bleu2);text-decoration:underline}
+.acc-presi{border-top:3px solid var(--bleu);background:var(--gris)}
+.acc-liens{display:flex;flex-wrap:wrap;gap:4px 16px;margin:10px 0 0;font-weight:600;font-size:var(--t-ui)}
+.mini-vote{display:flex;height:10px;margin:10px 0 6px;background:var(--gris);box-shadow:inset 0 0 0 1px var(--bord)}
+.mini-vote i{display:block;height:100%}.mini-vote .r1{background:var(--pourfill,var(--pour))}.mini-vote .r2{background:var(--contrefill,var(--contre))}.mini-vote .r3{background:var(--abst)}
+.acc-comp{padding-top:var(--e6)}
+@media (max-width:900px){.acc-portes{grid-template-columns:repeat(2,minmax(0,1fr))}}
+@media (max-width:560px){.acc-hero{padding-top:var(--e5);padding-bottom:var(--e5)}.acc-hero .h1{font-size:28px}.acc-portes a{padding:14px}.acc-portes .meta{font-size:13px}.acc-trouver select{min-width:0;width:100%}}
+
+/* Accueil : une seule police pour tout ce qui n'est pas le grand titre */
+.acc-portes .h3,.acc-trouver .lab{font-family:var(--s);font-weight:700;letter-spacing:0}
+.acc-portes .h3{font-size:var(--t-base)}
+.fil-actu .meta{margin-right:8px;font-size:13px}
+/* Menu trop large pour l'écran : un fondu indique qu'il continue */
+.nav.deborde{-webkit-mask-image:linear-gradient(to right,#000 0,#000 calc(100% - 36px),transparent);mask-image:linear-gradient(to right,#000 0,#000 calc(100% - 36px),transparent)}
+
+/* Accueil : la une (vote principal de la dernière séance + titres des médias) et la carte Présidentielle */
+.acc-front{display:grid;grid-template-columns:minmax(0,2fr) minmax(0,1fr);gap:var(--e6);align-items:start;padding-top:var(--e5)}
+.acc-front>*{min-width:0}
+.acc-une{border-top:3px solid var(--bleu);padding-top:14px}
+.acc-une>.cat{margin:0}
+.acc-une .h2{margin:8px 0 10px;font-size:var(--t-xl);line-height:1.25}
+.acc-une .h2 a{color:var(--texte);text-decoration:none}.acc-une .h2 a:hover{color:var(--bleu2);text-decoration:underline}
+.une-texte{margin:0 0 14px;font-size:var(--t-ui);line-height:1.5;color:var(--texte2)}
+.une-texte a{font-weight:600}
+.une-vote{max-width:560px}
+.une-vote .mini-vote{height:12px;margin:0 0 8px}
+.une-chiffres{display:flex;flex-wrap:wrap;gap:4px 18px;margin:0 0 8px;font-size:var(--t-ui);font-weight:700;font-variant-numeric:tabular-nums}
+.une-chiffres .po{color:var(--pour)}.une-chiffres .co{color:var(--contre)}.une-chiffres span:last-child{color:var(--texte2);font-weight:600}
+.acc-une>.meta{margin:0}
+.une-motions{margin:0 0 4px;padding-left:20px;font-size:var(--t-ui);line-height:1.5}.une-motions li{margin:0 0 6px}.une-motions a{font-weight:600}
+.une-expl{margin:12px 0 0;padding-left:12px;border-left:3px solid var(--bord);font-size:var(--t-ui);color:var(--texte2);max-width:68ch}
+.une-actu{margin-top:var(--e5);padding-top:14px;border-top:1px solid var(--bord)}
+.une-actu-h{display:flex;align-items:baseline;justify-content:space-between;flex-wrap:wrap;gap:6px 16px}
+.une-actu-h .h3{margin:0;font-family:var(--s);font-weight:700;font-size:var(--t-md)}
+.une-actu-h a{font-size:var(--t-ui);font-weight:600}
+.fil-une{list-style:none;margin:6px 0 0;padding:0;display:grid;grid-template-columns:repeat(2,minmax(0,1fr));column-gap:28px}
+.fil-une li{display:flex;flex-direction:column;gap:3px;padding:12px 0;border-bottom:1px solid var(--bord2);min-width:0}
+.fil-une .meta{font-size:13px}
+.fil-une a{color:var(--texte);font-weight:600;line-height:1.4;overflow-wrap:break-word}
+.fil-une a:hover{color:var(--bleu2)}
+@media (max-width:900px){.acc-front{grid-template-columns:1fr}}
+@media (max-width:640px){.fil-une{grid-template-columns:1fr}.fil-une li:nth-child(n+5){display:none}.acc-une .h2{font-size:var(--t-lg)}}
+
+/* Téléphone : les tableaux de listes deviennent des fiches empilées (plus de colonnes écrasées ni de défilement horizontal) */
+@media (max-width:640px){
+  .tw:has(>table.t-cartes),.tw.fitw:has(>table.t-cartes){overflow:visible}
+  table.t-cartes,table.t-cartes>tbody{display:block;width:100%}
+  table.t.fit.t-cartes{table-layout:auto}
+  table.t-cartes>caption{display:block;text-align:left;margin-bottom:8px}
+  table.t-cartes>thead{position:absolute;width:1px;height:1px;overflow:hidden;clip:rect(0 0 0 0);clip-path:inset(50%);white-space:nowrap}
+  table.t-cartes>tbody>tr{display:flex;flex-wrap:wrap;align-items:baseline;gap:4px 16px;padding:14px 0;border-bottom:1px solid var(--bord2);position:relative}
+  table.t-cartes>tbody>tr>td{display:block;flex:1 0 100%;width:auto!important;min-width:0;padding:0!important;border:0;text-align:left;overflow-wrap:break-word;font-size:var(--t-ui)}
+  table.t-cartes>tbody>tr>td.tc{flex:0 1 auto}
+  table.t-cartes>tbody>tr>td.tm{flex:1 0 100%;font-size:var(--t-base);font-weight:600;line-height:1.4}
+  table.t-cartes>tbody>tr>td.tm a{font-weight:600}
+  table.t-cartes>tbody>tr>td.n{text-align:left}
+  table.t-cartes>tbody>tr>td.dt,table.t-cartes>tbody>tr>td.tc:first-child{color:var(--texte2);font-size:13px}
+  table.t-cartes>tbody>tr>td[data-l]::before{content:attr(data-l) "\00a0:\00a0";font-weight:400;color:var(--texte2);font-size:13px}
+  table.t-cartes>tbody>tr>td[data-l="N°"]::before{content:"n°\00a0"}
+  table.t-cartes>tbody>tr>td:empty{display:none}
+  /* tableaux triables : la barre de tri reste visible, en boutons */
+  table.t.fit.t-cartes>thead{position:static;width:auto;height:auto;overflow:visible;clip:auto;clip-path:none;white-space:normal;display:block}
+  table.t.fit.t-cartes>thead>tr{display:flex;flex-wrap:wrap;align-items:center;gap:8px;padding:0 0 12px;border-bottom:2px solid var(--texte)}
+  table.t.fit.t-cartes>thead>tr::before{content:"Trier par";font-size:13px;color:var(--texte2);margin-right:2px}
+  table.t.fit.t-cartes>thead>tr>th{position:static;display:block;width:auto!important;padding:0;border:0;background:none;white-space:nowrap}
+  table.t.fit.t-cartes>thead>tr>th:not(:has(.th-s)){display:none}
+  table.t.fit.t-cartes .th-s{display:inline-flex;align-items:center;gap:6px;min-height:40px;padding:0 12px!important;border:1px solid var(--bord);font-size:13px;font-weight:600;background:var(--fond)}
+  table.t.fit.t-cartes .th-s .sort-ic{position:static;margin:0}
+  table.t.fit.t-cartes .th-s.on{border-color:var(--bleu2)}
+  table.t.fit.t-cartes .hs{display:block}
+  table.t.fit.t-cartes>thead>tr>th.hs:has(.th-s){display:block}
+  table.t.fit.t-cartes>tbody>tr>td.hm,table.t.fit.t-cartes>thead>tr>th.hm{display:none}
+  /* toute la fiche est cliquable : le lien principal la couvre */
+  table.t-cartes>tbody>tr>td.tl a::after{content:"";position:absolute;inset:0}
+  table.t-cartes>tbody>tr>td.tl a:focus-visible{outline:none}
+  table.t-cartes>tbody>tr:has(td.tl a:focus-visible){outline:2px solid var(--bleu2);outline-offset:2px}
+  table.t-cartes>tbody>tr>td a{display:inline;padding-top:0;padding-bottom:0}
+}
+
+/* Téléphone : sous-menus sur une seule ligne qui défile, au lieu de trois lignes empilées */
+@media (max-width:640px){
+  .sousnav{display:block;border-bottom:0}
+  .sous{flex-wrap:nowrap;overflow-x:auto;gap:0 20px;border-bottom:1px solid var(--bord);scrollbar-width:none;-webkit-overflow-scrolling:touch}
+  .sous::-webkit-scrollbar{display:none}
+  .sous a{flex:none;white-space:nowrap}
+  .sous.deborde{-webkit-mask-image:linear-gradient(to right,#000 0,#000 calc(100% - 40px),transparent);mask-image:linear-gradient(to right,#000 0,#000 calc(100% - 40px),transparent)}
+  .sousnav .legx{margin-top:14px}
+}
+/* Cibles tactiles : liens d'action de l'accueil et listes de groupes */
+@media (pointer:coarse){
+  .acc-liens a,.une-actu-h a,.qpc li a{display:inline-block;padding-top:11px;padding-bottom:11px}
+  .acc-liens{row-gap:0}
+  .qpc li{padding:0}
+}
+/* Repères « P / C / A » des tableaux par thème : plus lisibles */
+.mat .pos{width:17px;height:17px;font-size:11px}
+/* « Voter pour la première fois » : des étapes numérotées, pas des cases à cocher qui ne réagissent pas */
+.checklist{counter-reset:etape}
+.checklist li{counter-increment:etape;padding-left:38px}
+.checklist li::before{content:counter(etape);left:0;top:13px;width:24px;height:24px;border:0;border-radius:50%;background:var(--bleu2);color:var(--fond);font:700 13px/24px var(--s);text-align:center}
+
+/* Accès direct aux groupes (page « Ce que proposent les groupes ») */
+.sauts{display:flex;flex-wrap:wrap;align-items:center;gap:8px;margin:18px 0 0}
+.sauts button{font:600 13px/1 var(--s);color:var(--texte);background:var(--fond);border:1px solid var(--bord);padding:0 10px;min-height:36px;cursor:pointer}
+.sauts button:hover{border-color:var(--bleu2);color:var(--bleu2)}
+.pg h2[id]{scroll-margin-top:calc(var(--mast-h,64px) + 16px)}
+.pg h2[id]:focus{outline:none}
+@media (pointer:coarse){.sauts button{min-height:44px;padding:0 12px}}
+
+/* Repères P / C / A : un peu plus grands partout */
+.pos{width:16px;height:16px;font-size:11px}
+@media (pointer:coarse){.toc-a a{display:inline-block;min-width:36px;min-height:36px;line-height:36px;text-align:center}}
+
+/* Simulateur sur téléphone : le total reste visible en bas de l'écran pendant qu'on coche */
+.sim-mini{display:none}
+@media (max-width:820px){
+  .sim-mini{display:flex;flex-wrap:wrap;align-items:baseline;gap:2px 10px;position:sticky;bottom:0;z-index:2;margin:12px 0 0;padding:12px 14px calc(12px + env(safe-area-inset-bottom,0px));background:#123B6D;color:#fff;font-size:var(--t-ui)}
+  .sim-mini b{font-size:var(--t-lg)}
+  .sim-mini span{opacity:.9}
+  .sim-mini.ok span{font-weight:700;opacity:1}
+}
 </style>
 </head>
 <body data-lv="2">
@@ -777,6 +917,7 @@ main,dialog{overflow-wrap:break-word}
     <a class="wordmark" href="#/" aria-label="Aux Voix, accueil"><svg class="emb" viewBox="0 2 120 64" aria-hidden="true"><g fill="none" stroke="currentColor" stroke-width="6" stroke-linecap="round"><path d="M43.0 60.0 A17 17 0 0 1 50.0 46.2"/><path d="M53.1 44.5 A17 17 0 0 1 66.9 44.5"/><path d="M70.0 46.2 A17 17 0 0 1 77.0 60.0"/><path d="M32.0 60.0 A28 28 0 0 1 43.5 37.3"/><path d="M48.6 34.4 A28 28 0 0 1 71.4 34.4"/><path d="M76.5 37.3 A28 28 0 0 1 88.0 60.0"/><path d="M21.0 60.0 A39 39 0 0 1 37.1 28.4"/><path d="M44.1 24.4 A39 39 0 0 1 75.9 24.4"/><path d="M82.9 28.4 A39 39 0 0 1 99.0 60.0"/><path d="M10.0 60.0 A50 50 0 0 1 30.6 19.5"/><path d="M39.7 14.3 A50 50 0 0 1 80.3 14.3"/><path d="M89.4 19.5 A50 50 0 0 1 110.0 60.0"/></g></svg><span><span class="wm1">Aux </span><span class="wm2">Voix</span></span></a>
     <nav class="nav" aria-label="Rubriques">
       <a href="#/presidentielle" data-nav="presidentielle" class="nav-presi">Présidentielle<span class="np-an"> 2027</span></a>
+      <a href="#/actualites" data-nav="actualites">Actu<span class="np-an">alités</span></a>
       <a href="#/lois" data-nav="lois">Lois</a>
       <a href="#/votes" data-nav="votes">Votes</a>
       <a href="#/elus" data-nav="elus">Élus</a>
@@ -855,7 +996,7 @@ function texteDe(ti){const m=String(ti).match(/((?:du |de la |de l')?(?:projet|p
 function lectureDe(ti){const m=String(ti).match(/\(([^()]*(lecture|commission mixte paritaire|CMP)[^()]*)\)\s*$/i);return m?m[1]:null;}
 function headline(s){
   if(s.moc)return `Motion de censure ${s.adopte?"adoptée":"rejetée"} : ${n(s.po)} voix pour, ${n(s.rq)} étaient nécessaires`;
-  return `L'Assemblée ${s.adopte?"adopte":"rejette"} ${s.ti}, par ${n(s.po)} voix contre ${n(s.co)}`;
+  return `L'Assemblée ${s.adopte?"adopte":"rejette"} ${s.ti}, par ${n(s.po)} voix pour et ${n(s.co)} contre`;
 }
 function positionsPar(s){const by={1:[],2:[],3:[]};s.g.slice().sort((a,b)=>a[0]-b[0]).forEach(b=>{const g=grp(b[0]);if(!g.ni&&by[b[2]])by[b[2]].push(g.sigle);});return by;}
 function positionsResume(s){const by=positionsPar(s);return [[1,"majoritairement pour"],[2,"majoritairement contre"],[3,"majoritairement abstention"]].filter(([k])=>by[k].length).map(([k,l])=>`${cap(l)} : ${by[k].join(", ")}`).join(". ")+".";}
@@ -933,8 +1074,11 @@ function cmpVal(a,b){if(a==null&&b==null)return 0;if(a==null)return 1;if(b==null
 function sortRows(rows,cols,st){const c=cols.find(x=>x.k===st.k);if(!c)return rows;return rows.slice().sort((a,b)=>{const va=c.get(a),vb=c.get(b);if(va==null||vb==null)return cmpVal(va,vb);return st.dir*cmpVal(va,vb);});}
 const ICO={asc:'<path d="M2 6.6 5 3.4 8 6.6"/>',desc:'<path d="M2 3.4 5 6.6 8 3.4"/>',idle:'<path d="M2.6 4 5 1.6 7.4 4M2.6 6 5 8.4 7.4 6"/>'};
 function tableHTML(cols,rows,st,caption){
-  const cl=c=>[c.num?"n":"",c.hide||""].join(" ").trim();
-  return `<div class="tw fitw"><table class="t fit">${caption?`<caption>${caption}</caption>`:""}<thead><tr>${cols.map(c=>{const on=st.k===c.k;return `<th class="${cl(c)}"${c.wd?` style="width:${c.wd}"`:""} aria-sort="${on?(st.dir>0?"ascending":"descending"):"none"}">${c.get?`<button type="button" class="th-s${on?" on":""}" data-k="${c.k}" title="${esc(c.tip||("Trier par "+c.label.toLowerCase()))}">${c.label}<svg class="sort-ic" viewBox="0 0 10 10" aria-hidden="true">${on?(st.dir>0?ICO.asc:ICO.desc):ICO.idle}</svg></button>`:c.label}</th>`;}).join("")}</tr></thead><tbody>${rows.map((r,i)=>`<tr data-k="${esc(String(cols[0].get?cols[0].get(r):i))}">${cols.map(c=>`<td class="${cl(c)}">${c.render(r)}</td>`).join("")}</tr>`).join("")}</tbody></table></div>`;
+  /* sur téléphone, chaque ligne devient une fiche : la colonne principale en tête, les autres dessous */
+  const mk=(cols.find(c=>c.main)||cols.find(c=>!c.wd)||cols[0]).k,lk=(cols.find(c=>c.lien)||{k:mk}).k;
+  const cl=c=>[c.num?"n":"",c.hide||"",c.k===mk?"tm":"tc",c.k===lk?"tl":""].join(" ").trim();
+  const dl=c=>c.num&&c.k!==mk?` data-l="${esc(c.label.replace(/\u00AD/g,""))}"`:"";
+  return `<div class="tw fitw"><table class="t fit t-cartes" role="table">${caption?`<caption>${caption}</caption>`:""}<thead role="rowgroup"><tr role="row">${cols.map(c=>{const on=st.k===c.k;return `<th role="columnheader" class="${cl(c)}"${c.wd?` style="width:${c.wd}"`:""} aria-sort="${on?(st.dir>0?"ascending":"descending"):"none"}">${c.get?`<button type="button" class="th-s${on?" on":""}" data-k="${c.k}" title="${esc(c.tip||("Trier par "+c.label.toLowerCase()))}">${c.label}<svg class="sort-ic" viewBox="0 0 10 10" aria-hidden="true">${on?(st.dir>0?ICO.asc:ICO.desc):ICO.idle}</svg></button>`:c.label}</th>`;}).join("")}</tr></thead><tbody role="rowgroup">${rows.map((r,i)=>`<tr role="row" data-k="${esc(String(cols[0].get?cols[0].get(r):i))}">${cols.map(c=>`<td role="cell" class="${cl(c)}"${dl(c)}>${c.render(r)}</td>`).join("")}</tr>`).join("")}</tbody></table></div>`;
 }
 function bindSort(box,st,cols,redraw){box.addEventListener("click",e=>{const b=e.target.closest(".th-s");if(!b||!box.contains(b))return;const k=b.dataset.k;if(st.k===k)st.dir=-st.dir;else{st.k=k;const c=cols.find(x=>x.k===k);st.dir=c&&c.desc?-1:1;}
   const avant=new Map();if(!PRM)$$("tbody tr",box).forEach(tr=>avant.set(tr.dataset.k,tr.getBoundingClientRect().top));
@@ -971,45 +1115,86 @@ function derniereActivite(){
   let reprise="";if(m>=7&&m<=9){let x=new Date(Date.UTC(y,9,1));while(x.getUTCDay()===0||x.getUTCDay()===6)x=new Date(x.getTime()+864e5);reprise=` La session ordinaire reprend le ${fd(x.toISOString().slice(0,10),true)}, premier jour ouvrable d'octobre.`;}
   return `<p class="notice">Aucun scrutin public n'a eu lieu depuis le ${fd(d,true)} : le fichier officiel de l'Assemblée, vérifié le ${fd(DATA.maj.slice(0,10))}, n'en contient pas de plus récent.${reprise}</p>`;
 }
-function choisirUne(){
-  const cand=SC.filter(x=>x.sol||x.moc||estEnsemble(x)).slice(-8);if(!cand.length)return last(SC);
-  let prec=null;try{prec=localStorage.getItem("lr-une-"+LEG);}catch(e){}
-  const pool=cand.filter(x=>String(x.n)!==prec),liste=pool.length?pool:cand,s=liste[Math.floor(Math.random()*liste.length)];
-  try{localStorage.setItem("lr-une-"+LEG,String(s.n));}catch(e){}return s;
+/* À la une : le scrutin principal de la dernière séance (règle fixe, publiée dans la méthode) */
+function scrutinUne(){
+  const passes=SC.filter(x=>x.d<=TODAY_ISO);if(!passes.length)return last(SC);
+  const jour=last(passes).d.slice(0,10),S=passes.filter(x=>x.d.slice(0,10)===jour);
+  const votants=x=>(x.po||0)+(x.co||0)+(x.ab||0),plusSuivi=L=>L.slice().sort((a,b)=>votants(b)-votants(a))[0];
+  return S.filter(x=>x.moc).sort((a,b)=>(b.po||0)-(a.po||0))[0]||plusSuivi(S.filter(x=>x.sol))||plusSuivi(S.filter(estEnsemble))||plusSuivi(S);
+}
+/* Texte d'un scrutin : le lien officiel, sinon le dossier de la même législature dont le titre est identique (et seul à l'être) */
+let QLOI=null;
+const queueTitre=x=>norm(x).replace(/’/g,"'").trim().replace(/^(projet|proposition) de loi (organique |constitutionnelle )?/,"").replace(/^\S+\s+/,"").replace(/[\s,.;:]+$/,"").replace(/\s+/g," ");
+function loiDe(s){
+  if(SCR2LOI[s.n])return SCR2LOI[s.n];
+  const tx=texteDe(s.ti);if(!tx)return null;
+  const k=queueTitre(tx);if(k.split(" ").length<4)return null;
+  if(!QLOI||QLOI.src!==LOIS){QLOI={src:LOIS,m:new Map()};const re=new RegExp("L"+LEG+"N");
+    LOIS.forEach(l=>{if(!re.test(l.id))return;const q=queueTitre(l.titre);QLOI.m.set(q,QLOI.m.has(q)?null:l);});}
+  return QLOI.m.get(k)||null;
+}
+/* Objet du vote sans le titre du texte, affiché à part */
+function objetCourt(s){
+  let o=String(s.ti);const tx=texteDe(o);
+  if(tx&&!estEnsemble(s)){const i=norm(o).indexOf(norm(tx));if(i>0)o=o.slice(0,i).replace(/\s+(du|de la|de l['’]|d['’])\s*$/i,"").trim();}
+  return o.replace(/\s*\(examen prioritaire\)/gi,"").replace(/\s*\([^()]*(lecture|commission mixte paritaire)[^()]*\)\s*$/i,"").trim();
+}
+const jourRel=iso=>{const h=new Date(D(TODAY_ISO)-864e5).toISOString().slice(0,10);return iso===TODAY_ISO?"aujourd'hui":iso===h?"hier":"";};
+/* Titres des médias : les plus récents de chaque source, à parts égales */
+function titresMedias(k){
+  const M=actualites().filter(a=>a.src),par={};M.forEach(a=>(par[a.src]=par[a.src]||[]).push(a));
+  const srcs=Object.keys(par).sort((a,b)=>a.localeCompare(b,"fr")),out=[];
+  for(let i=0;out.length<k&&srcs.some(x=>par[x][i]);i++)srcs.forEach(x=>{if(par[x][i]&&out.length<k)out.push(par[x][i]);});
+  return out.sort((a,b)=>a.date<b.date?1:a.date>b.date?-1:0);
 }
 function pageHome(){
-  const s=choisirUne(),recents=SC.filter(x=>(x.sol||x.moc||estEnsemble(x))&&x.n!==s.n).slice(-6).reverse();
+  const s=scrutinUne(),jour=s.d.slice(0,10),rel=jourRel(jour),nbJour=SC.filter(x=>x.d.slice(0,10)===jour).length,c1=compteRebours(PRESI.t1);
+  const ens=estEnsemble(s),loi=s.moc?null:loiDe(s),tx=s.moc||ens?null:texteDe(s.ti),lec=lectureDe(s.ti),expl=expliquer(s)[0];
+  const A=titresMedias(6);
   const depts=[...new Set(actifs().map(d=>d.numDept+"|"+d.dept))].filter(x=>x!=="|").sort((a,b)=>a.localeCompare(b,"fr",{numeric:true}));
-  const lp=LOIS.find(l=>l.prom);const K=PER.length;
+  const tot=Math.max(1,(s.po||0)+(s.co||0)+(s.ab||0)),pcw=v=>((v||0)/tot*100).toFixed(1)+"%";
+  const M=s.moc?SC.filter(x=>x.moc&&x.d.slice(0,10)===jour):[],plusieurs=M.length>1;
+  const titre=plusieurs?`${M.length===2?"Deux":n(M.length)} motions de censure ${M.every(x=>!x.adopte)?"rejetées":"soumises au vote"}`:s.moc?headline(s):`L'Assemblée ${s.adopte?"adopte":"rejette"} ${objetCourt(s)}`;
+  const parQui=x=>{const m=String(x.ti).match(/\bpar ((?:M\.|Mme|MM\.|Mmes)\s.+)$/);return m?`motion déposée par ${m[1]}`:"";};
   return {title:"Accueil",html:`
-  ${encartPresiAccueil()}
-  ${COURANTE?`<section class="wrap trouver-w" aria-label="Qui vous représente ?"><div class="trouver">
-    <label class="h3" for="dsel">Qui vous représente ?</label><select id="dsel"><option value="">Choisir votre département</option>${depts.map(x=>{const[nd,dn]=x.split("|");return `<option value="${esc(dn)}">${esc(nd)} ${esc(dn)}</option>`;}).join("")}</select><span class="meta">ou cherchez un nom dans la barre de recherche</span>
-    <ul class="circs" id="dres"></ul></div></section>`:""}
-  <section class="wrap une"><div class="une-main">
-    ${derniereActivite()}
-    <p class="cat une-k">À la une : vote du ${fd(s.d)}</p>
-    <h1 class="${headline(s).length>110?"h1s":"h1"}">${esc(headline(s))}</h1>
-    <p class="lede">${esc(positionsResume(s))}</p>
-    <p class="meta">${esc(cap(s.tl||"scrutin public"))} n° ${s.n}, ${fd(s.d,true)}. Source : ${ext(offScr(s.n),"Assemblée nationale")}.</p>
-    <p class="acts"><a href="#/scrutin/${s.n}">Comprendre ce vote</a>${SCR2LOI[s.n]?`<a href="#/loi/${esc(SCR2LOI[s.n].id)}">Voir le texte et son parcours</a>`:""}</p>
-    <figure class="hemi-fig" style="margin-left:0;margin-right:0">${hemicycle(s,{anim:true})}<figcaption>${legendHTML(s)}</figcaption></figure></div>
-    <aside class="une-side" aria-labelledby="ag-t"><h2 class="h3" id="ag-t">Autres votes importants</h2>
-      <ul class="side-list">${recents.map(x=>`<li><a href="#/scrutin/${x.n}">${esc(cap(x.ti))}</a><div class="meta">${fds(x.d)} : ${x.adopte?"adopté":"rejeté"}, ${n(x.po)} pour, ${n(x.co)} contre</div></li>`).join("")}</ul>
-      <p class="acts meta" style="margin-top:14px"><a href="#/calendrier">Le mois en résumé</a><a href="#/votes">Tous les scrutins</a></p></aside></section>
-  <section class="wrap sec rel-sec" aria-labelledby="rj-t"><div class="sec-h"><h2 class="h2" id="rj-t">Le relevé</h2><span class="meta">${esc(DATA.label)}</span></div>
-    <div class="trio">
-      <div><p class="cat">Un chiffre</p><h3 class="h3">${pc(MED[K].partS)} : participation médiane des députés ${enExercice()} aux scrutins solennels</h3><p class="meta" style="margin-top:8px">Aux scrutins publics de toute nature, souvent tenus tard le soir sur des amendements : ${pc(MED[K].part)}. <a href="#/methode/indicateurs">Comment c'est calculé</a></p></div>
-      <div><p class="cat">Dernière loi promulguée</p>${lp?`<h3 class="h3"><a href="#/loi/${esc(lp.id)}">${esc(cap(lp.titre))}</a></h3><p class="meta" style="margin-top:8px">Promulguée le ${fd(lp.prom.date)}.</p>`:`<h3 class="h3">Aucune loi promulguée dans les données de cette législature</h3>`}</div>
-      <div><p class="cat">La base</p><h3 class="h3">${n(IDX.legislatures.reduce((a,x)=>a+x.nb,0))} scrutins publics depuis ${IDX.legislatures.length?last(IDX.legislatures).premier.slice(0,4):"2012"}, tous reliés à leur source officielle</h3><p class="meta" style="margin-top:8px"><a href="#/methode/sources">Sources et données brutes</a></p></div></div></section>
-  <section class="wrap sec" aria-labelledby="ex-t" style="padding-top:8px"><div class="sec-h"><h2 class="h2" id="ex-t">Explorer</h2></div>
-    <div class="quad trois-x">
-      <a href="#/simulateur"><span class="h3">Simulateur de coalition</span><span class="meta">Combien de sièges réunissent deux groupes, et à quelle fréquence ils votent ensemble.</span></a>
-      <a href="#/themes"><span class="h3">Les votes par thème</span><span class="meta">Agriculture, logement, santé : la position de chaque groupe, texte par texte.</span></a>
-      <a href="#/codes"><span class="h3">Codes et articles de loi</span><span class="meta">Le Code civil, la Constitution et les grands codes, avec ce qui a changé et la référence prête à citer.</span></a>
-    </div></section>
-  <section class="wrap sec" aria-labelledby="co-t" style="padding-top:8px"><div class="sec-h"><h2 class="h2" id="co-t">Comprendre</h2></div>
-    <div class="quad">${COMP.map(c=>`<a href="#/comprendre/${c.id}"><span class="h3">${c.titre}</span><span class="meta">${c.sous}</span></a>`).join("")}</div></section>`,
+  <section class="wrap acc-hero" aria-labelledby="acc-t">
+    <h1 class="h1" id="acc-t">La politique française, expliquée simplement</h1>
+    <p class="lede">Ce que votent les députés, les lois en cours, les élus et l'élection présidentielle, d'après les sources officielles. Gratuit, sans publicité et sans parti pris.</p>
+    <nav class="acc-portes" aria-label="Accès principaux">
+      <a href="#/elus"><span class="h3">Les élus</span><span class="meta">Votre député, ses votes, sa participation</span></a>
+      <a href="#/lois"><span class="h3">Les lois</span><span class="meta">Les textes en cours et leur parcours</span></a>
+      <a href="#/votes"><span class="h3">Les votes</span><span class="meta">Chaque scrutin, expliqué simplement</span></a>
+      <a href="#/codes"><span class="h3">Les codes</span><span class="meta">La Constitution, le Code civil, les articles à citer</span></a>
+    </nav>
+    ${COURANTE?`<div class="acc-trouver"><label class="lab" for="dsel">Qui vous représente ?</label><select id="dsel"><option value="">Choisir votre département</option>${depts.map(x=>{const[nd,dn]=x.split("|");return `<option value="${esc(dn)}">${esc(nd)} ${esc(dn)}</option>`;}).join("")}</select>
+      <ul class="circs" id="dres"></ul></div>`:""}
+  </section>
+  <div class="wrap acc-front">
+    <section class="acc-une" aria-labelledby="au-t">
+      <p class="cat">À la une : ${rel?`le vote d'${rel}, ${fd(jour,true)}`:`dernière séance de vote, ${fd(jour,true)}`}</p>
+      <h2 class="h2" id="au-t">${plusieurs?esc(titre):`<a href="#/scrutin/${s.n}">${esc(cap(titre))}</a>`}</h2>
+      ${plusieurs?`<ul class="une-motions">${M.map(x=>`<li><a href="#/scrutin/${x.n}">${esc(cap(parQui(x)||"motion de censure n° "+x.n))}</a> : ${n(x.po)} voix pour, ${n(x.rq)} étaient nécessaires. ${x.adopte?"Adoptée":"Rejetée"}.</li>`).join("")}</ul>`:s.moc?`<p class="une-texte">${esc(cap(s.ti))}.</p>`:""}
+      ${!ens&&(loi||tx)?`<p class="une-texte">Texte examiné : ${loi?`<a href="#/loi/${esc(loi.id)}">${esc(cap(loi.titre))}</a>`:esc(cap(tx))}${lec?` <span class="meta">(${esc(lec)})</span>`:""}</p>`:""}
+      ${s.moc?"":`<div class="une-vote"><div class="mini-vote" role="img" aria-label="${esc(`${n(s.po)} pour, ${n(s.co)} contre, ${n(s.ab||0)} ${plural(s.ab||0,"abstention")}`)}"><i class="r1" style="width:${pcw(s.po)}"></i><i class="r2" style="width:${pcw(s.co)}"></i><i class="r3" style="width:${pcw(s.ab)}"></i></div>
+      <p class="une-chiffres" aria-hidden="true"><span class="po">${n(s.po)} pour</span><span class="co">${n(s.co)} contre</span><span>${n(s.ab||0)} ${plural(s.ab||0,"abstention")}</span></p></div>
+      <p class="meta">${esc(positionsResume(s))}</p>`}
+      ${expl?`<p class="une-expl">${esc(expl)}</p>`:""}
+      <p class="acc-liens">${plusieurs?"":`<a href="#/scrutin/${s.n}">Comprendre ce vote</a>`}${loi?`<a href="#/loi/${esc(loi.id)}">Le parcours du texte</a>`:""}${nbJour>1?`<a href="#/votes">Les ${n(nbJour)} votes de cette séance</a>`:""}</p>
+      <section class="une-actu" aria-labelledby="aa-t">
+        <div class="une-actu-h"><h3 class="h3" id="aa-t">L'actualité politique</h3><a href="#/actualites">Toutes les actualités</a></div>
+        ${A.length?`<ol class="fil-une">${A.map(a=>`<li><span class="meta">${esc(a.src)}, ${jourRel(a.date)||fd(a.date)}</span>${ext(a.lien,esc(a.titre))}</li>`).join("")}</ol>`:`<p class="meta">Les titres de LCP, de Public Sénat et de vie-publique.fr s'affichent ici à chaque mise à jour du site.</p>`}
+      </section>
+    </section>
+    <div class="acc-col">
+      <section class="acc-carte acc-presi" aria-labelledby="ap-t">
+        <p class="cat">${c1?cap(c1):"2027"}</p><h2 class="h3" id="ap-t">Présidentielle 2027</h2>
+        <p class="ui">Premier tour le dimanche 18 avril, second tour le dimanche 2 mai 2027.</p>
+        <p class="acc-liens"><a href="#/presidentielle">L'essentiel</a><a href="#/candidats">Les candidats</a><a href="#/campagne">Actualités de la campagne</a></p>
+      </section>
+    </div>
+  </div>
+  <section class="wrap sec acc-comp" aria-labelledby="co-t"><div class="sec-h"><h2 class="h2" id="co-t">Comprendre</h2></div>
+    <div class="quad">${COMP.slice(0,4).map(c=>`<a href="#/comprendre/${c.id}"><span class="h3">${c.titre}</span><span class="meta">${c.sous}</span></a>`).join("")}</div></section>`,
   after(){const sel=$("#dsel");if(sel)sel.addEventListener("change",ev=>{const dn=ev.target.value,out=$("#dres");
       out.innerHTML=dn?actifs().filter(d=>d.dept===dn).sort((a,b)=>a.circ-b.circ).map(d=>`<li>${ord(d.circ)} : <a href="#/elu/${d.id}">${esc(d.nc)}</a> <span class="meta">(${esc(grp(d.groupe).sigle)})</span></li>`).join(""):"";frTypo(out);});}};
 }
@@ -1183,7 +1368,7 @@ function pageLoi(id){
 
     <section class="lv2" style="margin-top:30px"><h2 class="h2">Comprendre ce texte</h2>
       ${(l.auteurs||[]).length&&listeNoms(l.auteurs,5)?`<p class="ui">Déposé par ${listeNoms(l.auteurs,5)}.</p>`:""}
-      ${ed&&ed.change&&ed.change.length?`<h3 class="h3" style="margin-top:18px">Ce qui change</h3><div class="tw" style="margin-top:10px"><table class="t"><thead><tr><th>Avant</th><th>Après</th><th>Qui est concerné</th></tr></thead><tbody>${ed.change.map(r=>`<tr>${r.map(c=>`<td>${esc(c)}</td>`).join("")}</tr>`).join("")}</tbody></table></div>`:""}
+      ${ed&&ed.change&&ed.change.length?`<h3 class="h3" style="margin-top:18px">Ce qui change</h3><div class="tw" style="margin-top:10px"><table class="t t-cartes"><thead><tr><th>Avant</th><th>Après</th><th>Qui est concerné</th></tr></thead><tbody>${ed.change.map(r=>`<tr>${r.map(c=>`<td>${esc(c)}</td>`).join("")}</tr>`).join("")}</tbody></table></div>`:""}
       ${rail.length?`<h3 class="h3" style="margin-top:22px">Son parcours</h3>${cheminHTML(l)}`:""}
       <p class="explain ui">${esc(suiteLoi(l))}</p>
       ${senatHTML(l)}
@@ -1198,10 +1383,10 @@ function pageLoi(id){
         ${(l.rapporteurs||[]).length?`<dt>Rapporteurs</dt><dd>${listeNoms(l.rapporteurs)}</dd>`:""}
         ${l.cc?`<dt>Conseil constitutionnel</dt><dd>${fd(l.cc.date)} : ${esc(l.cc.lib||"décision")}${l.cc.url?" ; "+ext(l.cc.url,"lire la décision"):""}</dd>`:""}
         ${l.prom?`<dt>Promulgation</dt><dd>${fd(l.prom.date)}${l.prom.titre?" : "+esc(l.prom.titre):""}${l.prom.url?" ; "+ext(l.prom.url,"Légifrance"):""}</dd>`:""}</dl>
-      ${(l.etapes||[]).length?`<h3 class="h3" style="margin-top:24px">Toutes les étapes enregistrées</h3><div class="tw" style="margin-top:10px"><table class="t"><thead><tr><th>Date</th><th>Étape</th><th>Résultat</th><th>Libellé officiel</th></tr></thead><tbody>${l.etapes.map(e=>`<tr><td class="dt">${fds(e[2])}</td><td>${esc(etapeLib(e,l))}</td><td>${e[3]?esc(cap(e[3])):'<span class="meta">—</span>'}</td><td class="meta">${esc(e[1]||"")} <span class="code-a">${esc(e[0])}</span></td></tr>`).join("")}</tbody></table></div>`:""}
+      ${(l.etapes||[]).length?`<h3 class="h3" style="margin-top:24px">Toutes les étapes enregistrées</h3><div class="tw" style="margin-top:10px"><table class="t t-cartes"><thead><tr><th class="tc sl">Date</th><th class="tm">Étape</th><th class="tc">Résultat</th><th>Libellé officiel</th></tr></thead><tbody>${l.etapes.map(e=>`<tr><td class="dt">${fds(e[2])}</td><td>${esc(etapeLib(e,l))}</td><td>${e[3]?esc(cap(e[3])):'<span class="meta">—</span>'}</td><td class="meta">${esc(e[1]||"")} <span class="code-a">${esc(e[0])}</span></td></tr>`).join("")}</tbody></table></div>`:""}
       ${am?`<h3 class="h3" style="margin-top:24px">Amendements par auteur</h3><p class="meta" style="margin:6px 0 10px">${n(am.t)} amendements déposés sur les textes de ce dossier à l'Assemblée, dont ${n(am.a)} adoptés (${pc(am.a/am.t)}).</p>
         <div class="tw"><table class="t"><thead><tr><th>Déposés par</th><th class="n">Déposés</th><th class="n">Adoptés</th><th class="n">Taux d'adoption</th></tr></thead><tbody>${am.g.map(r=>`<tr><td>${esc(glab(r[0]))}</td><td class="n">${n(r[1])}</td><td class="n">${n(r[2])}</td><td class="n">${pc(r[1]?r[2]/r[1]:null)}</td></tr>`).join("")}</tbody></table></div>`:""}
-      ${scr.length?`<h3 class="h3" style="margin-top:24px">Tous les votes publics sur ce texte</h3><div class="tw" style="margin-top:10px"><table class="t"><thead><tr><th>Date</th><th>Scrutin</th><th>Résultat</th></tr></thead><tbody>${scr.slice().reverse().map(s=>`<tr><td class="dt">${fds(s.d)}</td><td class="w"><a href="#/scrutin/${s.n}">${esc(cap(s.ti))}</a></td><td class="dt">${s.adopte?"Adopté":"Rejeté"} <span class="meta">(${n(s.po)} pour, ${n(s.co)} contre)</span></td></tr>`).join("")}</tbody></table></div>`:""}
+      ${scr.length?`<h3 class="h3" style="margin-top:24px">Tous les votes publics sur ce texte</h3><div class="tw" style="margin-top:10px"><table class="t t-cartes"><thead><tr><th class="tc sl">Date</th><th class="tm">Scrutin</th><th class="tc">Résultat</th></tr></thead><tbody>${scr.slice().reverse().map(s=>`<tr><td class="dt">${fds(s.d)}</td><td class="w"><a href="#/scrutin/${s.n}">${esc(cap(s.ti))}</a></td><td class="dt">${s.adopte?"Adopté":"Rejeté"} <span class="meta">(${n(s.po)} pour, ${n(s.co)} contre)</span></td></tr>`).join("")}</tbody></table></div>`:""}
       <h3 class="h3" style="margin-top:24px">Sources officielles</h3><ul class="pieces" style="margin-top:10px"><li>${ext(offDos(l),"Dossier législatif sur le site de l'Assemblée nationale")}</li>${safeUrl(l.senat)?`<li>${ext(l.senat,"Dossier législatif sur le site du Sénat")}</li>`:""}${l.prom&&l.prom.url?`<li>${ext(l.prom.url,"Texte promulgué sur Légifrance")}</li>`:""}${l.cc&&l.cc.url?`<li>${ext(l.cc.url,"Décision du Conseil constitutionnel")}</li>`:""}${fin?`<li>${ext(offScr(fin.n),"Scrutin n° "+fin.n+" sur le site de l'Assemblée")}</li>`:""}</ul>
       ${ed?`<p class="meta" style="margin-top:12px">Résumé rédigé par ${esc(ed.auteur)}, vérifié par ${esc(ed.verif)}.</p>`:""}</section>
     <p class="dlg-acts" style="margin-top:28px"><button type="button" class="btn btn-p" id="partager">${fin?"Partager et citer":"Citer ce texte"}</button></p></div>`,after(){bindLv();
@@ -1218,7 +1403,7 @@ function pageElus(){
     {k:"part",label:"Tous scrutins",tip:"Trier par participation à tous les scrutins publics",wd:"12%",num:1,desc:1,hide:"hs",get:d=>d.st[K].part,render:d=>pc(d.st[K].part)},
     {k:"align",label:"Comme son groupe",tip:"Trier par part des votes identiques à la position de son groupe",wd:"14%",num:1,desc:1,hide:"hs",get:d=>d.st[K].align,render:d=>pc(d.st[K].align)},
     ...(DATA.amendements&&DATA.amendements.total?[{k:"am",label:"Amende­ments",tip:"Trier par nombre d'amendements déposés en premier signataire",wd:"11%",num:1,desc:1,get:d=>d.am?d.am[0]:0,render:d=>n(d.am?d.am[0]:0)}]:[])];
-  return {title:"Élus",html:`<div class="wrap sec"><h1 class="h1s">Élus</h1><p class="lede intro">Les ${n(actifs().length)} députés ${enExercice()} de la ${esc(DATA.label)}. Participation : part des scrutins où le député a voté, pour les scrutins solennels puis pour tous les scrutins. Cliquez sur un titre de colonne pour trier, à nouveau pour inverser.</p>
+  return {title:"Élus",html:`<div class="wrap sec"><h1 class="h1s">Élus</h1><p class="lede intro">Les ${n(actifs().length)} députés ${enExercice()} de la ${esc(DATA.label)}. Participation : part des scrutins où le député a voté, pour les scrutins solennels puis pour tous les scrutins. Pour trier, touchez ou cliquez un intitulé ; une seconde fois pour inverser l'ordre.</p>
     <div class="filters"><div><label class="lab" for="ef-q">Nom</label><input id="ef-q" type="search" placeholder="Nom ou prénom" style="width:220px"></div>
       <div><label class="lab" for="ef-g">Groupe</label><select id="ef-g"><option value="all">Tous les groupes</option>${GRP.filter(g=>g.effectif>0).map(g=>`<option value="${g.i}">${esc(g.nom)} (${esc(g.sigle)})</option>`).join("")}</select></div>
       <div><label class="lab" for="ef-d">Département</label><select id="ef-d"><option value="">Tous</option>${depts.map(x=>`<option>${esc(x)}</option>`).join("")}</select></div>
@@ -1292,7 +1477,7 @@ function pageGroupes(){
     {k:"rice",label:"Cohésion",wd:"10%",num:1,desc:1,get:g=>g.rice,render:g=>g.rice==null?'<span class="meta">sans objet</span>':pc(g.rice)},
     {k:"partS",label:"Solennels (médiane)",tip:"Trier par participation médiane aux scrutins solennels",wd:"17%",hide:"hm",num:1,desc:1,get:g=>g.partSMed,render:g=>pc(g.partSMed)},
     {k:"partM",label:"Tous scrutins (médiane)",tip:"Trier par participation médiane à tous les scrutins",wd:"18%",hide:"hm",num:1,desc:1,get:g=>g.partMed,render:g=>pc(g.partMed)}];
-  return {title:"Groupes",html:`<div class="wrap sec"><h1 class="h1s">Groupes</h1><p class="lede intro">Les votes se lisent par groupe parlementaire. Un groupe n'est pas un parti : chaque fiche montre aussi les partis de rattachement de ses membres. Cliquez sur un titre de colonne pour trier.</p>
+  return {title:"Groupes",html:`<div class="wrap sec"><h1 class="h1s">Groupes</h1><p class="lede intro">Les votes se lisent par groupe parlementaire. Un groupe n'est pas un parti : chaque fiche montre aussi les partis de rattachement de ses membres. Pour trier, touchez ou cliquez un intitulé ; une seconde fois pour inverser l'ordre.</p>
     <p class="ui"><a href="#/simulateur">Simuler une coalition entre groupes</a></p>
     <div id="gf-out" style="margin-top:22px"></div>
     <div class="box" style="max-width:820px"><h2>Définitions</h2><p><strong>Cohésion</strong> : à chaque scrutin, écart entre les voix pour et contre des membres du groupe, rapporté à leurs votes exprimés (indice de Rice). 100 % : tous votent pareil ; 0 % : partage à égalité. Moyenne sur tous les scrutins publics, abstentions non comptées.</p><p><strong>Participation médiane</strong> : la moitié des membres du groupe participe davantage, l'autre moitié moins.</p><p>Effectifs au ${fd((DATA.au||DATA.maj).slice(0,10))}.</p></div>
@@ -1338,19 +1523,19 @@ function resumeElu(dp){
   const c=(id,v,l)=>`<button type="button" data-ancre="${id}"><b>${v}</b><span>${l}</span></button>`;
   return `<nav class="resume-elu" aria-label="En bref">${c("profil",pc(st.partS),"de participation aux scrutins solennels")}${c("activite",amOk&&dp.am?n(dp.am[0]):"—","amendements déposés")}${c("votes",dif==null?"—":n(dif),"votes différents de son groupe")}</nav>`;
 }
-document.addEventListener("click",e=>{const b=e.target.closest&&e.target.closest("[data-ancre]");if(!b)return;const el=document.getElementById(b.dataset.ancre);if(el)el.scrollIntoView({behavior:matchMedia("(prefers-reduced-motion: reduce)").matches?"auto":"smooth",block:"start"});});
+document.addEventListener("click",e=>{const b=e.target.closest&&e.target.closest("[data-ancre]");if(!b)return;const el=document.getElementById(b.dataset.ancre);if(el){el.scrollIntoView({behavior:matchMedia("(prefers-reduced-motion: reduce)").matches?"auto":"smooth",block:"start"});if(el.getAttribute("tabindex")==="-1")el.focus({preventScroll:true});}});
 /* ============ Votes ============ */
 let VF={type:"all",per:"all",res:"all",q:"",lim:50,sort:{k:"n",dir:-1}};
 function pageVotes(){
   VF.lim=50;
-  const cols=[{k:"n",label:"N°",wd:"7%",num:1,desc:1,get:s=>s.n,render:s=>`<a href="#/scrutin/${s.n}">${s.n}</a>`},
+  const cols=[{k:"n",label:"N°",wd:"7%",num:1,desc:1,lien:1,get:s=>s.n,render:s=>`<a href="#/scrutin/${s.n}">${s.n}</a>`},
     {k:"d",label:"Date",wd:"11%",get:s=>s.d+String(s.n).padStart(6,"0"),render:s=>`<span style="white-space:nowrap">${fds(s.d)}</span>`},
     {k:"ti",label:"Objet",get:s=>s.ti,render:s=>`${esc(cap(s.ti))}${s.sol?' <span class="meta">(solennel)</span>':""}`},
     {k:"res",label:"Résultat",wd:"9%",get:s=>s.adopte?0:1,render:s=>s.adopte?"Adopté":"Rejeté"},
     {k:"po",label:"Pour",wd:"7%",num:1,desc:1,get:s=>s.po,render:s=>n(s.po)},
     {k:"co",label:"Contre",wd:"7%",hide:"hs",num:1,desc:1,get:s=>s.moc?null:s.co,render:s=>s.moc?"—":n(s.co)},
     {k:"ec",label:"Écart",wd:"7%",hide:"hm",num:1,desc:1,get:s=>s.moc?null:Math.abs(s.po-s.co),render:s=>s.moc?"—":n(Math.abs(s.po-s.co))}];
-  return {title:"Votes",html:`<div class="wrap sec"><h1 class="h1s">Votes</h1><p class="lede intro">Les ${n(SC.length)} scrutins publics de la ${esc(DATA.label)}, du ${fd(SC[0].d)} au ${fd(last(SC).d)}, avec le vote de chaque député. Cliquez sur un titre de colonne pour trier ; cliquez à nouveau pour inverser.</p>
+  return {title:"Votes",html:`<div class="wrap sec"><h1 class="h1s">Votes</h1><p class="lede intro">Les ${n(SC.length)} scrutins publics de la ${esc(DATA.label)}, du ${fd(SC[0].d)} au ${fd(last(SC).d)}, avec le vote de chaque député. Pour trier, touchez ou cliquez un intitulé ; une seconde fois pour inverser l'ordre.</p>
     <p class="ui"><a href="#/comparateur">Comparer les votes de deux députés ou de deux groupes</a>${COURANTE?' ; <a href="flux/votes.xml">suivre les votes importants (RSS)</a>':""}.</p>
     <div class="filters"><div><label class="lab" for="vf-type">Type</label><select id="vf-type"><option value="all">Tous les scrutins</option><option value="SPS">Scrutins solennels</option><option value="MOC">Motions de censure</option></select></div>
       <div><label class="lab" for="vf-res">Résultat</label><select id="vf-res"><option value="all">Tous</option><option value="a">Adoptés</option><option value="r">Rejetés</option></select></div>
@@ -1369,16 +1554,17 @@ function pageVotes(){
 }
 function pageScrutin(num){
   const s=SCN[num];if(!s)return pageNotFound();
-  const loi=SCR2LOI[s.n],by=positionsPar(s),txt=texteDe(s.ti);
+  const loi=loiDe(s),by=positionsPar(s),txt=texteDe(s.ti),ens=estEnsemble(s),lec=lectureDe(s.ti);
+  const h1=s.moc||!txt||ens?headline(s):`L'Assemblée ${s.adopte?"adopte":"rejette"} ${objetCourt(s)}, par ${n(s.po)} voix pour et ${n(s.co)} contre`;
   const mises=s.m&&s.m.length?`<section style="margin-top:28px"><h2 class="h3">Mises au point</h2><p class="ui" style="margin-top:8px">${s.m.map(([di,c])=>{const dp=DEP[di];return `${eluLink(dp)}, enregistré ${VLOW[s.v[dp.i]]}, indique avoir voulu voter ${VLOW[String(c)]}.`;}).join(" ")} Le résultat publié n'est pas modifié.</p></section>`:"";
   return {title:`Scrutin n° ${s.n}`,html:`<div class="wrap sec col" style="--col:980px">
     <p class="meta"><a href="#/votes">Votes</a>, ${esc(s.tl||"scrutin public")} n° ${s.n}</p>
-    <h1 class="h1s">${esc(headline(s))}</h1>
+    <h1 class="h1s">${esc(cap(h1))}</h1>
+    ${loi||(txt&&!ens)?`<p class="une-texte" style="margin-top:10px">Texte examiné : ${loi?`<a href="#/loi/${esc(loi.id)}">${esc(cap(loi.titre))}</a>`:esc(cap(txt))}${lec?` <span class="meta">(${esc(lec)})</span>`:""}</p>`:""}
     ${lvBar()}
     <p class="phrase" style="margin-top:14px">${esc(phraseEssentiel(s))}</p>
     <figure style="margin:20px 0 0">${hemicycle(s)}<figcaption>${legendHTML(s)}</figcaption></figure>
-    <section class="lv2" style="margin-top:28px"><h2 class="h2">Ce que ce vote signifie</h2><div class="explain">${expliquer(s).map(p=>`<p class="ui">${esc(p)}</p>`).join("")}</div>
-      ${txt||loi?`<p class="ui">Texte concerné : ${loi?`<a href="#/loi/${esc(loi.id)}">${esc(cap(loi.titre))}</a>`:esc(cap(txt))}.</p>`:""}</section>
+    <section class="lv2" style="margin-top:28px"><h2 class="h2">Ce que ce vote signifie</h2><div class="explain">${expliquer(s).map(p=>`<p class="ui">${esc(p)}</p>`).join("")}</div></section>
     <section class="lv2" style="margin-top:22px"><h2 class="h2">Qui a voté quoi</h2>
       <ul class="ui">${[[1,"Ont voté majoritairement pour"],[2,"Ont voté majoritairement contre"],[3,"Se sont majoritairement abstenus"]].filter(([k])=>by[k].length).map(([k,l])=>`<li>${l} : ${by[k].join(", ")}.</li>`).join("")}</ul>
       <p class="ui">${s.moc?`Seules les voix favorables à la motion sont comptées.`:`Écart entre pour et contre : ${n(Math.abs(s.po-s.co))} ${plural(Math.abs(s.po-s.co),"voix","voix")}. Suffrages exprimés (pour et contre) : ${n(s.ex)} ; majorité requise : ${n(s.rq)}.`}</p></section>
@@ -1417,7 +1603,7 @@ function pageCmp(q){
       else{const opts=sel=>groupesActifs().filter(g=>!g.ni).map(g=>`<option value="${g.i}"${g.i===sel?" selected":""}>${esc(g.nom)} (${esc(g.sigle)})</option>`).join("");
         box.innerHTML=`<div class="cmp-pick"><div><label class="lab" for="ga">Premier groupe</label><select id="ga">${opts(CMP.a.id)}</select></div><span class="vs">et</span><div><label class="lab" for="gb">Second groupe</label><select id="gb">${opts(CMP.b.id)}</select></div></div>`;
         $("#ga").addEventListener("change",e=>{CMP.a={t:"grp",id:+e.target.value};run();});$("#gb").addEventListener("change",e=>{CMP.b={t:"grp",id:+e.target.value};run();});}frTypo(box);};
-    const run=()=>{const A=CMP.a,B=CMP.b,out=$("#cmp-out");
+    const run=suite=>{if(suite!==true)CMP.lim=25;const A=CMP.a,B=CMP.b,out=$("#cmp-out");
       if(A.t===B.t&&A.id===B.id){out.innerHTML=`<p class="empty-note">Choisissez deux entités différentes.</p>`;frTypo(out);return;}
       const L=SC.filter(s=>(CMP.per==="all"||s.per===+CMP.per)&&(CMP.type==="all"||s.t===CMP.type)&&!s.moc);let N=0,Acc=0;const div=[],marks=[];
       L.forEach(s=>{const a=entVote(A,s),b=entVote(B,s);if(a&&b){N++;if(a===b){Acc++;marks.push("acc");}else{div.push(s);marks.push("div");}}else marks.push("abs");});
@@ -1427,8 +1613,9 @@ function pageCmp(q){
       const w=Math.max(L.length,1),bw=L.length>1500?2:L.length>600?3:6;
       const code=`<svg class="code" viewBox="0 0 ${w*bw} 64" preserveAspectRatio="none" role="img" aria-label="${esc(`Un trait par scrutin, dans l'ordre chronologique : ${Acc} votes identiques, ${div.length} divergences`)}">${marks.map((m,i)=>m==="abs"?"":`<rect class="${m}" x="${i*bw}" y="0" width="${Math.max(1,bw-1)}" height="64"/>`).join("")}</svg>`;
       const ax=L.length?`<div class="code-ax"><span>${fds(L[0].d)}</span><span>${fds(last(L).d)}</span></div><div class="rlg" style="justify-content:flex-start;margin-top:10px"><span class="lg"><i style="border-top:10px solid var(--bord);width:6px"></i>Même vote</span><span class="lg"><i style="border-top:10px solid var(--bleu2);width:6px"></i>Votes différents</span><span class="lg">Blanc : l'un des deux n'a pas voté</span></div>`:"";
-      const tbl=div.length?`<h2 class="h3" style="margin-top:36px">Les ${n(div.length)} ${plural(div.length,"divergence")}${div.length>200?", 200 plus récentes affichées":""}</h2><div class="tw" style="margin-top:12px"><table class="t"><thead><tr><th>Date</th><th>Scrutin</th><th>${la}</th><th>${lb}</th></tr></thead><tbody>${div.slice(-200).reverse().map(s=>`<tr><td style="white-space:nowrap">${fds(s.d)}</td><td class="w"><a href="#/scrutin/${s.n}">${esc(cap(s.ti))}</a></td><td><span class="v v${entVote(A,s)}">${POSL[entVote(A,s)]}</span></td><td><span class="v v${entVote(B,s)}">${POSL[entVote(B,s)]}</span></td></tr>`).join("")}</tbody></table></div>`:"";
-      out.innerHTML=head+(L.length?code+ax:`<p class="empty-note">Aucun scrutin ne correspond aux filtres.</p>`)+tbl;frTypo(out);};
+      const tbl=div.length?`<h2 class="h3" style="margin-top:36px">Les ${n(div.length)} ${plural(div.length,"divergence")}${div.length>200?" (les 200 plus récentes sont consultables ici)":""}</h2><div class="tw" style="margin-top:12px"><table class="t t-cartes"><thead><tr><th class="tc sl">Date</th><th class="tm">Scrutin</th><th class="tc">${la}</th><th class="tc">${lb}</th></tr></thead><tbody>${div.slice(-200).reverse().slice(0,CMP.lim).map(s=>`<tr><td style="white-space:nowrap">${fds(s.d)}</td><td class="w"><a href="#/scrutin/${s.n}">${esc(cap(s.ti))}</a></td><td><span class="v v${entVote(A,s)}">${POSL[entVote(A,s)]}</span></td><td><span class="v v${entVote(B,s)}">${POSL[entVote(B,s)]}</span></td></tr>`).join("")}</tbody></table></div>${Math.min(div.length,200)>CMP.lim?`<button type="button" class="btn btn-q more" id="cmp-m">Afficher 25 divergences de plus</button>`:""}`:"";
+      out.innerHTML=head+(L.length?code+ax:`<p class="empty-note">Aucun scrutin ne correspond aux filtres.</p>`)+tbl;frTypo(out);
+      const m=$("#cmp-m");if(m)m.addEventListener("click",()=>{const k=CMP.lim;CMP.lim+=25;run(true);const tr=$$("#cmp-out tbody tr")[k],l=tr&&$("a",tr);if(l)l.focus();});};
     $$("[data-cm]").forEach(b=>b.addEventListener("click",()=>{const m=b.dataset.cm;if(m===CMP.mode)return;CMP.mode=m;
       if(m==="elu"){const A=actifs();CMP.a={t:"elu",id:A[0].i};CMP.b={t:"elu",id:A.find(d=>d.groupe!==A[0].groupe).i};}else{const G=groupesActifs().filter(g=>!g.ni);CMP.a={t:"grp",id:G[0].i};CMP.b={t:"grp",id:G[1].i};}pickers();run();}));
     $("#cf-p").addEventListener("change",e=>{CMP.per=e.target.value;run();});$("#cf-t").addEventListener("change",e=>{CMP.type=e.target.value;run();});pickers();run();}};
@@ -1507,10 +1694,10 @@ function pageMethode(){
     <p class="lede intro">Tout ce qui figure sur ce site est calculé à partir des données publiques officielles de l'Assemblée nationale, sans interprétation ni jugement, et peut être vérifié par n'importe qui.</p>
     <section id="sources" style="margin-top:40px"><h2 class="h2">Sources et données brutes</h2>
       <p style="margin-top:12px">Votes, députés, groupes, partis de rattachement, commissions et dossiers législatifs proviennent exclusivement des données ouvertes de l'Assemblée nationale, publiées sous Licence Ouverte. Les fichiers sont téléchargés et recalculés deux fois par jour ; dernière vérification : ${fd(DATA.maj.slice(0,10))}.</p>
-      <div class="tw"><table class="t"><thead><tr><th>Législature</th><th>Période</th><th class="n">Scrutins</th><th>Données</th></tr></thead><tbody>${IDX.legislatures.map(x=>`<tr><td>${esc(x.label)}</td><td>${fds(x.premier)} au ${fds(x.dernier)}</td><td class="n">${n(x.nb)}</td><td><a href="${esc(x.fichier)}" download>JSON</a></td></tr>`).join("")}</tbody></table></div>
+      <div class="tw"><table class="t t-cartes"><thead><tr><th class="tm">Législature</th><th class="tc sl">Période</th><th class="n tc">Scrutins</th><th class="tc sl">Données</th></tr></thead><tbody>${IDX.legislatures.map(x=>`<tr><td>${esc(x.label)}</td><td>${fds(x.premier)} au ${fds(x.dernier)}</td><td class="n">${n(x.nb)}</td><td><a href="${esc(x.fichier)}" download>JSON</a></td></tr>`).join("")}</tbody></table></div>
       <ul class="pieces"><li>${ext(DATA.sources.scrutins,"Fichier officiel des scrutins de cette législature")}</li><li>${ext(DATA.sources.acteurs,"Fichier officiel des députés, mandats et organes")}</li>${DATA.sources.dossiers?`<li>${ext(DATA.sources.dossiers,"Fichier officiel des dossiers législatifs")}</li>`:""}</ul></section>
     <section id="indicateurs" style="margin-top:40px"><h2 class="h2">Comment sont calculés les chiffres</h2>
-      <div class="tw" style="margin-top:14px"><table class="t"><thead><tr><th>Indicateur</th><th>Calcul</th></tr></thead><tbody>
+      <div class="tw" style="margin-top:14px"><table class="t t-cartes"><thead><tr><th class="tm">Indicateur</th><th class="sl">Calcul</th></tr></thead><tbody>
       <tr><td>Participation aux scrutins solennels</td><td>Nombre de scrutins solennels où le député a voté (pour, contre ou abstention), divisé par le nombre de scrutins solennels tenus pendant son mandat.</td></tr>
       <tr><td>Participation à tous les scrutins</td><td>Même calcul sur l'ensemble des scrutins publics, y compris les votes d'amendements.</td></tr>
       <tr><td>Vote comme son groupe</td><td>Nombre de votes identiques à la position majoritaire que l'Assemblée publie pour le groupe du député à ce scrutin, divisé par ses votes exprimés. C'est le groupe parlementaire qui sert de référence, et non le parti, car l'Assemblée enregistre les votes par groupe.</td></tr>
@@ -1521,7 +1708,7 @@ function pageMethode(){
       <p class="ui">Résumés de lois : la phrase « en bref » est générée à partir des données officielles (dates, étapes, résultats des votes). Les résumés du contenu d'un texte sont rédigés et vérifiés par deux personnes distinctes avant publication, et signalés comme tels.</p></section>
     <section id="themes" style="margin-top:40px"><h2 class="h2">Thèmes, classements et limites</h2>
       <p style="margin-top:12px">Chaque scrutin reçoit au plus un thème, d'après les mots du titre du texte concerné. La liste des mots-clés est la suivante ; un texte qui n'en contient aucun reste sans thème.</p>
-      <div class="tw"><table class="t"><thead><tr><th>Thème</th><th>Mots recherchés dans le titre</th></tr></thead><tbody>${THEMES.map(t=>`<tr><td>${t[1]}</td><td class="meta">${esc(t[2].source.replace(/\\b|\(\?:|\)|\?|s\?/g,"").split("|").join(", "))}</td></tr>`).join("")}</tbody></table></div>
+      <div class="tw"><table class="t t-cartes"><thead><tr><th class="tm">Thème</th><th>Mots recherchés dans le titre</th></tr></thead><tbody>${THEMES.map(t=>`<tr><td>${t[1]}</td><td class="meta">${esc(t[2].source.replace(/\\b|\(\?:|\)|\?|s\?/g,"").split("|").join(", "))}</td></tr>`).join("")}</tbody></table></div>
       <p class="ui">Amendements : comptés dans le fichier officiel des amendements de l'Assemblée, relu une fois par semaine en raison de son volume. Sont comptés les amendements déposés en premier signataire, ceux qui ont été adoptés, et les cosignatures.</p>
       <p class="ui">Présence : l'Assemblée ne publie pas de relevé de présence en séance. Aucun site ne peut donc afficher un vrai taux de présence ; nous affichons la participation aux votes, sous ce nom.</p>
       <p class="ui">Codes : textes consolidés issus de la base LEGI de la Direction de l'information légale et administrative (la base de Légifrance), sous Licence Ouverte, relus chaque semaine. « Ce qui a changé » compare automatiquement la version en vigueur à la précédente, mot à mot. Les références à citer suivent l'usage universitaire (abréviation du code, numéro d'article, texte d'origine de la rédaction). Les explications de fond ne sont publiées que si elles ont été rédigées et vérifiées par deux personnes distinctes. Seule la publication au Journal officiel fait foi.</p>
@@ -1533,6 +1720,7 @@ function pageMethode(){
       <p class="ui"><strong>Sources.</strong> Uniquement les données et textes officiels (Assemblée nationale, Conseil constitutionnel, ministère de l'Intérieur, service-public.gouv.fr, Légifrance) et, pour les programmes, les documents publiés par les candidats eux-mêmes. Chaque information renvoie à sa source.</p>
       <p class="ui"><strong>Présentation.</strong> Candidats et groupes sont présentés dans l'ordre alphabétique, selon le même gabarit et les mêmes thèmes. Quand une information manque, la mention est la même pour tous.</p>
       <p class="ui"><strong>Ce que nous ne faisons pas.</strong> Ni sondage, ni pronostic, ni note, ni classement de candidats. Nous ne qualifions pas les positions : quand la position d'un groupe a changé d'un vote à l'autre sur un même texte, nous montrons les votes et leurs dates, sans parler de « contradiction », car un texte peut avoir été modifié entre-temps.</p>
+      <p class="ui"><strong>À la une.</strong> L'accueil met en avant le vote principal de la dernière séance de l'Assemblée (la veille, le plus souvent), choisi par une règle fixe et sans intervention humaine : les motions de censure s'il y en a (toutes, quand il y en a plusieurs), sinon le vote solennel, sinon le vote sur l'ensemble d'un texte, sinon le vote qui a réuni le plus de députés. Dessous, les derniers titres de LCP, de Public Sénat et de vie-publique.fr, à parts égales entre ces trois sources, repris tels quels avec un lien vers l'article.</p>
       <p class="ui"><strong>Vérification.</strong> Tout contenu rédigé est relu par une seconde personne avant publication. Toute erreur signalée est corrigée et consignée dans le journal des corrections, et toute personne citée dispose d'un droit de réponse.</p></section>
     <section id="corrections" style="margin-top:40px"><h2 class="h2">Journal des corrections</h2>${CORR.length?`<ul class="rows" style="margin-top:14px">${CORR.map(x=>`<li><p class="meta" style="margin:0 0 4px">${fd(x.date)}</p><p class="ui" style="margin:0">${esc(x.texte)}</p></li>`).join("")}</ul>`:`<p class="ui" style="margin-top:12px">Aucune correction publiée à ce jour.</p>`}</section>
     <section id="mentions" style="margin-top:40px"><h2 class="h2">Mentions légales</h2>
@@ -1549,7 +1737,7 @@ function pageMethode(){
     <section id="independance" style="margin-top:40px"><h2 class="h2">Indépendance</h2>
       <p style="margin-top:12px">Aux Voix ne reçoit aucun financement d'un parti, d'un élu, d'une entreprise ou d'un groupe d'intérêts, et n'affiche aucune publicité. Il ne note pas les élus et ne prend pas position sur les textes : il publie des faits officiels, avec leur source, et une méthode que chacun peut vérifier.</p></section>
     <section id="donnees-personnelles" style="margin-top:40px"><h2 class="h2">Données personnelles</h2>
-      <p style="margin-top:12px">${AUDIENCE?`Ce site ne dépose aucun cookie et n'affiche aucune publicité. Il mesure son audience avec GoatCounter, un outil sans cookie qui compte les pages consultées sans créer de profil individuel et sans suivre les visiteurs d'un site à l'autre. Les statistiques servent uniquement à savoir combien de personnes consultent le site et quelles pages. ${ext("https://www.goatcounter.com/help/privacy","Politique de confidentialité de GoatCounter")}. Aucun autre service tiers n'est utilisé.`:`Ce site ne dépose aucun cookie, n'utilise aucun outil de mesure d'audience ni aucun service tiers : ni publicité, ni police ou script chargés depuis un autre site.`} Seuls vos choix d'affichage (thème, niveau de lecture, législature) et le dernier vote mis en avant sur l'accueil, pour en proposer un autre à la visite suivante, sont conservés dans votre navigateur, sans être transmis. L'hébergeur conserve, pour des raisons de sécurité, les journaux techniques de connexion.</p>
+      <p style="margin-top:12px">${AUDIENCE?`Ce site ne dépose aucun cookie et n'affiche aucune publicité. Il mesure son audience avec GoatCounter, un outil sans cookie qui compte les pages consultées sans créer de profil individuel et sans suivre les visiteurs d'un site à l'autre. Les statistiques servent uniquement à savoir combien de personnes consultent le site et quelles pages. ${ext("https://www.goatcounter.com/help/privacy","Politique de confidentialité de GoatCounter")}. Aucun autre service tiers n'est utilisé.`:`Ce site ne dépose aucun cookie, n'utilise aucun outil de mesure d'audience ni aucun service tiers : ni publicité, ni police ou script chargés depuis un autre site.`} Seuls vos choix d'affichage (thème, niveau de lecture, législature) sont conservés dans votre navigateur, sans être transmis. L'hébergeur conserve, pour des raisons de sécurité, les journaux techniques de connexion.</p>
       <p class="ui">Les informations sur les députés (nom, circonscription, groupe, parti de rattachement, votes) sont des données publiques relatives à l'exercice de leur mandat, publiées par l'Assemblée nationale. Elles sont reproduites sans modification, pour l'information du public. Toute demande relative à ces données peut être adressée au contact ci-dessus.</p></section>
   </div>`};
 }
@@ -1600,7 +1788,8 @@ function pageSim(){
     <p class="lede intro">Cochez des groupes pour voir combien de sièges ils réunissent, et à quelle fréquence ils ont réellement voté de la même façon depuis le début de la législature.</p>
     <div class="sim"><fieldset class="sim-list"><legend class="lab">Groupes, dans l'ordre de l'hémicycle</legend>
       ${G.map(g=>`<label class="sim-g"><input type="checkbox" value="${g.i}"${SIM.has(g.i)?" checked":""}><span class="sw" style="--w:${(g.effectif/T*100).toFixed(1)}%"></span><b>${esc(g.sigle)}</b><span class="nm2">${esc(g.nom)}</span><span class="st">${n(g.effectif)}</span></label>`).join("")}
-      <p class="dlg-acts"><button type="button" class="btn" id="sim-0">Tout décocher</button></p></fieldset>
+      <p class="dlg-acts"><button type="button" class="btn" id="sim-0">Tout décocher</button></p>
+      <p class="sim-mini" id="sim-mini" aria-hidden="true"></p></fieldset>
     <div class="sim-res"><div id="sim-h"></div><div id="sim-res" aria-live="polite"></div></div></div>
     <p class="meta" style="margin-top:22px">Majorité absolue calculée sur les ${n(T)} sièges actuellement pourvus : ${n(M)}. L'accord de vote porte sur les scrutins publics où tous les groupes cochés ont exprimé une position majoritaire (pour, contre ou abstention), motions de censure exclues. Les non-inscrits, qui ne votent pas en bloc, n'entrent pas dans ce calcul.</p></div>`,
   after(){
@@ -1615,6 +1804,7 @@ function pageSim(){
     $("#sim-h").addEventListener("click",e=>{const c=e.target.closest("circle");if(!c)return;const i=+c.dataset.g,box=$(`.sim-g input[value="${i}"]`);
       if(SIM.has(i))SIM.delete(i);else SIM.add(i);if(box)box.checked=SIM.has(i);draw();});
     const draw=()=>{const sel=G.filter(g=>SIM.has(g.i)),tot=sel.reduce((a,g)=>a+g.effectif,0),ok=tot>=M,out=$("#sim-res");
+      const mini=$("#sim-mini");if(mini){mini.innerHTML=`<b>${n(tot)}</b> ${plural(tot,"siège")} sur ${n(T)}<span>${ok?"majorité absolue atteinte":`majorité absolue : ${n(M)}`}</span>`;mini.classList.toggle("ok",ok);}
       $$("#sim-h circle").forEach(c=>c.classList.toggle("on",SIM.has(+c.dataset.g)));const hn=$("#sim-h-n");if(hn){compter(hn,+(hn.dataset.v||0),tot,380);hn.dataset.v=tot;hn.classList.toggle("ok",ok);}
       const bloc=sel.filter(g=>!g.ni);let N=0,A=0,NE=0,AE=0;
       if(bloc.length>1)SC.forEach(s=>{if(s.moc)return;const p=bloc.map(g=>{const b=blockOf(s,g.i);return b?b[2]:0;});if(p.every(x=>x>=1&&x<=3)){N++;const eq=p.every(x=>x===p[0]);if(eq)A++;if(estEnsemble(s)){NE++;if(eq)AE++;}}});
@@ -1632,18 +1822,18 @@ function pageSim(){
 function derniersVotesElu(dp,sol){
   const L=SC.filter(s=>s.v[dp.i]!=="-"&&(!sol||s.sol)).slice(-25).reverse();
   if(!L.length)return `<p class="empty-note">Aucun scrutin pendant le mandat.</p>`;
-  return `<div class="tw"><table class="t"><thead><tr><th>Date</th><th>Scrutin</th><th>Son vote</th><th>Son groupe</th></tr></thead><tbody>${L.map(s=>{const gi=grpAtN(dp,s.n),b=blockOf(s,gi),c=s.v[dp.i],diff=b&&!grp(gi).ni&&"123".includes(c)&&b[2]>=1&&b[2]<=3&&+c!==b[2];
+  return `<div class="tw"><table class="t t-cartes"><thead><tr><th class="tc sl">Date</th><th class="tm">Scrutin</th><th class="tc">Son vote</th><th class="tc">Son groupe</th></tr></thead><tbody data-par="10" data-par-nom="votes">${L.map(s=>{const gi=grpAtN(dp,s.n),b=blockOf(s,gi),c=s.v[dp.i],diff=b&&!grp(gi).ni&&"123".includes(c)&&b[2]>=1&&b[2]<=3&&+c!==b[2];
     return `<tr${diff?' class="diff"':""}><td class="dt">${fds(s.d)}</td><td class="w"><a href="#/scrutin/${s.n}">${esc(cap(s.ti))}</a></td><td><span class="v v${c}">${VL[c]}</span>${diff?' <span class="tag diff-t">différent du groupe</span>':""}</td><td>${grp(gi).ni||!b?'<span class="meta">sans objet</span>':`<span class="v v${b[2]}">${POSL[b[2]]}</span>`}</td></tr>`;}).join("")}</tbody></table></div>`;
 }
 function derniersVotesGroupe(g,sol){
   const L=SC.filter(s=>blockOf(s,g.i)&&(!sol||s.sol)).slice(-20).reverse();
-  return `<div class="tw"><table class="t"><thead><tr><th>Date</th><th>Scrutin</th><th>Position</th><th class="n">Pour</th><th class="n">Contre</th><th class="n">Abst.</th></tr></thead><tbody>${L.map(s=>{const b=blockOf(s,g.i);return `<tr><td class="dt">${fds(s.d)}</td><td class="w"><a href="#/scrutin/${s.n}">${esc(cap(s.ti))}</a></td><td>${g.ni?'<span class="meta">sans objet</span>':`<span class="v v${b[2]}">${POSL[b[2]]}</span>`}</td><td class="n">${n(b[3])}</td><td class="n">${n(b[4])}</td><td class="n">${n(b[5])}</td></tr>`;}).join("")}</tbody></table></div>`;
+  return `<div class="tw"><table class="t t-cartes"><thead><tr><th class="tc sl">Date</th><th class="tm">Scrutin</th><th class="tc">Position du groupe</th><th class="n tc">Pour</th><th class="n tc">Contre</th><th class="n tc">Abst.</th></tr></thead><tbody data-par="10" data-par-nom="votes">${L.map(s=>{const b=blockOf(s,g.i);return `<tr><td class="dt">${fds(s.d)}</td><td class="w"><a href="#/scrutin/${s.n}">${esc(cap(s.ti))}</a></td><td>${g.ni?'<span class="meta">sans objet</span>':`<span class="v v${b[2]}">${POSL[b[2]]}</span>`}</td><td class="n">${n(b[3])}</td><td class="n">${n(b[4])}</td><td class="n">${n(b[5])}</td></tr>`;}).join("")}</tbody></table></div>`;
 }
 function themesGroupe(g){
   const c={};SC.forEach(s=>{if(!s.th||!estEnsemble(s))return;const b=blockOf(s,g.i);if(!b||b[2]<1||b[2]>3)return;const x=c[s.th]=c[s.th]||[0,0,0,0];x[b[2]]++;x[0]++;});
   const L=THEMES.filter(t=>c[t[0]]);if(!L.length||g.ni)return "";
   return `<h2 class="h3" style="margin-top:36px">Ses positions par thème</h2><p class="meta" style="margin:6px 0 12px">Position majoritaire du groupe sur les votes portant sur l'ensemble d'un texte. <a href="#/themes">Voir tous les thèmes</a>.</p>
-  <div class="tw"><table class="t"><thead><tr><th>Thème</th><th class="n">Pour</th><th class="n">Contre</th><th class="n">Abst.</th><th>Répartition</th></tr></thead><tbody>${L.map(t=>{const x=c[t[0]];return `<tr><td><a href="#/themes?t=${t[0]}">${t[1]}</a></td><td class="n">${x[1]}</td><td class="n">${x[2]}</td><td class="n">${x[3]}</td><td><span class="rep">${[1,3,2].map(k=>x[k]?`<i class="r${k}" style="width:${(x[k]/x[0]*100).toFixed(1)}%"></i>`:"").join("")}</span></td></tr>`;}).join("")}</tbody></table></div>`;
+  <div class="tw"><table class="t t-cartes"><thead><tr><th class="tm">Thème</th><th class="n tc">Pour</th><th class="n tc">Contre</th><th class="n tc">Abst.</th><th class="sl">Répartition</th></tr></thead><tbody>${L.map(t=>{const x=c[t[0]];return `<tr><td><a href="#/themes?t=${t[0]}">${t[1]}</a></td><td class="n">${x[1]}</td><td class="n">${x[2]}</td><td class="n">${x[3]}</td><td><span class="rep">${[1,3,2].map(k=>x[k]?`<i class="r${k}" style="width:${(x[k]/x[0]*100).toFixed(1)}%"></i>`:"").join("")}</span></td></tr>`;}).join("")}</tbody></table></div>`;
 }
 function quiPourQuiContre(s){
   const col=k=>s.g.filter(b=>b[2]===k&&!grp(b[0]).ni).sort((a,b)=>a[0]-b[0]).map(b=>`<li><a href="#/groupe/${grp(b[0]).id}">${esc(grp(b[0]).sigle)}</a> <span class="meta">${n(b[3])} pour, ${n(b[4])} contre${b[5]?", "+n(b[5])+" abst.":""}</span></li>`).join("")||'<li class="meta">Aucun groupe</li>';
@@ -1813,7 +2003,7 @@ function pagePresi(){
     </ul>
 
     <div class="notice" style="margin-top:28px"><strong>Notre engagement de neutralité.</strong> Tous les candidats et tous les groupes sont présentés selon le même gabarit, dans l'ordre alphabétique, à partir de leurs propres documents ou des données officielles. Nous ne publions ni sondage, ni pronostic, ni note, et nous ne qualifions pas les positions de quiconque. Chaque information renvoie à sa source. <a href="#/methode/neutralite">Nos règles en détail</a>.</div>
-    <p class="acts" style="margin-top:22px"><a href="#/candidats">Les candidats</a><a href="#/programmes">Programmes des partis</a><a href="#/propositions">Ce que proposent les groupes</a><a href="#/elections">Toutes les dates de vote</a><a href="#/actualites">Actualités</a></p></div>`};
+    <p class="acts" style="margin-top:22px"><a href="#/candidats">Les candidats</a><a href="#/programmes">Programmes des partis</a><a href="#/propositions">Ce que proposent les groupes</a><a href="#/elections">Toutes les dates de vote</a><a href="#/campagne">Actualités de la campagne</a></p></div>`};
 }
 
 function pageCandidats(q){
@@ -1827,7 +2017,7 @@ function pageCandidats(q){
     return `<article class="cand"><h2 class="h3">${esc(c.prenom+" "+c.nom)}${c.publie!==true?' <span class="tag">Brouillon à vérifier</span>':""}</h2>${c.publie!==true&&c.a_verifier?`<p class="meta">Sources à contrôler : ${(c.a_verifier||[]).filter(safeUrl).map(u=>ext(u,esc((u.match(/^https:\/\/(?:www\.)?([^/]+)/)||[])[1]||"source"))).join(", ")}. ${esc(c.note||"")}</p>`:""}
       <p class="meta">${esc(c.statut==="officiel"?"Candidature officielle, liste du Conseil constitutionnel":"Candidature déclarée")}${c.soutien?", "+esc(c.soutien):""}. ${c.declaration&&safeUrl(c.declaration.source)?`Déclaration du ${fd(c.declaration.date)} : ${ext(c.declaration.source,"source")}.`:""}</p>
       ${c.site&&safeUrl(c.site)?`<p class="ui">${ext(c.site,"Site de campagne")}${c.programme&&safeUrl(c.programme)?`, ${ext(c.programme,"programme officiel")}`:""}</p>`:""}
-      <table class="t"><thead><tr><th>Thème</th><th>Ce qu'il ou elle propose, d'après ses propres documents</th></tr></thead><tbody>${THEMES.map(t=>{const P=(c.propositions||[]).filter(p=>p.theme===t[0]);
+      <table class="t t-cartes"><thead><tr><th class="tm">Thème</th><th class="sl">Ce qu'il ou elle propose, d'après ses propres documents</th></tr></thead><tbody>${THEMES.map(t=>{const P=(c.propositions||[]).filter(p=>p.theme===t[0]);
         return `<tr><td>${esc(t[1])}</td><td>${P.length?P.map(p=>`${esc(p.texte)} ${safeUrl(p.source)?ext(p.source,"source"):""}`).join("<br>"):'<span class="meta">Aucune proposition publiée sur ce thème à ce jour</span>'}</td></tr>`;}).join("")}</tbody></table>
       ${dp?`<p class="ui">${esc(c.prenom+" "+c.nom)} est ou a été député : ${eluLink(dp)}, ses votes et sa participation.</p>`:""}</article>`;};
   return {title:"Candidats à la présidentielle",html:`<div class="wrap sec col" style="--col:960px">
@@ -1861,7 +2051,7 @@ function pagePropositions(q){
   const filtre=l=>!th||themeOf({ti:l.titre})===th;
   const carte=({g,textes,changes})=>{const T=textes.filter(filtre).slice().sort((a,b)=>((b.etapes||[])[0]||[])[2]>((a.etapes||[])[0]||[])[2]?1:-1);
     const C=changes.filter(c=>filtre(c.loi));
-    return `<article class="pg"><h2 class="h3"><a href="#/groupe/${g.id}">${esc(g.nom)}</a> <span class="meta">${esc(g.sigle)}, ${n(g.effectif)} ${plural(g.effectif,"député")}</span></h2>
+    return `<article class="pg"><h2 class="h3" id="pg-${g.id}" tabindex="-1"><a href="#/groupe/${g.id}">${esc(g.nom)}</a> <span class="meta">${esc(g.sigle)}, ${n(g.effectif)} ${plural(g.effectif,"député")}</span></h2>
       <div class="pg-c"><div><h3 class="cat">Textes déposés par ses députés${th?" sur ce thème":""}</h3>
         ${T.length?`<ul class="side-list">${T.slice(0,5).map(l=>`<li><a href="#/loi/${esc(l.id)}">${esc(cap(l.titre))}</a><div class="meta">${esc(statutLoi(l))}</div></li>`).join("")}</ul>${T.length>5?`<p class="meta">Et ${n(T.length-5)} autres.</p>`:""}`:`<p class="meta">Aucun texte déposé${th?" sur ce thème":""} dans les données de cette législature.</p>`}</div>
       <div><h3 class="cat">Positions qui ont évolué sur un même texte</h3>
@@ -1873,6 +2063,7 @@ function pagePropositions(q){
     <p class="lede intro">Les partis présenteront leurs programmes pendant la campagne. Dès aujourd'hui, on peut voir ce que leurs groupes proposent et votent à l'Assemblée, d'après les seules données officielles. Groupes classés par ordre alphabétique.</p>
     <nav class="chips" aria-label="Thèmes"><a href="#/propositions"${!th?' aria-current="page"':""}>Tous les thèmes</a>${THEMES.filter(t=>cpt[t[0]]).map(t=>`<a href="#/propositions?t=${t[0]}"${t[0]===th?' aria-current="page"':""}>${t[1]}</a>`).join("")}</nav>
     <p class="meta" style="margin:14px 0 0">« Textes déposés » : propositions de loi dont au moins un auteur est membre du groupe. « Positions qui ont évolué » : textes sur l'ensemble desquels la position majoritaire du groupe n'a pas été la même d'un vote à l'autre, par exemple entre deux lectures. Ces changements peuvent s'expliquer par des modifications du texte entre-temps : nous les signalons sans les juger.</p>
+    <nav class="sauts" aria-label="Aller directement à un groupe"><span class="meta">Aller directement à :</span>${D.map(({g})=>`<button type="button" data-ancre="pg-${g.id}" title="${esc(g.nom)}">${esc(g.sigle)}</button>`).join("")}</nav>
     ${D.map(carte).join("")}</div>`};
 }
 
@@ -1884,7 +2075,7 @@ function pageProgrammes(){
   const fiche=p=>{const v=p.groupe?votesThemeGroupe(p.groupe):null,d=p.document||{};
     return `<article class="cand"><h2 class="h3">${esc(p.parti)}</h2>
       <p class="meta">${safeUrl(d.url)?ext(d.url,esc(d.titre||"Programme officiel")):esc(d.titre||"")}${d.date?`, publié le ${fd(d.date)}`:""}${v?`. Groupe à l'Assemblée : <a href="#/groupe/${v.g.id}">${esc(v.g.nom)}</a>`:""}.</p>
-      <div class="tw"><table class="t"><thead><tr><th>Thème</th><th>Ce que dit le programme (texte du parti)</th><th>Votes de son groupe à l'Assemblée sur ce thème</th></tr></thead><tbody>${THEMES.map(t=>{const X=(p.extraits||[]).filter(x=>x.theme===t[0]),c=v&&v.c[t[0]];
+      <div class="tw"><table class="t t-cartes"><thead><tr><th class="tm">Thème</th><th>Ce que dit le programme (texte du parti)</th><th>Votes de son groupe à l'Assemblée sur ce thème</th></tr></thead><tbody>${THEMES.map(t=>{const X=(p.extraits||[]).filter(x=>x.theme===t[0]),c=v&&v.c[t[0]];
         return `<tr><td>${esc(t[1])}</td><td>${X.length?X.map(x=>`<q>${esc(x.texte)}</q> ${safeUrl(x.source)?ext(x.source,"source"+(x.page?", p. "+esc(String(x.page)):"")):""}`).join("<br>"):'<span class="meta">Pas d\'extrait publié sur ce thème</span>'}</td>
         <td>${c?`${n(c[1])} pour, ${n(c[2])} contre, ${n(c[3])} abstention${c[3]>1?"s":""} <a href="#/themes?t=${t[0]}">voir les textes</a>`:'<span class="meta">Aucun vote sur l\'ensemble d\'un texte de ce thème</span>'}</td></tr>`;}).join("")}</tbody></table></div></article>`;};
   return {title:"Programmes des partis",html:`<div class="wrap sec">
@@ -1906,10 +2097,10 @@ function pageElections(){
   return {title:"Calendrier des élections",html:`<div class="wrap sec col" style="--col:960px">
     <h1 class="h1s">Les prochaines élections</h1>
     <p class="lede intro">Toutes les élections où vous pouvez voter, de la plus proche à la plus lointaine. Les dates exactes sont fixées par décret quelques semaines ou quelques mois avant chaque scrutin.</p>
-    <div class="tw"><table class="t"><thead><tr><th>Élection</th><th>Prochain vote</th><th>Précédent vote</th><th>En savoir plus</th></tr></thead><tbody>${E.map(e=>`<tr><td><strong>${esc(e[0])}</strong></td><td>${esc(e[1])}</td><td>${esc(e[2])}</td><td>${ext(e[3],"service-public.gouv.fr")}</td></tr>`).join("")}</tbody></table></div>
+    <div class="tw"><table class="t t-cartes"><thead><tr><th class="tm">Élection</th><th class="tc">Prochain vote</th><th class="tc">Précédent vote</th><th class="sl">En savoir plus</th></tr></thead><tbody>${E.map(e=>`<tr><td><strong>${esc(e[0])}</strong></td><td>${esc(e[1])}</td><td>${esc(e[2])}</td><td>${ext(e[3],"service-public.gouv.fr")}</td></tr>`).join("")}</tbody></table></div>
     <p class="meta">Source : ${ext(PRESI.srcDates,"service-public.gouv.fr, « Quelles sont les dates des prochaines élections ? »")}, vérifié par l'administration le 1er juillet 2026. En outre-mer, certaines élections ont lieu le samedi. Les sénateurs sont élus par un collège de grands électeurs, pas directement par les citoyens.</p>
     <h2 class="h2" style="margin-top:32px">Présidentielle 2027 : les étapes</h2>
-    <div class="tw"><table class="t"><thead><tr><th>Date</th><th>Étape</th><th>Statut de la date</th></tr></thead><tbody>
+    <div class="tw"><table class="t t-cartes"><thead><tr><th class="tc sl">Date</th><th class="tm">Étape</th><th class="tc">Statut de la date</th></tr></thead><tbody>
       <tr><td>Au plus tard le 7 février 2027</td><td>Décret de convocation des électeurs</td><td>Règle légale : au moins dix semaines avant le premier tour</td></tr>
       <tr><td>Mercredi 10 mars 2027</td><td>Dernier jour pour s'inscrire en ligne sur les listes électorales</td><td>Calculé d'après la règle officielle, à confirmer</td></tr>
       <tr><td>Vendredi 12 mars 2027</td><td>Dernier jour pour s'inscrire en mairie ou par courrier</td><td>Calculé d'après la règle officielle, à confirmer</td></tr>
@@ -1926,26 +2117,28 @@ function actualites(){
   SC.forEach(s=>{if(s.moc)A.push({date:s.d,cat:"assemblee",titre:cap(s.ti),lien:`#/scrutin/${s.n}`,txt:s.adopte?"Motion de censure adoptée : le Gouvernement est renversé.":`Motion de censure rejetée : ${n(s.po)} voix, ${n(s.rq)} nécessaires.`});
     else if(s.sol)A.push({date:s.d,cat:"assemblee",titre:cap(headline(s)),lien:`#/scrutin/${s.n}`,txt:`Vote solennel : ${s.adopte?"adopté":"rejeté"}, ${n(s.po)} pour et ${n(s.co)} contre.`});});
   PACTU.filter(a=>a.publie===true).forEach(a=>A.push({date:a.date,cat:a.categorie==="presidentielle"?"presidentielle":"assemblee",titre:a.titre,lien:safeUrl(a.source)?a.source:"",txt:a.resume||"",ext:true}));
-  POFF.forEach(o=>A.push({date:o.date,cat:"publiques",titre:o.titre,lien:o.lien,txt:`${o.rubrique}, ${o.source}`,ext:true}));
+  POFF.forEach(o=>A.push({date:o.date,cat:o.presi?"presidentielle":(o.source==="vie-publique.fr"?"publiques":"politique"),titre:o.titre,lien:o.lien,src:o.source,ext:true}));
   A.push({date:PRESI.verif,cat:"presidentielle",titre:"Dates de l'élection présidentielle arrêtées : 18 avril et 2 mai 2027",lien:PRESI.srcAnnonce,txt:"Annoncées à l'issue du Conseil des ministres du 1er juillet 2026.",ext:true});
-  return A.filter(a=>a.date).sort((a,b)=>a.date<b.date?1:-1);
+  return A.filter(a=>a.date).sort((a,b)=>a.date<b.date?1:a.date>b.date?-1:0);
 }
-function pageActualites(q){
-  const c=q.get("c")||"",A=actualites().filter(a=>!c||a.cat===c).slice(0,60);
-  const lib={presidentielle:"Présidentielle",assemblee:"Assemblée",publiques:"Politiques publiques"};
-  return {title:"Actualités",html:`<div class="wrap sec col" style="--col:900px">
-    <h1 class="h1s">Actualités</h1>
-    <p class="lede intro">Les faits politiques importants, datés et sourcés, chaque jour : lois promulguées, votes solennels, motions de censure, actualité des politiques publiques, étapes de l'élection présidentielle. Uniquement des sources officielles, sans commentaire ni opinion.</p>
-    <nav class="chips" aria-label="Catégories"><a href="#/actualites"${!c?' aria-current="page"':""}>Tout</a><a href="#/actualites?c=presidentielle"${c==="presidentielle"?' aria-current="page"':""}>Présidentielle</a><a href="#/actualites?c=assemblee"${c==="assemblee"?' aria-current="page"':""}>Assemblée</a><a href="#/actualites?c=publiques"${c==="publiques"?' aria-current="page"':""}>Politiques publiques</a></nav>
-    ${A.length?`<ol class="fil-actu">${A.map(a=>`<li><span class="dt">${fd(a.date)}</span><span class="tag">${lib[a.cat]}</span><b>${a.lien?(a.ext?ext(a.lien,esc(a.titre)):`<a href="${esc(a.lien)}">${esc(a.titre)}</a>`):esc(a.titre)}</b>${a.txt?`<p>${esc(a.txt)}</p>`:""}</li>`).join("")}</ol>`:`<p class="empty-note">Aucune actualité dans cette catégorie pour la législature affichée.</p>`}
-    <p class="meta">Sources : les données officielles de l'Assemblée nationale, produites automatiquement ; les titres de vie-publique.fr, le site d'information de l'État édité par la Direction de l'information légale et administrative, repris tels quels avec un lien vers l'article ; et des faits rédigés, sourcés et relus par une seconde personne. Aucun commentaire ni opinion n'est ajouté.</p></div>`};
+const LIBACT={presidentielle:"Présidentielle",assemblee:"Assemblée",publiques:"Politiques publiques",politique:"Politique"};
+function ligneActu(a){return `<li><span class="dt">${fd(a.date)}</span><span class="tag">${LIBACT[a.cat]||""}</span>${a.src?`<span class="meta">${esc(a.src)}</span>`:""}<b>${a.lien?(a.ext?ext(a.lien,esc(a.titre)):`<a href="${esc(a.lien)}">${esc(a.titre)}</a>`):esc(a.titre)}</b>${a.txt?`<p>${esc(a.txt)}</p>`:""}</li>`;}
+function pageActualites(q,campagne){
+  const c=campagne?"presidentielle":(q.get("c")||""),A=actualites().filter(a=>!c||a.cat===c).slice(0,80);
+  const chip=(k,l)=>`<a href="#/actualites${k?"?c="+k:""}"${c===k?' aria-current="page"':""}>${l}</a>`;
+  return {title:campagne?"Actualités de la campagne":"Actualités",html:`<div class="wrap sec col" style="--col:900px">
+    <h1 class="h1s">${campagne?"Actualités de la campagne présidentielle":"Actualités"}</h1>
+    <p class="lede intro">${campagne?"Uniquement ce qui concerne l'élection présidentielle de 2027 : candidatures, primaires, parrainages, étapes officielles.":"Ce qui se passe en politique, chaque jour : débats, décisions, votes, lois. Uniquement des sources publiques, sans publicité ni commentaire."}</p>
+    ${campagne?"":`<nav class="chips" aria-label="Catégories">${chip("","Tout")}${chip("politique","Politique")}${chip("assemblee","Assemblée")}${chip("publiques","Politiques publiques")}${chip("presidentielle","Présidentielle")}</nav>`}
+    ${A.length?`<ol class="fil-actu" data-par="20" data-par-nom="actualités">${A.map(ligneActu).join("")}</ol>`:`<p class="empty-note">Aucune actualité dans cette catégorie pour le moment.</p>`}
+    <p class="meta">Sources : les articles de LCP et de Public Sénat, les chaînes publiques de l'Assemblée nationale et du Sénat ; les titres de vie-publique.fr, le site d'information de l'État ; les données officielles de l'Assemblée ; et des faits rédigés, sourcés et relus par une seconde personne. Les titres sont repris tels quels, avec un lien vers l'article d'origine ; nous n'ajoutons aucun commentaire.${campagne?" Les actualités de la campagne sont repérées automatiquement d'après leur titre (candidature, primaire, parrainages, élection présidentielle).":""}</p></div>`};
 }
 
 function encartPresiAccueil(){
   const c=compteRebours(PRESI.t1);
   return `<section class="wrap presi-acc" aria-labelledby="pa-t"><div class="presi-acc-b">
     <div><p class="cat">${c?cap(c):"2027"}</p><h2 class="h2" id="pa-t">Présidentielle 2027</h2><p class="ui">Premier tour le dimanche 18 avril 2027, second tour le dimanche 2 mai. Les règles, les dates, les candidats et ce que proposent les groupes, expliqués simplement et sans parti pris.</p></div>
-    <nav class="presi-acc-l" aria-label="Rubriques de la section Présidentielle"><a href="#/presidentielle">L'essentiel</a><a href="#/candidats">Les candidats</a><a href="#/programmes">Programmes des partis</a><a href="#/propositions">Ce que proposent les groupes</a><a href="#/elections">Toutes les dates de vote</a><a href="#/actualites">Actualités</a></nav></div></section>`;
+    <nav class="presi-acc-l" aria-label="Rubriques de la section Présidentielle"><a href="#/presidentielle">L'essentiel</a><a href="#/candidats">Les candidats</a><a href="#/programmes">Programmes des partis</a><a href="#/propositions">Ce que proposent les groupes</a><a href="#/elections">Toutes les dates de vote</a><a href="#/campagne">Actualités de la campagne</a></nav></div></section>`;
 }
 /* ============ Visuel Flash ============ */
 const dlg=$("#dlg");
@@ -2057,7 +2250,12 @@ function poser(ind,cible,box){if(!cible){ind.style.opacity="0";return;}
   const neuf=!ind.dataset.pose;if(neuf)box.classList.add("no-anim");
   ind.style.opacity="1";ind.style.width=cible.offsetWidth+"px";ind.style.transform=`translateX(${cible.offsetLeft}px)`;
   if(neuf){ind.dataset.pose="1";void ind.offsetWidth;box.classList.remove("no-anim");}}
-function navInd(){const nav=$(".nav");let ind=$(".nav-ind",nav);if(!ind){ind=document.createElement("span");ind.className="nav-ind";ind.setAttribute("aria-hidden","true");nav.appendChild(ind);}
+function navDefile(){const nav=$(".nav"),a=$('.nav a[aria-current="page"]');if(!nav)return;nav.classList.toggle("deborde",nav.scrollWidth>nav.clientWidth+2);
+  if(a&&nav.scrollWidth>nav.clientWidth+2)nav.scrollLeft=Math.max(0,a.offsetLeft-(nav.clientWidth-a.offsetWidth)/2);}
+function sousDefile(){const el=$(".sous");if(!el)return;const maj=()=>el.classList.toggle("deborde",el.scrollLeft+el.clientWidth<el.scrollWidth-2);
+  const a=$('.sous a[aria-current="page"]');if(a&&el.scrollWidth>el.clientWidth+2)el.scrollLeft=Math.max(0,a.offsetLeft-el.offsetLeft-24);maj();
+  if(!el.dataset.ec){el.dataset.ec="1";el.addEventListener("scroll",maj,{passive:true});}}
+function navInd(){navDefile();sousDefile();const nav=$(".nav");let ind=$(".nav-ind",nav);if(!ind){ind=document.createElement("span");ind.className="nav-ind";ind.setAttribute("aria-hidden","true");nav.appendChild(ind);}
   poser(ind,$('.nav a[aria-current="page"]'),nav);}
 function segInd(seg){let ind=$(".seg-ind",seg);if(!ind){ind=document.createElement("span");ind.className="seg-ind";ind.setAttribute("aria-hidden","true");seg.prepend(ind);seg.classList.add("has-ind");}
   poser(ind,$('button[aria-pressed="true"],button[aria-selected="true"]',seg),seg);}
@@ -2074,12 +2272,28 @@ function tableauxDefilants(){const vus=new Set();$$(".tw",document.getElementByI
   if(w.offsetParent!==null&&w.scrollWidth>w.clientWidth+1){const cap=$("caption",w);let lab=(cap?cap.textContent.trim():titreProche(w)).slice(0,90),k=lab,i=2;while(vus.has(k)){k=`${lab} (${i++})`;}vus.add(k);
     w.setAttribute("tabindex","0");w.setAttribute("role","region");w.setAttribute("aria-label",frStr(k+", tableau à défilement horizontal"));}
   else if(w.getAttribute("role")==="region"){w.removeAttribute("tabindex");w.removeAttribute("role");w.removeAttribute("aria-label");}});}
-let _tdMO=null;new MutationObserver(()=>{clearTimeout(_tdMO);_tdMO=setTimeout(tableauxDefilants,60);}).observe(document.getElementById("main"),{childList:true,subtree:true});
+/* Listes longues : on affiche les premiers éléments, puis « Afficher … de plus » (data-par = nombre par palier) */
+function paginerListes(){$$("[data-par]:not([data-par-ok])",document.getElementById("main")).forEach(L=>{
+  L.setAttribute("data-par-ok","");const k=+L.dataset.par||20,E=[...L.children];if(E.length<=k+3)return;
+  E.slice(k).forEach(e=>e.hidden=true);const quoi=L.dataset.parNom||"éléments";
+  const b=document.createElement("button");b.type="button";b.className="btn btn-q more";
+  const lib=()=>{const r=E.filter(e=>e.hidden).length;b.textContent=`Afficher ${Math.min(k,r)} ${quoi} de plus (encore ${n(r)})`;};lib();
+  b.addEventListener("click",()=>{const C=E.filter(e=>e.hidden).slice(0,k);C.forEach(e=>e.hidden=false);const l=C[0]&&$("a",C[0]);if(l)l.focus();
+    if(E.some(e=>e.hidden))lib();else b.remove();});
+  (L.closest(".tw")||L).after(b);});}
+/* Tableaux en fiches sur téléphone : chaque cellule reçoit l'intitulé de sa colonne (affiché seulement en mode fiche) */
+function etiqueterTables(){$$("table.t-cartes",document.getElementById("main")).forEach(t=>{
+  const H=$$("thead th",t);if(!t.hasAttribute("role")){t.setAttribute("role","table");$$(":scope>thead,:scope>tbody",t).forEach(x=>x.setAttribute("role","rowgroup"));}
+  $$("tr",t).forEach(tr=>{if(tr.hasAttribute("role"))return;tr.setAttribute("role","row");
+    [...tr.children].forEach((c,i)=>{if(c.tagName==="TH"){c.setAttribute("role","columnheader");return;}c.setAttribute("role","cell");const h=H[i];if(!h)return;
+      ["tm","tc"].forEach(k=>{if(h.classList.contains(k))c.classList.add(k);});
+      if(!h.classList.contains("tm")&&!h.classList.contains("sl")&&!c.hasAttribute("data-l"))c.setAttribute("data-l",h.textContent.replace(/\u00AD/g,"").trim());});});});}
+let _tdMO=null;new MutationObserver(()=>{clearTimeout(_tdMO);_tdMO=setTimeout(()=>{paginerListes();etiqueterTables();tableauxDefilants();},60);}).observe(document.getElementById("main"),{childList:true,subtree:true});
 addEventListener("resize",()=>tableauxDefilants());
-function embellir(){animer(main);navInd();segs();tableauxDefilants();}
+function embellir(){animer(main);navInd();segs();paginerListes();etiqueterTables();tableauxDefilants();}
 
 /* ============ Sous-menus et choix de la législature ============ */
-const FAMILLES=[[["presidentielle","L'essentiel"],["candidats","Les candidats"],["programmes","Programmes des partis"],["propositions","Ce que proposent les groupes"],["elections","Calendrier des élections"],["actualites","Actualités"]],[["votes","Tous les votes"],["themes","Par thème"],["calendrier","Mois par mois"],["comparateur","Comparer"]],[["groupes","Les groupes"],["simulateur","Simulateur de coalition"]]];
+const FAMILLES=[[["presidentielle","L'essentiel"],["candidats","Les candidats"],["programmes","Programmes des partis"],["propositions","Ce que proposent les groupes"],["elections","Calendrier des élections"],["campagne","Actualités de la campagne"]],[["votes","Tous les votes"],["themes","Par thème"],["calendrier","Mois par mois"],["comparateur","Comparer"]],[["groupes","Les groupes"],["simulateur","Simulateur de coalition"]]];
 const AVEC_LEG=["votes","themes","calendrier","comparateur","groupes","simulateur","elus","lois"];
 let LEGOPTS="";
 function barreHaut(p0){
@@ -2112,7 +2326,7 @@ function route(){
     case "calendrier":pg=pageCal(q);nav="votes";break;case "themes":pg=pageThemes(q);nav="votes";break;
     case "simulateur":pg=pageSim();nav="groupes";break;case "codes":pg=pageCodes();nav="codes";break;
     case "presidentielle":pg=pagePresi();nav="presidentielle";break;case "candidats":pg=pageCandidats(q);nav="presidentielle";break;case "programmes":pg=pageProgrammes();nav="presidentielle";break;case "propositions":pg=pagePropositions(q);nav="presidentielle";break;
-    case "elections":pg=pageElections();nav="presidentielle";break;case "actualites":pg=pageActualites(q);nav="presidentielle";break;
+    case "elections":pg=pageElections();nav="presidentielle";break;case "actualites":pg=pageActualites(q);nav="actualites";break;case "campagne":pg=pageActualites(q,true);nav="presidentielle";break;
     case "code":pg=parts[2]?pageArticle(parts[1],parts[2]):pageCode(parts[1],q);nav="codes";break;case "classements":pg=pageElus();nav="elus";break;case "methode":pg=pageMethode();nav="";break;case "comprendre":pg=pageComprendre(parts[1]);break;default:pg=pageNotFound();}
   if(dlg.open)dlg.close();
   const rendre=()=>{
