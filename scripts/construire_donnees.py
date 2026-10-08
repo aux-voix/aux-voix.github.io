@@ -393,6 +393,10 @@ def charger_lois(data, numeros, leg, am_textes=None, gi=None):
                 for tref in liste(a.get("texteAssocie")) + liste(a.get("texteAdopte")):
                     if txt(tref):
                         docs.setdefault(uid, set()).add(txt(tref))
+            # texte déposé (pour l'exposé des motifs) : le premier dépôt à l'Assemblée, à défaut le premier dépôt tout court
+            depots = sorted([(txt(a.get("dateActe"))[:10], txt(a.get("texteAssocie"))) for a in actes(d)
+                             if txt(a.get("codeActe")).endswith("DEPOT") and txt(a.get("texteAssocie"))])
+            tx = next((u for _, u in depots if "ANR5" in u), None) or (depots[0][1] if depots else None)
             am = {"t": 0, "a": 0, "g": {}}
             for doc in docs.get(uid, ()):
                 x = am_textes.get(doc)
@@ -407,7 +411,7 @@ def charger_lois(data, numeros, leg, am_textes=None, gi=None):
             am_out = {"t": am["t"], "a": am["a"], "g": sorted([[gi.get(g, -1) if g != "Gouvernement" else -2, v[0], v[1]] for g, v in am["g"].items()], key=lambda r: -r[1])} if am["t"] else None
             lois.append({"id": uid, "titre": txt(titre_d.get("titre")), "chemin": txt(titre_d.get("titreChemin")) or None, "senat": txt(titre_d.get("senatChemin")) or None,
                          "proc": proc, "etapes": et[:24], "prom": prom, "cc": cc, "scrutins": sorted(scr),
-                         "auteurs": auteurs[:40], "rapporteurs": sorted(rapporteurs)[:20], "am": am_out})
+                         "auteurs": auteurs[:40], "rapporteurs": sorted(rapporteurs)[:20], "am": am_out, "tx": tx})
     lois.sort(key=lambda l: (l["prom"] or {}).get("date") or (l["etapes"][-1][2] if l["etapes"] else ""), reverse=True)
     print(f"  lois et textes suivis : {len(lois)} (dont {sum(1 for l in lois if l['prom'])} promulguées)")
     return lois
@@ -1020,6 +1024,26 @@ def main():
             codes.construire_codes(SITE, os.path.join(RACINE, "cache"))
         except Exception as e:
             print(f"Codes : collecte interrompue ({e}) ; le reste du site est publié normalement")
+    # Exposé des motifs des textes déposés (ce que propose un texte et pourquoi) : facultatif, ne bloque jamais le site
+    if not os.environ.get("RELEVE_LOCAL") or os.environ.get("RELEVE_TEXTES_LOCAL"):
+        try:
+            sys.path.insert(0, os.path.dirname(os.path.abspath(__file__)))
+            import textes
+            par_leg = {}
+            for x in index:
+                try:
+                    dl = json.load(open(os.path.join(SITE, x["fichier"]), encoding="utf-8"))
+                except Exception:
+                    continue
+                par_leg[x["leg"]] = [(l["id"], l.get("tx"), (l.get("prom") or {}).get("date") or (l["etapes"][-1][2] if l.get("etapes") else ""))
+                                     for l in dl.get("lois", []) if l.get("tx")]
+            ecrits, nouveaux, echecs, absents = textes.construire_textes(SITE, os.path.join(RACINE, "cache", "textes"), par_leg)
+            bilan = f"{ecrits} textes expliqués ({nouveaux} nouveaux lus sur le site de l'Assemblée, {absents} pas encore en ligne, {echecs} échecs)"
+            print("Textes : " + bilan)
+            if os.environ.get("GITHUB_ACTIONS"):
+                print(("::warning" if echecs and not nouveaux else "::notice") + " title=Textes::" + bilan)
+        except Exception as e:
+            print(f"Textes : lecture interrompue ({e}) ; le reste du site est publié normalement")
     # Pages publiques (moteurs de recherche), plan du site, flux RSS : facultatif, ne bloque jamais le site
     try:
         sys.path.insert(0, os.path.dirname(os.path.abspath(__file__)))

@@ -237,8 +237,21 @@ class Generateur:
             fin = [scr_n for scr_n in l.get("scrutins", []) if scr_n in num_retenus]
             cit = [("Référence", ((prom or {}).get("titre") or titre) + (f", JO du {fd(prom['date'])}" if prom else f" ({d['label']}, dossier législatif de l'Assemblée nationale)")),
                    ("Avec la source", f"Aux Voix, d'après les données de l'Assemblée nationale, {self.url}{chemin} (consulté le {fd(self.aujourdhui)}).")]
+            # ce que propose le texte, selon ses auteurs (exposé des motifs, s'il a déjà été lu)
+            expo = ""
+            try:
+                tx = json.load(open(os.path.join(self.site, "textes", str(leg), l["id"] + ".json"), encoding="utf-8"))
+                qui = "le Gouvernement" if str(tx.get("u", "")).startswith("PRJL") else "ses auteurs"
+                P, Ex = tx.get("p") or [], tx.get("e") or []
+                if P or Ex:
+                    expo = (f"<h2>Ce que propose ce texte</h2><p><em>Extraits de l'exposé des motifs, écrits par {qui} et recopiés mot pour mot ; Aux Voix ne les reprend pas à son compte.</em></p>"
+                            + (f"<h3>Ce que prévoit le texte, selon {qui}</h3><ul class='l'>" + "".join(f"<li>{ESC(x)}</li>" for x in P[:6]) + "</ul>" if P else "")
+                            + (f"<h3>Pourquoi ce texte est proposé, selon {qui}</h3>" + "".join(f"<p>{ESC(x)}</p>" for x in Ex[:2]) if Ex else ""))
+            except Exception:
+                pass
             corps = f"""<p class="fil"><a href="/#/lois">Lois</a>, {ESC(d['label'])}</p><h1>{ESC(titre)}</h1><p class="lede">{ESC(statut)}.</p>
 <a class="cta" href="/#/loi/{ESC(l['id'])}">Voir le parcours et les votes</a>{f'<a class="cta s" href="{ESC(prom["url"])}">Texte sur Légifrance</a>' if prom and prom.get("url") else ''}
+{expo}
 {f'<h2>Son parcours</h2><table><thead><tr><th>Date</th><th>Étape</th><th>Résultat</th></tr></thead><tbody>{etapes}</tbody></table>' if etapes else ''}
 {f'<h2>Votes à l’Assemblée</h2><ul class="l">' + ''.join(f'<li><a href="/vote/{leg}/{k}/">Scrutin n° {k}</a></li>' for k in fin) + '</ul>' if fin else ''}
 {self.bloc_citer("c", cit)}"""

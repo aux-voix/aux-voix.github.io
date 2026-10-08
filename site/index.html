@@ -1048,6 +1048,20 @@ main,dialog{overflow-wrap:break-word}
 .pt-l li{padding:10px 0;border-bottom:1px solid var(--bord2);line-height:1.55}
 .pt-l li b{margin-right:6px}
 .pt-v{margin:8px 0 0}
+/* Ce que propose un texte */
+.tx{margin-top:30px}
+.tx .h3{margin:20px 0 8px;font-family:var(--s);font-weight:700}
+.tx-av{margin:10px 0 0;padding:12px 14px;background:var(--gris);border-left:3px solid var(--bord);font-size:var(--t-ui);line-height:1.55;color:var(--texte2)}
+.tx-av strong{color:var(--texte)}
+.tx-p{margin:0;padding-left:20px;line-height:1.6}
+.tx-p li{margin:0 0 10px}
+.tx-e p{margin:0 0 12px;line-height:1.65;max-width:72ch}
+.tx-d{margin:4px 0 8px}
+.tx-d summary{cursor:pointer;font-weight:600;color:var(--bleu2);padding:8px 0}
+.tx-d summary:focus-visible{outline:2px solid var(--bleu2);outline-offset:2px}
+.tx-d[open] summary{margin-bottom:8px}
+.tx-s{margin-top:10px}
+@media (pointer:coarse){.tx-d summary{padding:12px 0}}
 </style>
 </head>
 <body data-lv="2">
@@ -1507,6 +1521,8 @@ function pageLoi(id){
       ${(()=>{const x=senatInfo(l);return x&&x.court?`<p class="ui"><strong>Au Sénat :</strong> ${esc(x.court)}.${x.bilan?" "+esc(x.bilan):""}</p>`:"";})()}
       ${!ed?`<p class="meta">Résumé établi à partir du titre officiel du texte. <a href="#/methode/themes">Comment</a></p>`:""}</section>
 
+    <section class="tx" id="tx-zone" aria-labelledby="tx-t" aria-busy="true"><h2 class="h2" id="tx-t">Ce que propose ce texte</h2><p class="meta">Chargement du texte déposé…</p></section>
+
     <section class="lv2" style="margin-top:30px"><h2 class="h2">Comprendre ce texte</h2>
       ${(l.auteurs||[]).length&&listeNoms(l.auteurs,5)?`<p class="ui">Déposé par ${listeNoms(l.auteurs,5)}.</p>`:""}
       ${ed&&ed.change&&ed.change.length?`<h3 class="h3" style="margin-top:18px">Ce qui change</h3><div class="tw" style="margin-top:10px"><table class="t t-cartes"><thead><tr><th>Avant</th><th>Après</th><th>Qui est concerné</th></tr></thead><tbody>${ed.change.map(r=>`<tr>${r.map(c=>`<td>${esc(c)}</td>`).join("")}</tr>`).join("")}</tbody></table></div>`:""}
@@ -1530,8 +1546,29 @@ function pageLoi(id){
       ${scr.length?`<h3 class="h3" style="margin-top:24px">Tous les votes publics sur ce texte</h3><div class="tw" style="margin-top:10px"><table class="t t-cartes"><thead><tr><th class="tc sl">Date</th><th class="tm">Scrutin</th><th class="tc">Résultat</th></tr></thead><tbody>${scr.slice().reverse().map(s=>`<tr><td class="dt">${fds(s.d)}</td><td class="w"><a href="#/scrutin/${s.n}">${esc(cap(s.ti))}</a></td><td class="dt">${s.adopte?"Adopté":"Rejeté"} <span class="meta">(${n(s.po)} pour, ${n(s.co)} contre)</span></td></tr>`).join("")}</tbody></table></div>`:""}
       <h3 class="h3" style="margin-top:24px">Sources officielles</h3><ul class="pieces" style="margin-top:10px"><li>${ext(offDos(l),"Dossier législatif sur le site de l'Assemblée nationale")}</li>${safeUrl(l.senat)?`<li>${ext(l.senat,"Dossier législatif sur le site du Sénat")}</li>`:""}${l.prom&&l.prom.url?`<li>${ext(l.prom.url,"Texte promulgué sur Légifrance")}</li>`:""}${l.cc&&l.cc.url?`<li>${ext(l.cc.url,"Décision du Conseil constitutionnel")}</li>`:""}${fin?`<li>${ext(offScr(fin.n),"Scrutin n° "+fin.n+" sur le site de l'Assemblée")}</li>`:""}</ul>
       ${ed?`<p class="meta" style="margin-top:12px">Résumé rédigé par ${esc(ed.auteur)}, vérifié par ${esc(ed.verif)}.</p>`:""}</section>
-    <p class="dlg-acts" style="margin-top:28px"><button type="button" class="btn btn-p" id="partager">${fin?"Partager et citer":"Citer ce texte"}</button></p></div>`,after(){bindLv();
+    <p class="dlg-acts" style="margin-top:28px"><button type="button" class="btn btn-p" id="partager">${fin?"Partager et citer":"Citer ce texte"}</button></p></div>`,after(){bindLv();texteDepose(l);
     $("#partager").addEventListener("click",()=>fin?partager("Partager et citer ce texte",[["Citer ce texte","Référence prête à coller dans un devoir ou un article.",()=>citerLoi(l)],["Visuel Flash","Image au format des réseaux sociaux, avec la source incrustée.",()=>openFlash("loi:"+l.id)]]):citerLoi(l));}};
+}
+
+/* ============ Ce que propose un texte, et pourquoi : l'exposé des motifs, cité mot pour mot ============ */
+function texteDepose(l){
+  const z=$("#tx-zone");if(!z)return;
+  const fini=html=>{if(!document.contains(z))return;z.innerHTML=`<h2 class="h2" id="tx-t">Ce que propose ce texte</h2>`+html;z.removeAttribute("aria-busy");frTypo(z);try{lexiquer(z,4);}catch(e){}};
+  const ailleurs=()=>safeUrl(l.senat)&&/^SN/.test(((l.etapes||[])[0]||[])[0]||"")
+    ?`<p class="ui">Ce texte a d'abord été déposé au Sénat : sa présentation par ses auteurs (l'exposé des motifs) se lit sur ${ext(l.senat,"le site du Sénat")}.</p>`
+    :`<p class="ui">La présentation de ce texte par ses auteurs (l'exposé des motifs) n'est pas encore disponible ici. Elle se lit dans le ${ext(offDos(l),"dossier législatif de l'Assemblée nationale")}.</p>`;
+  fetch(`textes/${LEG}/${encodeURIComponent(l.id)}.json`,{cache:"no-cache"}).then(r=>{if(!r.ok)throw new Error();return r.json();}).then(x=>{
+    const gouv=/^PRJL/.test(x.u||""),qui=gouv?"le Gouvernement":(l.auteurs||[]).length>1?"ses auteurs":"son auteur",Qui=cap(qui);
+    const src=x.u?`https://www.assemblee-nationale.fr/dyn/docs/${x.u}.raw`:offDos(l);
+    const P=x.p||[],E=x.e||[];
+    if(!P.length&&!E.length){fini(`${x.n?`<p class="ui">Le texte déposé compte ${n(x.n)} ${plural(x.n,"article")}.</p>`:""}${ailleurs()}<p class="meta">${ext(src,"Lire le texte déposé sur le site de l'Assemblée nationale")}</p>`);return;}
+    const liste=L=>`<ul class="tx-p">${L.map(p=>`<li>${esc(p)}</li>`).join("")}</ul>`;
+    const court=E[0]&&E[0].length<260&&E[1]?2:1;
+    fini(`<p class="tx-av"><strong>Ce passage est écrit par ${qui}</strong>, dans l'exposé des motifs déposé avec le texte. Recopié mot pour mot, il présente ${qui==="ses auteurs"?"leur":"son"} point de vue : Aux Voix ne le reprend pas à son compte. Les positions des groupes se lisent dans leurs votes, plus bas.</p>
+      ${P.length?`<h3 class="h3">Ce que prévoit le texte, selon ${qui}</h3>${liste(P.slice(0,3))}${P.length>3?`<details class="tx-d"><summary>Le détail des autres articles (${n(P.length-3)})</summary>${liste(P.slice(3))}</details>`:""}`:""}
+      ${E.length?`<h3 class="h3">Pourquoi ce texte est proposé, selon ${qui}</h3><div class="tx-e">${E.slice(0,court).map(p=>`<p>${esc(p)}</p>`).join("")}</div>${E.length>court?`<details class="tx-d"><summary>Lire la suite de l'exposé des motifs</summary><div class="tx-e">${E.slice(court).map(p=>`<p>${esc(p)}</p>`).join("")}</div></details>`:""}`:""}
+      <p class="meta tx-s">${x.n?`Le texte déposé compte ${n(x.n)} ${plural(x.n,"article")}. `:""}Source : ${ext(src,"texte déposé à l'Assemblée nationale")}${E.length>2?", où l'exposé des motifs se lit en entier":""}.</p>`);
+  }).catch(()=>fini(ailleurs()));
 }
 /* ============ Élus ============ */
 let EF={q:"",g:"all",d:"",anc:false,lim:60,sort:{k:"nom",dir:1}};
@@ -1865,6 +1902,7 @@ function pageMethode(){
       <p class="ui"><strong>À la une.</strong> L'accueil met en avant le vote principal de la dernière séance de l'Assemblée (la veille, le plus souvent), choisi par une règle fixe et sans intervention humaine : les motions de censure s'il y en a (toutes, quand il y en a plusieurs), sinon le vote solennel, sinon le vote sur l'ensemble d'un texte, sinon le vote qui a réuni le plus de députés. Dessous, les derniers titres de LCP, de Public Sénat et de vie-publique.fr, à parts égales entre ces trois sources, repris tels quels avec un lien vers l'article.</p>
       <p class="ui"><strong>La semaine à l'Assemblée.</strong> Le bilan de chaque semaine est calculé avec les mêmes règles : tous les votes sur l'ensemble d'un texte, votes solennels et motions de censure, dans l'ordre chronologique ; le vote qui a réuni le plus de députés ; le vote le plus serré parmi ceux qui comptent au moins 50 suffrages exprimés ; les lois promulguées et les textes déposés. Aucun vote n'est choisi à la main.</p>
       <p class="ui"><strong>Trouver son député.</strong> La correspondance entre communes et circonscriptions vient des résultats officiels des élections législatives de 2024 par bureau de vote (ministère de l'Intérieur) : chaque bureau est rattaché à sa circonscription en comparant la liste de ses candidats à celle de chaque circonscription. Les codes postaux viennent de l'API Découpage administratif (Etalab). Quand une commune est partagée entre plusieurs circonscriptions, le numéro du bureau de vote permet de trouver la bonne.</p>
+      <p class="ui"><strong>Ce que propose un texte.</strong> Sur la page de chaque loi, la rubrique « Ce que propose ce texte » reprend mot pour mot des extraits de l'exposé des motifs, c'est-à-dire la présentation écrite par les auteurs du texte (le Gouvernement ou des parlementaires) au moment de son dépôt, lue sur le site de l'Assemblée nationale. Ces passages expriment le point de vue de leurs auteurs, ce que la page indique chaque fois : Aux Voix n'en retire ni n'y ajoute rien, et ne les reprend pas à son compte. Les paragraphes où les auteurs présentent leurs articles sont regroupés sous « Ce que prévoit le texte ».</p>
       <p class="ui"><strong>Lexique et quiz.</strong> Les définitions et les réponses s'appuient sur la Constitution, le Règlement de l'Assemblée nationale et service-public.gouv.fr. Le quiz ne porte que sur le fonctionnement des institutions, jamais sur des opinions ou des personnes.</p>
       <p class="ui"><strong>Vérification.</strong> Tout contenu rédigé est relu par une seconde personne avant publication. Toute erreur signalée est corrigée et consignée dans le journal des corrections, et toute personne citée dispose d'un droit de réponse.</p></section>
     <section id="corrections" style="margin-top:40px"><h2 class="h2">Journal des corrections</h2>${CORR.length?`<ul class="rows" style="margin-top:14px">${CORR.map(x=>`<li><p class="meta" style="margin:0 0 4px">${fd(x.date)}</p><p class="ui" style="margin:0">${esc(x.texte)}</p></li>`).join("")}</ul>`:`<p class="ui" style="margin-top:12px">Aucune correction publiée à ce jour.</p>`}</section>
@@ -2478,6 +2516,7 @@ const CLASSE=[
   etapes:["Ouvrez la page <a href=\"#/lois\">Lois</a>, choisissez « Promulguées » dans le filtre Statut, puis un texte avec la classe.",
    "Faites préciser qui l'a déposé : le Gouvernement (projet de loi) ou des parlementaires (proposition de loi).",
    "Tracez au tableau une frise avec chaque étape du « parcours » et sa date.",
+   "Lisez « Ce que propose ce texte » : que prévoit-il, et quelles raisons ses auteurs donnent-ils ? Faites remarquer que c'est leur point de vue, et regardez ensuite comment les groupes ont voté.",
    "Repérez les passages entre l'Assemblée et le Sénat : combien de lectures ? Y a-t-il eu une commission mixte paritaire ?",
    "Terminez par la promulgation et la publication au Journal officiel : à partir de quand la loi s'applique-t-elle ?"],
   questions:["Pourquoi un texte passe-t-il plusieurs fois dans chaque assemblée ? (fiche <a href=\"#/comprendre/navette\">La navette</a>)","Qui a le dernier mot en cas de désaccord persistant ?","Combien de temps s'est écoulé entre le dépôt et la promulgation ?"],
