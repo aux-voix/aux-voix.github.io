@@ -207,6 +207,20 @@ class Generateur:
 {self.bloc_citer("c", cit)}"""
             self.page(chemin, titre[:110], f"Scrutin public n° {s['n']} du {fd(s['d'])} à l'Assemblée nationale : {s['ti'][:160]}. Résultat et vote de chaque député.", corps)
             self.urls["votes"].append((chemin, s["d"]))
+        # cartes à intégrer sur d'autres sites (integrer.html) : un petit fichier par centaine de scrutins, sans le vote nominatif
+        try:
+            dossier = os.path.join(self.site, "carte", str(leg))
+            os.makedirs(dossier, exist_ok=True)
+            gnoms = [[g.get("sigle", "?"), g.get("nom", ""), 1 if g.get("ni") else 0] for g in grp]
+            paquets = {}
+            for s in scr:
+                paquets.setdefault(s["n"] // 100, []).append([s["n"], s["d"], s["ti"], s["t"], 1 if "adopt" in s["so"] else 0, s["po"], s["co"], s.get("ab", 0), s.get("rq", 0),
+                                                            [[b[0], b[2]] for b in s.get("g", [])]])
+            for k, L in paquets.items():
+                with open(os.path.join(dossier, f"{k}.json"), "w", encoding="utf-8") as f:
+                    json.dump({"leg": leg, "label": d.get("label", ""), "maj": d.get("maj", ""), "g": gnoms, "s": L}, f, ensure_ascii=False, separators=(",", ":"))
+        except Exception as e:
+            print(f"Cartes intégrables : {e}")
         if courante:
             self.flux("/flux/votes.xml", "Aux Voix, votes importants", "Les votes solennels, motions de censure et votes sur l'ensemble des textes à l'Assemblée nationale.",
                       [(f"{'Adopté' if 'adopt' in s['so'] else 'Rejeté'} : {s['ti'][:1].upper() + s['ti'][1:]}", f"{self.url}/vote/{leg}/{s['n']}/", s["d"],

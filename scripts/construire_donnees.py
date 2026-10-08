@@ -1000,6 +1000,18 @@ def main():
         actualites_officielles()
     except Exception as e:
         print(f"Actualités officielles : collecte interrompue ({e})")
+    # Communes et circonscriptions (trouver son député avec son code postal) : facultatif, ne bloque jamais le site
+    if not os.environ.get("RELEVE_LOCAL") or os.environ.get("RELEVE_COMMUNES_LOCAL"):
+        try:
+            sys.path.insert(0, os.path.dirname(os.path.abspath(__file__)))
+            import communes
+            communes.construire_communes(SITE, os.environ.get("RELEVE_COMMUNES_LOCAL") or os.path.join(RACINE, "cache", "communes"))
+            if os.environ.get("GITHUB_ACTIONS"):
+                print("::notice title=Communes::table des communes et circonscriptions à jour")
+        except Exception as e:
+            print(f"Communes : construction interrompue ({e}) ; la recherche par département reste disponible")
+            if os.environ.get("GITHUB_ACTIONS"):
+                print(f"::warning title=Communes::{e}")
     # Codes consolidés (Constitution, Code civil…) : facultatif, ne bloque jamais le reste du site
     if not os.environ.get("RELEVE_LOCAL") or os.environ.get("RELEVE_LEGI_LOCAL"):
         try:

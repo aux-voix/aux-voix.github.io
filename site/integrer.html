@@ -1,0 +1,66 @@
+<!doctype html>
+<html lang="fr">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<meta name="robots" content="noindex">
+<title>Vote de l'Assemblée nationale, par Aux Voix</title>
+<style>
+@font-face{font-family:"Source Sans 3";src:url("fonts/SourceSans3.ttf") format("truetype");font-weight:200 900;font-display:swap}
+:root{--fond:#FFFFFF;--texte:#1B1D1F;--texte2:#5A6169;--bord:#DDE1E5;--gris:#F5F7F9;--bleu:#123B6D;--lien:#1B58A3;--pour:#1F6FB2;--contre:#B42318;--abst:#8A9099;color-scheme:light}
+@media (prefers-color-scheme:dark){:root{--fond:#14171A;--texte:#E8EAED;--texte2:#A9B0B8;--bord:#2C3238;--gris:#1C2024;--bleu:#9CC2EA;--lien:#8FB9E8;--pour:#5C9FDC;--contre:#EF6B5F;color-scheme:dark}}
+*{box-sizing:border-box}
+html,body{margin:0;background:transparent;color:var(--texte);font:16px/1.45 "Source Sans 3",system-ui,-apple-system,"Segoe UI",Roboto,Arial,sans-serif}
+.c{background:var(--fond);border:1px solid var(--bord);border-top:3px solid var(--bleu);padding:14px 16px 12px;max-width:680px}
+.h{display:flex;align-items:center;gap:8px;font-size:13px;color:var(--texte2);flex-wrap:wrap}
+.h svg{width:26px;height:15px;flex:none}
+.h b{color:var(--texte);font-weight:700}
+h1{margin:8px 0 6px;font-size:18px;line-height:1.3;font-weight:700;display:-webkit-box;-webkit-line-clamp:3;-webkit-box-orient:vertical;overflow:hidden}
+h1 a{color:var(--texte);text-decoration:none}h1 a:hover{text-decoration:underline}
+.r{margin:0 0 6px;font-size:15px}.r b{margin-right:6px}.r .ok{color:var(--pour)}.r .ko{color:var(--contre)}
+.bar{display:flex;height:10px;background:var(--gris);box-shadow:inset 0 0 0 1px var(--bord);margin:0 0 8px}
+.bar i{display:block;height:100%}.bar .p{background:var(--pour)}.bar .co{background:var(--contre)}.bar .a{background:var(--abst)}
+.g{margin:0;font-size:13.5px;color:var(--texte2);display:-webkit-box;-webkit-line-clamp:3;-webkit-box-orient:vertical;overflow:hidden}
+.f{display:flex;justify-content:space-between;gap:8px 14px;flex-wrap:wrap;margin-top:10px;padding-top:8px;border-top:1px solid var(--bord);font-size:13px;color:var(--texte2)}
+.f a{color:var(--lien);font-weight:600}
+a:focus-visible{outline:2px solid var(--lien);outline-offset:2px}
+.err{padding:16px;border:1px solid var(--bord);font-size:15px;background:var(--fond)}
+</style>
+</head>
+<body>
+<main id="c" aria-live="polite"><p class="err">Chargement du vote…</p></main>
+<script>
+(function(){
+  "use strict";
+  var P=new URLSearchParams(location.search),leg=(P.get("leg")||"17").replace(/\D/g,""),n=parseInt(P.get("n"),10),box=document.getElementById("c");
+  var esc=function(s){return String(s==null?"":s).replace(/'/g,"\u2019").replace(/[&<>"]/g,function(c){return {"&":"&amp;","<":"&lt;",">":"&gt;",'"':"&quot;"}[c];});};
+  var NF=new Intl.NumberFormat("fr-FR"),nb=function(x){return NF.format(x||0);};
+  var MOIS=["janvier","février","mars","avril","mai","juin","juillet","août","septembre","octobre","novembre","décembre"];
+  var fd=function(iso){var p=String(iso).slice(0,10).split("-");return (+p[2]===1?"1er":+p[2])+" "+MOIS[+p[1]-1]+" "+p[0];};
+  var base=new URL(".",location.href).href;
+  var EMB='<svg viewBox="8 10 104 54" aria-hidden="true"><g fill="none" stroke="currentColor" stroke-width="7" stroke-linecap="round" style="color:var(--bleu)"><path d="M43 60A17 17 0 0 1 77 60"/><path d="M32 60A28 28 0 0 1 88 60"/><path d="M21 60A39 39 0 0 1 99 60"/><path d="M10 60A50 50 0 0 1 110 60"/></g></svg>';
+  function erreur(t){box.innerHTML='<p class="err">'+esc(t)+' <a href="'+esc(base)+'" target="_blank" rel="noopener">Aux Voix</a></p>';}
+  if(!n){erreur("Numéro de scrutin manquant.");return;}
+  fetch("carte/"+leg+"/"+Math.floor(n/100)+".json").then(function(r){if(!r.ok)throw new Error();return r.json();}).then(function(d){
+    var s=null;for(var i=0;i<d.s.length;i++)if(d.s[i][0]===n){s=d.s[i];break;}
+    if(!s){erreur("Ce scrutin est introuvable.");return;}
+    var num=s[0],date=s[1],ti=s[2],type=s[3],adopte=!!s[4],po=s[5],co=s[6],ab=s[7],rq=s[8],G=s[9],moc=type==="MOC";
+    var important=moc||type==="SPS"||/^l.ensemble/i.test(ti);
+    var lien=important?base+"vote/"+leg+"/"+num+"/":base+"#/scrutin/"+num;
+    var titre=moc?"Motion de censure "+(adopte?"adoptée":"rejetée")+" : "+nb(po)+" voix pour, "+nb(rq)+" étaient nécessaires":"L'Assemblée "+(adopte?"adopte":"rejette")+" "+ti+", par "+nb(po)+" voix pour et "+nb(co)+" contre";
+    var pos={1:[],2:[],3:[]};G.slice().sort(function(x,y){return x[0]-y[0];}).forEach(function(b){var g=d.g[b[0]];if(g&&!g[2]&&pos[b[1]])pos[b[1]].push(g[0]);});
+    var gr=[[1,"Majoritairement pour"],[2,"majoritairement contre"],[3,"majoritairement abstention"]].filter(function(x){return pos[x[0]].length;}).map(function(x){return x[1]+" : "+pos[x[0]].join(", ");}).join(" · ");
+    var tot=Math.max(1,po+co+ab),w=function(v){return (v/tot*100).toFixed(1)+"%";};
+    document.title="Scrutin n° "+num+" : "+(adopte?"adopté":"rejeté")+", Aux Voix";
+    box.innerHTML='<article class="c" aria-labelledby="t">'+
+      '<div class="h">'+EMB+'<b>Aux Voix</b><span>Assemblée nationale · scrutin n° '+num+' · '+fd(date)+'</span></div>'+
+      '<h1 id="t" title="'+esc(titre)+'"><a href="'+esc(lien)+'" target="_blank" rel="noopener">'+esc(titre.charAt(0).toUpperCase()+titre.slice(1))+'</a></h1>'+
+      '<p class="r"><b class="'+(adopte?"ok":"ko")+'">'+(moc?(adopte?"Motion adoptée":"Motion rejetée"):(adopte?"Adopté":"Rejeté"))+'</b>'+(moc?nb(po)+" voix pour, "+nb(rq)+" nécessaires":nb(po)+" pour, "+nb(co)+" contre, "+nb(ab)+" abstention"+(ab>1?"s":""))+'</p>'+
+      (moc?"":'<div class="bar" role="img" aria-label="'+nb(po)+' pour, '+nb(co)+' contre, '+nb(ab)+' abstentions"><i class="p" style="width:'+w(po)+'"></i><i class="co" style="width:'+w(co)+'"></i><i class="a" style="width:'+w(ab)+'"></i></div>')+
+      (gr&&!moc?'<p class="g">'+esc(gr)+'</p>':"")+
+      '<div class="f"><a href="'+esc(lien)+'" target="_blank" rel="noopener">Voir le détail et le vote de chaque député</a><span>Source : Assemblée nationale, '+esc(d.label)+'</span></div></article>';
+  }).catch(function(){erreur("Le vote n'a pas pu être chargé.");});
+})();
+</script>
+</body>
+</html>
